@@ -1,33 +1,55 @@
 import React, { useState } from "react";
-import lineTop from "../../assets/images/lineTop.png";
-import lineLeft from "../../assets/images/lineLeft.png";
-import NoLoginForm from "@/components/auth/login/NoLoginForm";
 import "./Auth.scss";
-import NoRegister from "@/components/auth/register/NoRegister";
 import RegisterForm from "@/components/auth/register/RegisterForm";
 import LoginForm from "@/components/auth/login/LoginForm";
+import logo from "../../assets/images/logo.png";
+
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const authModeClass = isLogin ? "is-login" : "is-register";
+
   return (
     <div className={`auth ${authModeClass}`}>
-      <div className={`auth-container ${authModeClass}`}>
-        <div className="auth-container_left">
-          <img className="line-top" src={lineTop} />
-          <img className="line-bottom" src={lineTop} />
-          <img className="line-left" src={lineLeft} />
-          <img className="line-right" src={lineLeft} />
-          {isLogin ? (
-            <NoLoginForm setIsLogin={setIsLogin} />
-          ) : (
-            <NoRegister setIsLogin={setIsLogin} />
-          )}
+      <div className={`auth-card ${authModeClass}`}>
+        <div className="auth-card_header">
+          <img className="auth-logo" src={logo} alt="TechNova" />
+          <span className="auth-brand">TechNova</span>
         </div>
-        <div className="auth-container_right">
+
+        <div className="auth-tabs">
+          <button
+            type="button"
+            className={isLogin ? "active" : ""}
+            onClick={() => setIsLogin(true)}
+          >
+            Đăng nhập
+          </button>
+          <button
+            type="button"
+            className={!isLogin ? "active" : ""}
+            onClick={() => setIsLogin(false)}
+          >
+            Đăng ký
+          </button>
+          <span className="auth-tabs_indicator" aria-hidden="true" />
+        </div>
+
+        <div className="auth-hero">
+          <h2>
+            {isLogin
+              ? "Chào mừng bạn trở lại với TechNova!"
+              : "Tạo tài khoản TechNova mới!"}
+          </h2>
+          <p>
+            {isLogin ? "Đăng nhập để tiếp tục." : "Đăng ký để bắt đầu trải nghiệm."}
+          </p>
+        </div>
+
+        <div className="auth-card_body">
           {isLogin ? (
-            <LoginForm setIsLogin={setIsLogin} />
+            <LoginForm setIsLogin={setIsLogin} compact />
           ) : (
-            <RegisterForm setIsLogin={setIsLogin} />
+            <RegisterForm setIsLogin={setIsLogin} compact />
           )}
         </div>
       </div>

@@ -3,10 +3,12 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { FiLock, FiMail, FiUser } from "react-icons/fi";
 
 import "./RegisterForm.scss";
 import { registerValidationSchema } from "@/utils/validation/authValidation";
-const RegisterForm = ({ setIsLogin }) => {
+import authApi from "@/utils/api/authApi";
+const RegisterForm = ({ setIsLogin, compact = false }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const initiateValues = {
@@ -18,30 +20,77 @@ const RegisterForm = ({ setIsLogin }) => {
     confirmPassword: "",
   };
 
-  const handleSubmit = (values) => {
-    console.log(values);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const payload = {
+        email: values.email,
+        username: values.userName,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        firstName: values.firstName,
+        lastName: values.lastName,
+      };
+      const res = await authApi.register(payload);
+      const message =
+          res?.data?.message || "Đăng ký thành công. Vui lòng đăng nhập.";
+      alert(message);
+      setIsLogin(true);
+    } catch (error) {
+      const message =
+          error?.response?.data?.message ||
+          "Đăng ký thất bại. Vui lòng thử lại.";
+      alert(message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const res = await authApi.googleLogin();
+      const data = res?.data;
+      const dataField = data?.data;
+      const redirectUrl =
+        (typeof dataField === "string" ? dataField : null) ||
+        dataField?.redirectUrl ||
+        dataField?.url ||
+        data?.redirectUrl ||
+        data?.url;
+      if (typeof redirectUrl === "string" && redirectUrl.trim().length > 0) {
+        window.location.href = redirectUrl;
+        return;
+      }
+      alert("Không lấy được URL đăng nhập Google từ server.");
+    } catch (error) {
+      console.error("Google login error:", error);
+      alert("Không gọi được API đăng nhập Google. Kiểm tra lại BE/CORS.");
+    }
   };
 
   return (
     <div data-aos="fade-right" className={`register `}>
-      <h1>Đăng ký</h1>
+      {!compact && <h1>Đăng ký</h1>}
       <div className="register-form">
         <Formik
           initialValues={initiateValues}
           validationSchema={registerValidationSchema}
           onSubmit={handleSubmit}
         >
-          {({ handleSubmit, errors, values }) => (
+          {({ handleSubmit }) => (
             <Form onSubmit={handleSubmit}>
               <div className="register-form_item">
                 <label className="register-form_title" htmlFor="firstName">
                   Họ
                 </label>
-                <Field
-                  className="register-form_input"
-                  type="text"
-                  name="firstName"
-                />
+                <div className="input-wrap">
+                  <FiUser className="input-icon" />
+                  <Field
+                    className="register-form_input has-icon"
+                    type="text"
+                    name="firstName"
+                    placeholder="Họ"
+                  />
+                </div>
                 <ErrorMessage
                   name="firstName"
                   component="div"
@@ -52,11 +101,15 @@ const RegisterForm = ({ setIsLogin }) => {
                 <label className="register-form_title" htmlFor="lastName">
                   Tên
                 </label>
-                <Field
-                  className="register-form_input"
-                  type="text"
-                  name="lastName"
-                />
+                <div className="input-wrap">
+                  <FiUser className="input-icon" />
+                  <Field
+                    className="register-form_input has-icon"
+                    type="text"
+                    name="lastName"
+                    placeholder="Tên"
+                  />
+                </div>
                 <ErrorMessage
                   name="lastName"
                   component="div"
@@ -67,11 +120,15 @@ const RegisterForm = ({ setIsLogin }) => {
                 <label className="register-form_title" htmlFor="email">
                   Email
                 </label>
-                <Field
-                  className="register-form_input"
-                  type="email"
-                  name="email"
-                />
+                <div className="input-wrap">
+                  <FiMail className="input-icon" />
+                  <Field
+                    className="register-form_input has-icon"
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                  />
+                </div>
                 <ErrorMessage
                   name="email"
                   component="div"
@@ -82,11 +139,15 @@ const RegisterForm = ({ setIsLogin }) => {
                 <label className="register-form_title" htmlFor="userName">
                   Tên đăng nhập
                 </label>
-                <Field
-                  className="register-form_input"
-                  type="text"
-                  name="userName"
-                />
+                <div className="input-wrap">
+                  <FiUser className="input-icon" />
+                  <Field
+                    className="register-form_input has-icon"
+                    type="text"
+                    name="userName"
+                    placeholder="Tên đăng nhập"
+                  />
+                </div>
                 <ErrorMessage
                   name="userName"
                   component="div"
@@ -97,11 +158,15 @@ const RegisterForm = ({ setIsLogin }) => {
                 <label className="register-form_title" htmlFor="password">
                   Mật khẩu
                 </label>
-                <Field
-                  className="register-form_input"
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                />
+                <div className="input-wrap">
+                  <FiLock className="input-icon" />
+                  <Field
+                    className="register-form_input has-icon"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Mật khẩu"
+                  />
+                </div>
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -126,11 +191,15 @@ const RegisterForm = ({ setIsLogin }) => {
                 >
                   Xác nhận lại mật khẩu
                 </label>
-                <Field
-                  className="register-form_input"
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                />
+                <div className="input-wrap">
+                  <FiLock className="input-icon" />
+                  <Field
+                    className="register-form_input has-icon"
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Nhập lại mật khẩu"
+                  />
+                </div>
                 <ErrorMessage
                   name="confirmPassword"
                   component="div"
@@ -139,7 +208,7 @@ const RegisterForm = ({ setIsLogin }) => {
                 {showConfirmPassword ? (
                   <FaRegEye
                     className="eye"
-                    onClick={() => showConfirmPassword(false)}
+                    onClick={() => setShowConfirmPassword(false)}
                   />
                 ) : (
                   <FaEyeSlash
@@ -153,9 +222,9 @@ const RegisterForm = ({ setIsLogin }) => {
                 Bạn đã có tài khoản?{" "}
                 <span onClick={() => setIsLogin(true)}>Đăng nhập</span>
               </p>
-              <p>Hoặc</p>
+              <p className="p_divider">Hoặc</p>
               <div className="login-gg">
-                <button>
+                <button type="button" onClick={handleGoogleLogin}>
                   <FcGoogle />
                   <p>Đăng nhập bằng Google</p>
                 </button>
