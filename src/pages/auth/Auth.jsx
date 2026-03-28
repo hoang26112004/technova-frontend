@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Auth.scss";
 import RegisterForm from "@/components/auth/register/RegisterForm";
 import LoginForm from "@/components/auth/login/LoginForm";
 import logo from "../../assets/images/logo.png";
+import { useLocation } from "react-router-dom";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const authModeClass = isLogin ? "is-login" : "is-register";
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mode = params.get("mode");
+    if (mode === "register") {
+      setIsLogin(false);
+    } else if (mode === "login") {
+      setIsLogin(true);
+    }
+  }, [location.search]);
 
   return (
     <div className={`auth ${authModeClass}`}>

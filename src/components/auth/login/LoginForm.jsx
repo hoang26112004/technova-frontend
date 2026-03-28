@@ -23,17 +23,28 @@ const LoginForm = ({ setIsLogin, compact = false }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const payload = {
-        username: values.userName,
+        username: values.userName?.trim(),
         password: values.password,
       };
       const res = await authApi.login(payload);
-      const token = res?.data?.data?.token;
-      if (token) {
-        localStorage.setItem("accessToken", token);
+      const data = res?.data?.data;
+      const accessToken = data?.accessToken;
+      const refreshToken = data?.refreshToken;
+      const expiresIn = data?.expiresIn;
+      if (accessToken) {
+        localStorage.setItem("accessToken", accessToken);
+      }
+      if (refreshToken) {
+        localStorage.setItem("refreshToken", refreshToken);
+      }
+      if (expiresIn) {
+        const expiresAt = Date.now() + Number(expiresIn) * 1000;
+        localStorage.setItem("accessTokenExpiresAt", String(expiresAt));
       }
       navigate("/");
     } catch (error) {
       const message =
+          error?.response?.data?.data?.message ||
           error?.response?.data?.message ||
           "Đăng nhập thất bại. Vui lòng thử lại.";
       alert(message);
@@ -45,14 +56,13 @@ const LoginForm = ({ setIsLogin, compact = false }) => {
   const handleGoogleLogin = async () => {
     try {
       const res = await authApi.googleLogin();
-      const data = res?.data;
-      const dataField = data?.data;
+      const dataField = res?.data?.data;
       const redirectUrl =
         (typeof dataField === "string" ? dataField : null) ||
         dataField?.redirectUrl ||
         dataField?.url ||
-        data?.redirectUrl ||
-        data?.url;
+        res?.data?.redirectUrl ||
+        res?.data?.url;
       if (typeof redirectUrl === "string" && redirectUrl.trim().length > 0) {
         window.location.href = redirectUrl;
         return;
@@ -125,10 +135,12 @@ const LoginForm = ({ setIsLogin, compact = false }) => {
                 )}
               </div>
               <button type="submit">
-                {/*onClick={() => navigate("/")}*/}
                 Đăng nhập
               </button>
-              <p className="p_forgotPassword" onClick={() => setIsForgotPassword(true)}>
+              <p
+                className="p_forgotPassword"
+                onClick={() => setIsForgotPassword(true)}
+              >
                 Quên mật khẩu?
               </p>
               {isFogotPassword && <ForgotPassword />}

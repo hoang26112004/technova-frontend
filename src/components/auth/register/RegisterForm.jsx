@@ -23,21 +23,34 @@ const RegisterForm = ({ setIsLogin, compact = false }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const payload = {
-        email: values.email,
-        username: values.userName,
+        email: values.email?.trim(),
+        username: values.userName?.trim(),
         password: values.password,
         confirmPassword: values.confirmPassword,
-        firstName: values.firstName,
-        lastName: values.lastName,
+        firstName: values.firstName?.trim(),
+        lastName: values.lastName?.trim(),
       };
       const res = await authApi.register(payload);
+      const data = res?.data?.data;
+      const status = res?.data?.status;
+      if (status && status !== "SUCCESS") {
+        throw new Error(
+          data?.message ||
+            res?.data?.message ||
+            "Đăng ký thất bại. Vui lòng thử lại."
+        );
+      }
       const message =
-          res?.data?.message || "Đăng ký thành công. Vui lòng đăng nhập.";
+          data?.message ||
+          res?.data?.message ||
+          "Đăng ký thành công. Vui lòng đăng nhập.";
       alert(message);
       setIsLogin(true);
     } catch (error) {
       const message =
+          error?.response?.data?.data?.message ||
           error?.response?.data?.message ||
+          error?.message ||
           "Đăng ký thất bại. Vui lòng thử lại.";
       alert(message);
     } finally {
@@ -48,14 +61,13 @@ const RegisterForm = ({ setIsLogin, compact = false }) => {
   const handleGoogleLogin = async () => {
     try {
       const res = await authApi.googleLogin();
-      const data = res?.data;
-      const dataField = data?.data;
+      const dataField = res?.data?.data;
       const redirectUrl =
         (typeof dataField === "string" ? dataField : null) ||
         dataField?.redirectUrl ||
         dataField?.url ||
-        data?.redirectUrl ||
-        data?.url;
+        res?.data?.redirectUrl ||
+        res?.data?.url;
       if (typeof redirectUrl === "string" && redirectUrl.trim().length > 0) {
         window.location.href = redirectUrl;
         return;
@@ -76,7 +88,7 @@ const RegisterForm = ({ setIsLogin, compact = false }) => {
           validationSchema={registerValidationSchema}
           onSubmit={handleSubmit}
         >
-          {({ handleSubmit }) => (
+          {({ handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
               <div className="register-form_item">
                 <label className="register-form_title" htmlFor="firstName">
@@ -217,7 +229,9 @@ const RegisterForm = ({ setIsLogin, compact = false }) => {
                   />
                 )}
               </div>
-              <button type="submit">Đăng ký</button>
+              <button type="submit" disabled={isSubmitting}>
+                Đăng ký
+              </button>
               <p>
                 Bạn đã có tài khoản?{" "}
                 <span onClick={() => setIsLogin(true)}>Đăng nhập</span>

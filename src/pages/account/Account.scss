@@ -1,0 +1,133 @@
+.account-page {
+  max-width: 1100px;
+  margin: 24px auto 48px;
+  padding: 0 16px;
+}
+
+.account-page h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.account-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.account-card {
+  height: auto;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+.account-card_2{
+  height: 350px;
+  background: #ffffff;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+.account-card h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.account-card h3 {
+  font-size: 16px;
+  margin: 18px 0 8px;
+}
+.account-card_2 h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.account-card_2 h3 {
+  font-size: 16px;
+  margin: 18px 0 8px;
+}
+
+.account-avatar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.account-avatar__img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e5e5e5;
+}
+
+.account-avatar__upload input {
+  display: none;
+}
+
+.account-avatar__upload {
+  background: #3571f2;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.account-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.account-form input,
+.account-form select,
+.account-form textarea {
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.account-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.account-form button {
+  background: #3571f2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.account-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.account-checkbox {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .account-grid {
+    grid-template-columns: 1fr;
+  }
+}

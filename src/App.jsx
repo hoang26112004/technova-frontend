@@ -9,6 +9,7 @@ import "aos/dist/aos.css";
 // import Cart from "./pages/cart/Cart";
 import Auth from "./pages/auth/Auth";
 import OAuthCallback from "./pages/auth/OAuthCallback";
+import Account from "./pages/account/Account";
 // import ProductsByCategory from "./pages/productsByCategory/ProductsByCategory";
 // import ContactPage from "./pages/contact/ContactPage";
 // import MarketSystemPage from "./pages/market-system/MarketSystemPage";
@@ -53,6 +54,10 @@ const App = () => {
     {
       path: "/auth/callback",
       element: <OAuthCallback />,
+    },
+    {
+      path: "/account",
+      element: <Account />,
     },
     // {
     //   path: "/productsByCategory/:categoryName",
