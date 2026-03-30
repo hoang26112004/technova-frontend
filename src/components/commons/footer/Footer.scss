@@ -1,22 +1,24 @@
 .footer {
-  border-top: 1px solid #ff6347;
-  border-bottom: 1px solid #ff6347;
-  padding: 20px 10%;
+  border-top: 1px solid #ffffff;
+  padding: 28px 10%;
   width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: #fcefed;
+  gap: 20px;
+  background-color: #ffffff;
+  color: #3b2f2a;
 
   .header-desktop__logo {
-    font-size: 50px;
     text-align: center;
     cursor: pointer;
-    .header-desktop-logo_first {
-      // margin-right: 10px;
-      color: black;
-    }
-    .header-desktop-logo_second {
-      color: #ff6347;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+
+    .footer__logo-img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
     }
   }
 
@@ -29,17 +31,19 @@
     .footer__title {
       font-size: 15px;
       font-weight: 700;
+      color: #3b2f2a;
     }
 
     .footer__item {
-      font-size: 15px;
+      font-size: 14px;
+      color: #8b7a73;
     }
 
     .hover {
       cursor: pointer;
       transition: 0.3s;
       &:hover {
-        color: #ff6347;
+        color: #ff7a59;
       }
     }
   }
@@ -48,14 +52,14 @@
     margin-bottom: 50px;
   }
   @media screen and (max-width: 768px) {
-    padding: 20px 5%;
+    padding: 24px 5%;
     .header-desktop__logo {
       display: none;
     }
   }
 
   @media screen and (max-width: 544.98px) {
-    padding: 20px 10%;
+    padding: 24px 10%;
     display: flex;
     flex-direction: column;
     justify-content: center;

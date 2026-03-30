@@ -1,23 +1,22 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { FaStar, FaRegStar, FaRegStarHalfStroke } from "react-icons/fa6";
 
 import "./InformationDetail.scss";
 
-const InformationDetail = ({product}) => {
+const InformationDetail = ({ product }) => {
   const [typeMenu, setTypeMenu] = useState("info");
   const [rate, setRate] = useState(0);
+  const comments = product?.comments || [];
 
   useEffect(() => {
-    const rate = () => {
-      const sumRate = product.comments.reduce(
-        (sum, item) => sum + item.rating,
-        0
-      );
-      setRate(sumRate / product.comments.length);
-    };
-    rate();
-  }, [product]);
+    if (!comments.length) {
+      setRate(0);
+      return;
+    }
+    const sumRate = comments.reduce((sum, item) => sum + (item.rating || 0), 0);
+    setRate(sumRate / comments.length);
+  }, [comments]);
 
   return (
     <div className="infomation">
@@ -27,19 +26,19 @@ const InformationDetail = ({product}) => {
             className={`${typeMenu === "info" ? "active" : ""}`}
             onClick={() => setTypeMenu("info")}
           >
-            Thông tin sản phẩm
+            Thong tin san pham
           </li>
           <li
             className={`${typeMenu === "exchangePolicy" ? "active" : ""}`}
             onClick={() => setTypeMenu("exchangePolicy")}
           >
-            Chính sách đổi trả
+            Chinh sach doi tra
           </li>
           <li
             className={`${typeMenu === "comment" ? "active" : ""}`}
             onClick={() => setTypeMenu("comment")}
           >
-            Đánh giá sản phẩm
+            Danh gia san pham
           </li>
         </ul>
       </div>
@@ -54,16 +53,18 @@ const InformationDetail = ({product}) => {
         </div>
       )}
       {typeMenu === "comment" &&
-        (product.comments.length === 0 ? (
+        (comments.length === 0 ? (
           <div data-aos="fade-up" className="comment__no">
-            Chưa có đánh giá nào
+            Chua co danh gia nao
           </div>
         ) : (
           <div data-aos="fade-up" className="comment__have">
             <h1>{product.name}</h1>
             <div className="comment__have__rate">
               <div className="comment__have__rate__star">
-                <span className="comment__have__rate-number">{rate}</span>
+                <span className="comment__have__rate-number">
+                  {rate.toFixed(1)}
+                </span>
                 <span>
                   {Array.from({ length: Math.floor(rate) }, (_, i) => (
                     <FaStar key={i} />
@@ -75,12 +76,12 @@ const InformationDetail = ({product}) => {
                 </span>
               </div>
               <div className="comment__have__rate-count">
-                <span>{product.comments.length}</span> Đánh giá
+                <span>{comments.length}</span> Danh gia
               </div>
             </div>
             <div className="comment__have__list">
-              {product.comments.map((comment, index) => (
-                <div className="comment__have__item" key={index}>
+              {comments.map((comment) => (
+                <div className="comment__have__item" key={comment.id}>
                   <img src={comment.avatar} alt={comment.name} />
                   <div className="comment__have__item-content">
                     <p className="name">{comment.name}</p>
@@ -98,12 +99,12 @@ const InformationDetail = ({product}) => {
               ))}
             </div>
             <div className="comment__have__write">
-              <button>Viết đánh giá</button>
+              <button>Viet danh gia</button>
             </div>
           </div>
         ))}
     </div>
   );
-}
+};
 
 export default InformationDetail;

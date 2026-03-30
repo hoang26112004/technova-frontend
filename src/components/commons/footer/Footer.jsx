@@ -1,13 +1,13 @@
 /* eslint-disable */
-import React from 'react';
+import React from "react";
+import logo from "@/assets/images/logo.png";
 
 import "./Footer.scss";
 const Footer = () => {
   return (
     <div className="footer" data-aos="fade-up">
       <div className="header-desktop__logo">
-        <span className="header-desktop-logo_first">ND</span>
-        <span className="header-desktop-logo_second">Style</span>
+        <img className="footer__logo-img" src={logo} alt="TechNova" />
       </div>
       <ul className="footer__list">
         <li className="footer__title">Công ty...</li>

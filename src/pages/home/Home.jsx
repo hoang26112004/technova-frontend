@@ -1,31 +1,23 @@
-/* eslint-disable */
-import Banner from "@/components/commons/banner/Banner";
 import Layout from "@/components/commons/layout/Layout";
+import Banner from "@/components/commons/banner/Banner";
 import Category from "@/components/product/category/Category";
-import Accessory from "@/components/product/collection/accessory/Accessory";
-import Female from "@/components/product/collection/female/Female";
-import Male from "@/components/product/collection/male/Male";
-import Comment from "@/components/product/comment/Comment";
-import DiscountedProduct from "@/components/product/discountedProduct/DiscountedProduct";
 import SuggestedProduct from "@/components/product/suggestedProducts/SuggestedProduct";
+import DiscountedProduct from "@/components/product/discountedProduct/DiscountedProduct";
 import Voucher from "@/components/product/voucher/Voucher";
 import React from "react";
+import "./Home.scss";
 
 const Home = () => {
   return (
-    <div>
-      <Layout>
+    <Layout>
+      <div className="tech-home">
         <Banner />
-        <Category />
         <Voucher />
-        <DiscountedProduct />
+        <Category />
         <SuggestedProduct />
-        <Male />
-        <Female />
-        <Accessory/>
-        <Comment />
-      </Layout>
-    </div>
+        <DiscountedProduct />
+      </div>
+    </Layout>
   );
 };
 

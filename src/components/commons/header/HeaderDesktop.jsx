@@ -6,6 +6,8 @@ import { setInputImage, setInputValue, setResult } from "@/store/searchSlice";
 import { readFileAsync } from "@/utils/readFile";
 import Menu from "./Menu";
 import authApi from "@/utils/api/authApi";
+import productApi from "@/utils/api/productApi";
+import { mapProductToCard } from "@/utils/api/mappers";
 import logo from "@/assets/images/logo.png";
 
 import { FiSearch } from "react-icons/fi";
@@ -183,14 +185,22 @@ const HeaderDesktop = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      dispatch(setInputValue(inputText));
+  const handleKeyPress = async (e) => {
+    if (e.key !== "Enter") return;
+    const keyword = inputText.trim();
+    if (!keyword) return;
+    dispatch(setInputValue(keyword));
+    try {
+      const res = await productApi.search(keyword);
+      const items = res?.data?.data || [];
+      dispatch(setResult(items.map(mapProductToCard)));
+    } catch (error) {
+      console.error("Search error:", error);
       dispatch(setResult(resultFake));
-      dispatch(setInputImage(""));
-      navigate("/search");
-      dispatch(setInputValue(""));
     }
+    dispatch(setInputImage(""));
+    navigate("/search");
+    dispatch(setInputValue(""));
   };
 
   const handleChangeFile = async (e) => {
