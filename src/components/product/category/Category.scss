@@ -1,85 +1,52 @@
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-  75% {
-    transform: translateX(-5px);
-  }
-  100% {
-    transform: translateX(0);
+.tech-section {
+  margin-top: 32px;
+  color: #3b2f2a;
+}
+
+.tech-section__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.tech-section__header p {
+  color: #8b7a73;
+}
+
+.tech-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.tech-grid--cats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tech-card {
+  background: #fff;
+  border: 1px solid #efe6e1;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.tech-card--cat h3 {
+  margin-bottom: 6px;
+}
+
+.tech-card--cat p {
+  color: #8b7a73;
+  font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+  .tech-grid--cats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.category {
-  width: 100%;
-  padding: 150px 10%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 70px;
-
-  .category__item {
-    width: 195px;
-    height: 195px;
-    position: relative;
-
-    .category__item-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      background-color: #f9dad5;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-      }
-    }
-
-    .category__item-btn {
-      position: absolute;
-      width: 80%;
-      top: 100%;
-      left: 10%;
-      transform: translate(0, -50%);
-      border: 2px solid #fec9c0;
-      color: black;
-      padding: 10px 10px;
-      font-weight: 500;
-      font-size: 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: #ffffff;
-
-      &:hover {
-        color: #ff6347;
-      }
-    }
-
-    &:hover {
-      .category__item-img {
-        animation: shake 0.3s ease-in-out;
-      }
-    }
-  }
-
-  @media screen and (max-width: 767.98px) {
-    padding: 200px 5%;
-  }
-
-  @media screen and (max-width: 510.98px) {
-    justify-content: center;
+@media (max-width: 640px) {
+  .tech-grid--cats {
+    grid-template-columns: 1fr;
   }
 }
