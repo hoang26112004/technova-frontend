@@ -11,7 +11,9 @@ const LayoutAdmin = ({ children }) => {
 				<div className="absolute inset-0 backdrop-blur-sm" />
 			</div>
 			<SidebarAdmin />
-            {children}
+            <div className="relative z-10 flex-1 overflow-auto">
+                {children}
+            </div>
 		</div>
 	);
 };

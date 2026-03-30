@@ -5,9 +5,11 @@ import {
     Menu,
 	ShoppingBag,
 	TrendingUp,
+	Users,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import logo from "@/assets/images/logo.png";
 
 const SIDEBAR_ITEMS = [
 	{
@@ -34,6 +36,12 @@ const SIDEBAR_ITEMS = [
 		color: "#10b981",
 		href: "/admin/orders",
 	},
+	{
+		name: "Users",
+		icon: Users,
+		color: "#0ea5e9",
+		href: "/admin/users",
+	},
 ];
 const SidebarAdmin = () => {
     const location = useLocation();
@@ -48,7 +56,7 @@ const SidebarAdmin = () => {
           width: isSidebarOpen ? 256 : 80,
         }}
       >
-        <div className="text-gray-100 h-full bg-[#FF8901] bg-opacity-50 backdrop-blur-md p-4 flex flex-col">
+        <div className="text-gray-100 h-full bg-white p-4 flex flex-col border">
           {isSidebarOpen && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -57,8 +65,8 @@ const SidebarAdmin = () => {
               className="flex items-center justify-center"
             >
               <p>
-                <Link to={"/"} className="text-2xl font-bold justify-center ">
-                  NDStyle
+                <Link to={"/"} className="flex items-center justify-center">
+                  <img src={logo} alt="TechNova" className="h-20 w-auto" />
                 </Link>
               </p>
             </motion.div>

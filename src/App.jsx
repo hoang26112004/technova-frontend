@@ -21,7 +21,9 @@ import Overview from "./pages/admin/Overview";
 import ProductAdminPage from "./pages/admin/ProductAdminPage";
 import OrderAdminPage from "./pages/admin/OrderAdminPage";
 import CategoryAdminPage from "./pages/admin/CategoryAdminPage";
+import UserAdminPage from "./pages/admin/UserAdminPage";
 import FollowingProducts from "./pages/followingProducts/FollowingProducts";
+import AdminGuard from "./components/commons/guards/AdminGuard";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -89,19 +91,43 @@ const App = () => {
     },
     {
       path: "/admin/*",
-      element: <Overview />,
+      element: (
+        <AdminGuard>
+          <Overview />
+        </AdminGuard>
+      ),
     },
     {
       path: "/admin/products",
-      element: <ProductAdminPage />,
+      element: (
+        <AdminGuard>
+          <ProductAdminPage />
+        </AdminGuard>
+      ),
     },
     {
       path: "/admin/orders",
-      element: <OrderAdminPage />,
+      element: (
+        <AdminGuard>
+          <OrderAdminPage />
+        </AdminGuard>
+      ),
     },
     {
       path: "/admin/categories",
-      element: <CategoryAdminPage />,
+      element: (
+        <AdminGuard>
+          <CategoryAdminPage />
+        </AdminGuard>
+      ),
+    },
+    {
+      path: "/admin/users",
+      element: (
+        <AdminGuard>
+          <UserAdminPage />
+        </AdminGuard>
+      ),
     },
     {
       path: "/followingProducts/:id",

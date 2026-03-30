@@ -9,6 +9,7 @@ import authApi from "@/utils/api/authApi";
 import productApi from "@/utils/api/productApi";
 import { mapProductToCard } from "@/utils/api/mappers";
 import logo from "@/assets/images/logo.png";
+import { clearAdminFlag, ensureAdminStatus } from "@/utils/auth";
 
 import { FiSearch } from "react-icons/fi";
 import { MdFlipCameraIos } from "react-icons/md";
@@ -20,6 +21,7 @@ import "./HeaderDesktop.scss";
 const HeaderDesktop = () => {
   const [inputText, setInputText] = useState("");
   const [isShow, setIsShow] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const childRef = useRef(null);
   const isLoggedIn = Boolean(localStorage.getItem("accessToken"));
 
@@ -35,6 +37,24 @@ const HeaderDesktop = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [childRef]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setIsAdmin(false);
+      return;
+    }
+    let isMounted = true;
+    ensureAdminStatus()
+      .then((value) => {
+        if (isMounted) setIsAdmin(value);
+      })
+      .catch(() => {
+        if (isMounted) setIsAdmin(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [isLoggedIn]);
 
   const resultFake = [
     {
@@ -225,6 +245,7 @@ const HeaderDesktop = () => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("accessTokenExpiresAt");
+      clearAdminFlag();
       setIsShow(false);
       navigate("/auth");
     }
@@ -283,6 +304,9 @@ const HeaderDesktop = () => {
             >
               {isLoggedIn ? (
                 <>
+                  {isAdmin && (
+                    <p onClick={() => navigate("/admin")}>Admin</p>
+                  )}
                   <p onClick={() => navigate("/account")}>Tai khoan</p>
                   <p onClick={handleLogout}>Dang xuat</p>
                 </>
