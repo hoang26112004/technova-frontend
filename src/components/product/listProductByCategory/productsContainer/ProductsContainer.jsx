@@ -1,28 +1,50 @@
 /* eslint-disable*/
 import React, { useEffect, useState } from "react";
-import { fakeProducts } from "@/utils/const/Constant";
+import productApi from "@/utils/api/productApi";
+import { mapProductToCard } from "@/utils/api/mappers";
 
 import "./ProductsContainer.scss";
 import ProductItem from "../../discountedProduct/productItem/ProductItem";
 import { Pagination } from "antd";
-const ProductsContainer = () => {
-  const listProducts = fakeProducts;
+const ProductsContainer = ({ categoryName }) => {
   const [pageSize, setPageSize] = useState(12);
   const [currentPage, setCurrentPage] = useState(1);
-  const [products, setProducts] = useState(listProducts);
+  const [products, setProducts] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleChangePage = (page) => {
     setCurrentPage(page);
   };
 
   useEffect(() => {
-    const handlePagination = () => {
-      const startIndex = (currentPage - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      setProducts(listProducts.slice(startIndex, endIndex));
+    let isMounted = true;
+    setLoading(true);
+    productApi
+      .getProducts({
+        page: currentPage - 1,
+        size: pageSize,
+        category: categoryName,
+        status: true,
+      })
+      .then((res) => {
+        const pageData = res?.data?.data;
+        const items = pageData?.content || [];
+        if (isMounted) {
+          setProducts(items.map(mapProductToCard));
+          setTotal(pageData?.totalElements || items.length);
+        }
+      })
+      .catch((error) => {
+        console.error("Load products error:", error);
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+    return () => {
+      isMounted = false;
     };
-    handlePagination();
-  }, [currentPage]);
+  }, [currentPage, pageSize, categoryName]);
 
   return (
     <div className="productsContainer">
@@ -42,14 +64,15 @@ const ProductsContainer = () => {
         </div>
       </div>
       <div className="productsContainer__list">
-        {products.map((product, index) => (
-          <ProductItem product={product} />
-        ))}
+        {!loading &&
+          products.map((product, index) => (
+            <ProductItem key={product.id || index} product={product} />
+          ))}
       </div>
       <Pagination
         align="center"
         pageSize={pageSize}
-        total={listProducts.length}
+        total={total}
         current={currentPage}
         onChange={handleChangePage}
         style={{marginBottom: "20px"}}

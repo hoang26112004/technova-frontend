@@ -1,44 +1,80 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { ImHeadphones } from "react-icons/im";
 import { FiPackage } from "react-icons/fi";
 import { FaTruck } from "react-icons/fa";
 import { PiHandCoinsFill } from "react-icons/pi";
 import { FaHeart } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 import "./RightSession.scss";
 import { formatNumber } from "@/utils/function";
+import cartApi from "@/utils/api/cartApi";
 
-const RightSession = ({product}) => {
+const RightSession = ({ product }) => {
   const [infoSelect, setInfoSelect] = useState({
     type: 0,
     quantity: "1",
   });
   const [isLike, setIsLike] = useState(false);
+  const navigate = useNavigate();
+
+  const variants = product?.variants || [];
+  const selectedVariant = useMemo(
+    () => variants[infoSelect.type],
+    [variants, infoSelect.type]
+  );
+  const unitPrice =
+    selectedVariant?.price != null ? selectedVariant.price : product?.price;
+  const discount = Number(product?.discount || 0);
 
   const benefits = [
     {
       icon: <ImHeadphones />,
-      title: "Giao hàng toàn quốc",
-      desc: "Thanh toán (COD) khi nhận hàng",
+      title: "Giao hang toan quoc",
+      desc: "Thanh toan (COD) khi nhan hang",
     },
     {
       icon: <FiPackage />,
-      title: "Miễn phí giao hàng",
-      desc: "Theo chính sách",
+      title: "Mien phi giao hang",
+      desc: "Theo chinh sach",
     },
     {
       icon: <FaTruck />,
-      title: "Đổi trả trong 7 ngày",
-      desc: "Kể từ ngày giao hàng",
+      title: "Doi tra trong 7 ngay",
+      desc: "Ke tu ngay giao hang",
     },
     {
       icon: <PiHandCoinsFill />,
-      title: "Hỗ trợ 24/7",
-      desc: "Theo chính sách",
+      title: "Ho tro 24/7",
+      desc: "Theo chinh sach",
     },
   ];
+
+  const handleAddToCart = async () => {
+    const variantId = selectedVariant?.id;
+    if (!variantId) {
+      alert("San pham chua co bien the de mua.");
+      return;
+    }
+    const qty = Math.max(1, Number(infoSelect.quantity || 1));
+    try {
+      await cartApi.addItem(variantId, qty);
+      alert("Da them vao gio hang.");
+    } catch (error) {
+      const message =
+        error?.response?.data?.data?.message ||
+        error?.response?.data?.message ||
+        "Them vao gio hang that bai.";
+      alert(message);
+    }
+  };
+
+  const handleBuyNow = async () => {
+    await handleAddToCart();
+    navigate("/cart");
+  };
 
   return (
     <div className="right-session">
@@ -62,19 +98,19 @@ const RightSession = ({product}) => {
       <div className="right-session__price">
         <span
           className={`right-session__price__sale ${
-            product.discount > 0 ? "" : "hidden"
+            discount > 0 ? "" : "hidden"
           }`}
         >
-          {formatNumber(product.price * (1 - product.discount / 100))} đ
+          {formatNumber(unitPrice * (1 - discount / 100))} d
         </span>
         <span className="right-session__price__real">
-          {formatNumber(product.price)} đ
+          {formatNumber(unitPrice)} d
         </span>
       </div>
       <div className="right-session__type">
-        <p>Phân loại</p>
+        <p>Phan loai</p>
         <div className="right-session__type__buttons">
-          {product.types.map((type, index) => (
+          {(product.types || ["Default"]).map((type, index) => (
             <button
               onClick={() => setInfoSelect({ ...infoSelect, type: index })}
               key={index}
@@ -86,7 +122,7 @@ const RightSession = ({product}) => {
         </div>
       </div>
       <div className="right-session__quantity-group">
-        <p>Số lượng</p>
+        <p>So luong</p>
         <div className="right-session__quantity-group__quantity">
           <div className="right-session__quantity-group__quantity-buttons">
             <button
@@ -120,12 +156,16 @@ const RightSession = ({product}) => {
               +
             </button>
           </div>
-          <p>Tìm kiếm sản phẩm tương tự</p>
+          <p>Tim kiem san pham tuong tu</p>
         </div>
       </div>
       <div className="right-session__button">
-        <button className="right-session__button-add">Thêm vào giỏ hàng</button>
-        <button className="right-session__button-buy">Mua ngay</button>
+        <button className="right-session__button-add" onClick={handleAddToCart}>
+          Them vao gio hang
+        </button>
+        <button className="right-session__button-buy" onClick={handleBuyNow}>
+          Mua ngay
+        </button>
       </div>
       <div className="right-session__benefits">
         {benefits.map((benefit, index) => (
@@ -142,6 +182,6 @@ const RightSession = ({product}) => {
       </div>
     </div>
   );
-}
+};
 
 export default RightSession;
