@@ -1,11 +1,13 @@
-.swiper-header{
+.swiper-header {
   width: 100%;
-  background-color: #ff6347;
-  padding: 11px 130px;
+  background-color: #ff7a59;
+  border-bottom: 1px solid #efe6e1;
+  padding: 10px 130px;
   display: flex;
   align-items: center;
+  color: #e8ecf4;
 
-  .swiper-button{
+  .swiper-button {
     padding: 4px;
     background-color: #fff;
     border-radius: 50%;
@@ -13,50 +15,43 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    border: none;
+    border: 1px solid #ffe1d7;
 
-    .swiper-icon{
+    .swiper-icon {
       width: 20px;
       height: 20px;
-      color: #ff6347;
+      color: #ff7a59;
     }
   }
 
-  .swiper-button_disabled{
-    background-color: #D9D9D9;
-    opacity: 50%;
+  .swiper-button_disabled {
+    opacity: 0.5;
   }
 
-  .swiper-container{
+  .swiper-container {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    .swiper-slide{
+    .swiper-slide {
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 500;
       color: #fff;
-      cursor: pointer;
-
-      &:hover{
-        color: #D9D9D9;
-      }
     }
   }
 
-  @media screen and (max-width: 767.98px){
-    padding: 11px 20px;
+  @media screen and (max-width: 767.98px) {
+    padding: 10px 20px;
   }
 
-  @media screen and (max-width: 444.98px){
-    padding: 11px 20px;
-
-    .swiper-button{
-      display: none;  
+  @media screen and (max-width: 444.98px) {
+    padding: 10px 20px;
+    .swiper-button {
+      display: none;
     }
   }
 }

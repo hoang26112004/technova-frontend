@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -23,7 +23,7 @@ const SwiperHeader = () => {
       };
 
       swiperInstance.on("slideChange", updateNavigation);
-      updateNavigation(); // Gọi 1 lần để cập nhật trạng thái ban đầu
+      updateNavigation();
 
       return () => {
         swiperInstance.off("slideChange", updateNavigation);
@@ -35,9 +35,7 @@ const SwiperHeader = () => {
     <div className="swiper-header">
       <button
         ref={prevRef}
-        className={`swiper-button ${
-          isBeginning ? "swiper-button_disabled" : ""
-        }`}
+        className={`swiper-button ${isBeginning ? "swiper-button_disabled" : ""}`}
         disabled={isBeginning}
       >
         <GrFormPrevious className="swiper-icon" />
@@ -51,9 +49,9 @@ const SwiperHeader = () => {
         }}
         className="swiper-container"
       >
-        <SwiperSlide>Chào đón bộ sưu tập thu đông 2024</SwiperSlide>
-        <SwiperSlide>Phái đẹp để yêu, vạn deal cưng chiều</SwiperSlide>
-        <SwiperSlide>Đồ mặc cả nhà, êm ái cả ngày</SwiperSlide>
+        <SwiperSlide>TechNova: Hang moi ve hang tuan</SwiperSlide>
+        <SwiperSlide>Giam gia linh kien va phu kien gaming</SwiperSlide>
+        <SwiperSlide>Tra gop 0% cho laptop va dien thoai</SwiperSlide>
       </Swiper>
       <button
         ref={nextRef}
@@ -64,6 +62,6 @@ const SwiperHeader = () => {
       </button>
     </div>
   );
-}
+};
 
-export default SwiperHeader
+export default SwiperHeader;
