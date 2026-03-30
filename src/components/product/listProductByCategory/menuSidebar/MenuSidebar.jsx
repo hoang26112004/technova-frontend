@@ -1,12 +1,13 @@
 /* eslint-disable */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 
 import "./MenuSidebar.scss";
-import { categorys } from "@/utils/const/Constant";
+import categoryApi from "@/utils/api/categoryApi";
 const MenuSidebar = () => {
   const [opens, setOpens] = useState([]);
   const [isOpenPrice, setIsOpenPrice] = useState(true);
+  const [category, setCategory] = useState([]);
 
   const handleClick = (value, isOpen) => {
     if (isOpen) {
@@ -16,7 +17,21 @@ const MenuSidebar = () => {
     }
   };
 
-  const category = categorys;
+  useEffect(() => {
+    let isMounted = true;
+    categoryApi
+      .getCategories({ page: 0, size: 50 })
+      .then((res) => {
+        const items = res?.data?.data?.content || [];
+        if (isMounted) setCategory(items);
+      })
+      .catch((error) => {
+        console.error("Load categories error:", error);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   return (
     <div className="menuSidebar">
       <div className="menuSidebar__category">
@@ -39,9 +54,7 @@ const MenuSidebar = () => {
             </div>
             {opens.includes(item.id) && (
               <div className="menuSidebar__category-item-child">
-                {item.children.map((child) => (
-                  <p key={child.id}>{child.name}</p>
-                ))}
+                <p>KhÃ´ng cÃ³ danh má»¥c con</p>
               </div>
             )}
           </div>
