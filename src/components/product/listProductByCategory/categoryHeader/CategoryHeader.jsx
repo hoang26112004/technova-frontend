@@ -1,6 +1,7 @@
 /* eslint-disable*/
-import { listCategory } from "@/utils/const/Constant";
 import React, { useEffect, useRef, useState } from "react";
+import categoryApi from "@/utils/api/categoryApi";
+import { resolveImageUrl } from "@/utils/api/mappers";
 
 import "./CategoryHeader.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,7 +9,7 @@ import { Autoplay, Navigation } from "swiper/modules";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 const CategoryHeader = () => {
-  const categorys = listCategory;
+  const [categorys, setCategorys] = useState([]);
   const [slidesPerView, setSlidesPerView] = useState(5);
   const updateSlidesPerView = () => {
     const width = window.innerWidth;
@@ -46,6 +47,22 @@ const CategoryHeader = () => {
     }
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+    categoryApi
+      .getCategories({ page: 0, size: 20 })
+      .then((res) => {
+        const items = res?.data?.data?.content || [];
+        if (isMounted) setCategorys(items);
+      })
+      .catch((error) => {
+        console.error("Load categories error:", error);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="category_swiper">
       <button ref={prevRef} className={`swiper-button `}>
@@ -67,9 +84,12 @@ const CategoryHeader = () => {
           <SwiperSlide className="swiper-category__item" key={index}>
             <div key={index} className="category__item">
               <div className="category__item-img">
-                <img src={category.image} alt={category.title} />
+                <img
+                  src={resolveImageUrl(category.imageUrl)}
+                  alt={category.name}
+                />
               </div>
-              <button className="category__item-btn">{category.title}</button>
+              <button className="category__item-btn">{category.name}</button>
             </div>
           </SwiperSlide>
         ))}
