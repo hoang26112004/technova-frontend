@@ -40,6 +40,7 @@ const mapProductToAdmin = (product) => {
       : "",
     rating: 0,
     variations,
+    variantsRaw: product?.variants || [],
     tags: [],
   };
 };
@@ -284,6 +285,7 @@ const ProductAdminPage = () => {
                 isOpen={true}
                 onClose={() => setShowModal(null)}
                 onSubmit={handleFormSubmit}
+                onVariantsUpdated={refreshProducts}
                 initialData={showModal === "edit" ? selectedProduct : null}
                 formType={showModal}
               />
