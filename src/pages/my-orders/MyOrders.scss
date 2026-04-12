@@ -1,0 +1,169 @@
+.my-orders {
+  padding: 22px 0 44px;
+  display: flex;
+  justify-content: center;
+}
+
+.my-orders__container {
+  width: 84%;
+  max-width: 1100px;
+}
+
+.my-orders__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 16px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.my-orders__header h1 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.my-orders__header p {
+  margin: 8px 0 0;
+  color: #475569;
+  font-size: 13px;
+}
+
+.my-orders__filters {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.my-orders__select {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.my-orders__select:focus {
+  border-color: rgba(255, 99, 71, 0.55);
+  box-shadow: 0 0 0 4px rgba(255, 99, 71, 0.12);
+}
+
+.my-orders__link {
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.my-orders__notice {
+  margin-top: 12px;
+  border-radius: 14px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.my-orders__notice--error {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.06);
+}
+
+.my-orders__list {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.my-orders__card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 14px 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.my-orders__row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(226, 232, 240, 0.9);
+}
+
+.my-orders__row:last-of-type {
+  border-bottom: none;
+}
+
+.my-orders__label {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.my-orders__value {
+  color: #0b1220;
+  font-weight: 900;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.my-orders__actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.my-orders__btn {
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-weight: 900;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #0b1220;
+  transition: transform 120ms ease, box-shadow 160ms ease, opacity 160ms ease;
+  box-shadow: 0 12px 18px rgba(255, 99, 71, 0.18);
+}
+
+.my-orders__btn:active {
+  transform: translateY(1px);
+}
+
+.my-orders__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.my-orders__pager {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .my-orders__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .my-orders__container {
+    width: 92%;
+  }
+
+  .my-orders__header {
+    flex-direction: column;
+  }
+
+  .my-orders__row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}

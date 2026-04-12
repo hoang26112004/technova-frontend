@@ -1,0 +1,14 @@
+.layout-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-main {
+  flex: 1 0 auto;
+}
+
+.layout-footer {
+  flex: 0 0 auto;
+}
+

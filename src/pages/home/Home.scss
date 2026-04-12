@@ -1,0 +1,39 @@
+.tech-home {
+  background:
+    radial-gradient(560px 560px at 10% 8%, rgba(255, 99, 71, 0.14), transparent 60%),
+    radial-gradient(720px 720px at 92% 14%, rgba(255, 138, 118, 0.12), transparent 62%),
+    radial-gradient(540px 540px at 70% 92%, rgba(15, 23, 42, 0.06), transparent 60%),
+    var(--surface-2);
+  padding: 28px 16px 72px;
+}
+
+.tech-home__container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tech-home__top {
+  display: grid;
+  /* Stack Banner + Recommendations to avoid the right rail being squeezed */
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+/* Allow grid children to shrink instead of overflowing into the other column.
+   Without this, the horizontal product rail's min-content width can force overlap. */
+.tech-home__top > * {
+  min-width: 0;
+}
+
+.tech-home__cats {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Keep the section stacked on all widths (matches "DevTools shrink" behavior). */

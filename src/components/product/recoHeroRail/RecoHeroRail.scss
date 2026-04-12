@@ -1,0 +1,131 @@
+.reco-rail {
+  background: rgba(255, 255, 255, 0.60);
+  border: 1px solid rgba(226, 232, 240, 0.92);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.reco-rail__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.reco-rail__eyebrow {
+  margin: 0 0 8px;
+  font-weight: 900;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: rgba(255, 99, 71, 0.95);
+}
+
+.reco-rail__header h2 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: -0.03em;
+}
+
+.reco-rail__sub {
+  margin: 6px 0 0;
+  color: var(--muted-2);
+  font-size: 13px;
+}
+
+.reco-rail__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reco-rail__scroller {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 8px 4px 14px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reco-rail__scroller::-webkit-scrollbar {
+  height: 6px;
+}
+
+.reco-rail__scroller::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.28);
+  border-radius: 999px;
+}
+
+.reco-rail__item {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+}
+
+.reco-rail__item .product-item {
+  width: 270px;
+  height: 500px;
+}
+
+/* Skeleton */
+.reco-rail__item--skeleton {
+  width: 270px;
+  height: 500px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 14px;
+}
+
+.reco-rail__media {
+  height: 315px;
+  border-radius: 14px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.reco-rail__media,
+.reco-rail__line {
+  background: linear-gradient(90deg, rgba(226, 232, 240, 0.55), rgba(226, 232, 240, 0.35), rgba(226, 232, 240, 0.55));
+  background-size: 220% 100%;
+  animation: shimmer 1100ms ease-in-out infinite;
+}
+
+.reco-rail__line {
+  height: 12px;
+  border-radius: 999px;
+}
+
+.reco-rail__line--short {
+  width: 62%;
+}
+
+.reco-rail__line--price {
+  width: 46%;
+  height: 14px;
+  margin-top: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: 100% 0; }
+}
+
+@media (max-width: 920px) {
+  .reco-rail__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .reco-rail__actions {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .reco-rail__item .product-item { width: 240px; }
+  .reco-rail__item--skeleton { width: 240px; }
+}
