@@ -31,7 +31,7 @@ const Category = () => {
   }, []);
 
   return (
-    <div data-aos="fade-up" className="category">
+    <div className="category">
       {!loading &&
         categorys.map((item, index) => (
         <div

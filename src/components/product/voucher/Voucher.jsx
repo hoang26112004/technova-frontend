@@ -4,10 +4,10 @@ import "./Voucher.scss";
 
 const Voucher = () => {
   const items = [
-    "Mien phi doi tra 7 ngay",
-    "Bao hanh dien tu",
-    "Tra gop 0%",
-    "Ho tro ky thuat 24/7",
+    "Miễn phí đổi trả 7 ngày",
+    "Bảo hành điện tử",
+    "Trả góp 0%",
+    "Hỗ trợ kỹ thuật 24/7",
   ];
 
   return (

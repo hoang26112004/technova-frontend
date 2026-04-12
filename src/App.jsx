@@ -14,6 +14,8 @@ import ProductsByCategory from "./pages/productsByCategory/ProductsByCategory";
 import ContactPage from "./pages/contact/ContactPage";
 import MarketSystemPage from "./pages/market-system/MarketSystemPage";
 import Order from "./pages/order/Order";
+import OrderTracking from "./pages/order-tracking/OrderTracking";
+import MyOrders from "./pages/my-orders/MyOrders";
 import BlogList from "./components/blog/BlogList";
 import BlogDetail from "./components/blog/BlogDetail";
 import SearchResultPage from "./pages/blog/SearchResultPage";
@@ -22,6 +24,8 @@ import ProductAdminPage from "./pages/admin/ProductAdminPage";
 import OrderAdminPage from "./pages/admin/OrderAdminPage";
 import CategoryAdminPage from "./pages/admin/CategoryAdminPage";
 import UserAdminPage from "./pages/admin/UserAdminPage";
+import VariantAdminPage from "./pages/admin/VariantAdminPage";
+import AttributeAdminPage from "./pages/admin/AttributeAdminPage";
 import FollowingProducts from "./pages/followingProducts/FollowingProducts";
 import AdminGuard from "./components/commons/guards/AdminGuard";
 const App = () => {
@@ -78,6 +82,14 @@ const App = () => {
       element: <Order />,
     },
     {
+      path: "/order-tracking",
+      element: <OrderTracking />,
+    },
+    {
+      path: "/my-orders",
+      element: <MyOrders />,
+    },
+    {
       path: "/blog",
       element: <BlogList />,
     },
@@ -110,6 +122,22 @@ const App = () => {
       element: (
         <AdminGuard>
           <OrderAdminPage />
+        </AdminGuard>
+      ),
+    },
+    {
+      path: "/admin/variants",
+      element: (
+        <AdminGuard>
+          <VariantAdminPage />
+        </AdminGuard>
+      ),
+    },
+    {
+      path: "/admin/attributes",
+      element: (
+        <AdminGuard>
+          <AttributeAdminPage />
         </AdminGuard>
       ),
     },

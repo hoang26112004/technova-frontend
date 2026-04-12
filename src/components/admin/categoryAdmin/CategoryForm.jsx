@@ -1,5 +1,4 @@
-import { Plus, Trash } from "lucide-react";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const CategoryForm = ({
 	formData,
@@ -7,9 +6,39 @@ const CategoryForm = ({
 	onSubmit,
 	formType,
 	onClose,
-	onAddSubcategory,
-	onRemoveSubcategory,
+	onClearImage,
 }) => {
+	const fileInputRef = useRef(null);
+	const [previewUrl, setPreviewUrl] = useState("");
+
+	useEffect(() => {
+		if (!formData.image) {
+			setPreviewUrl("");
+			return;
+		}
+		const url = URL.createObjectURL(formData.image);
+		setPreviewUrl(url);
+		return () => URL.revokeObjectURL(url);
+	}, [formData.image]);
+
+	const handlePickImage = () => {
+		if (fileInputRef.current) fileInputRef.current.click();
+	};
+
+	const handleDrop = (event) => {
+		event.preventDefault();
+		const file = event.dataTransfer.files?.[0];
+		if (file) {
+			onChange({ target: { name: "image", files: [file] } });
+		}
+	};
+
+	const handleDragOver = (event) => {
+		event.preventDefault();
+	};
+
+	const activeImageUrl = previewUrl || formData.imageUrl;
+
 	return (
 		<form onSubmit={onSubmit} className="space-y-4">
 			<div>
@@ -41,74 +70,68 @@ const CategoryForm = ({
 
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
-					Icon
+					Image
 				</label>
-				<input
-					type="text"
-					name="icon"
-					value={formData.icon}
-					onChange={onChange}
-					placeholder="📱, 👕, 🏠, etc."
-					className="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-				/>
-			</div>
-
-			<div>
-				<label className="block text-sm font-medium text-gray-700">
-					Display Order
-				</label>
-				<input
-					type="number"
-					name="displayOrder"
-					value={formData.displayOrder}
-					onChange={onChange}
-					min="1"
-					className="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-				/>
-			</div>
-
-			<div>
-				<label className="block text-sm font-medium text-gray-700 mb-2">
-					Subcategories
-				</label>
-
-				{formData.subcategories.map((subcategory, index) => (
-					<div key={index} className="flex items-center mb-2">
-						<input
-							type="text"
-							value={subcategory}
-							onChange={(e) => {
-								const newSubcategories = [
-									...formData.subcategories,
-								];
-								newSubcategories[index] = e.target.value;
-								onChange({
-									target: {
-										name: "subcategories",
-										value: newSubcategories,
-									},
-								});
-							}}
-							className="block w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-							placeholder="Subcategory name"
-						/>
+				<div
+					onDrop={handleDrop}
+					onDragOver={handleDragOver}
+					role="button"
+					tabIndex={0}
+					onKeyDown={(event) => {
+						if (event.key === "Enter" || event.key === " ") {
+							handlePickImage();
+						}
+					}}
+					onClick={handlePickImage}
+					className="mt-1 flex items-center gap-4 rounded-lg border-2 border-dashed border-orange-200 bg-orange-50/40 p-4 transition hover:border-orange-400"
+				>
+					<div className="flex h-16 w-16 items-center justify-center rounded-lg border border-orange-200 bg-white">
+						{activeImageUrl ? (
+							<img
+								src={activeImageUrl}
+								alt={`${formData.name || "Category"} image`}
+								className="h-14 w-14 rounded-md object-cover"
+							/>
+						) : (
+							<span className="text-xs text-gray-400">
+								No image
+							</span>
+						)}
+					</div>
+					<div className="flex-1">
+						<div className="text-sm font-medium text-gray-700">
+							Drop an image here or click to upload
+						</div>
+						<div className="text-xs text-gray-500">
+							PNG, JPG up to 5MB
+						</div>
+						{formData.image?.name && (
+							<div className="mt-1 text-xs text-gray-600">
+								Selected: {formData.image.name}
+							</div>
+						)}
+					</div>
+					{formData.image && (
 						<button
 							type="button"
-							onClick={() => onRemoveSubcategory(index)}
-							className="ml-2 text-red-500 hover:text-red-700"
+							onClick={(event) => {
+								event.stopPropagation();
+								onClearImage();
+							}}
+							className="rounded-md border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
 						>
-							<Trash className="h-4 w-4" />
+							Remove
 						</button>
-					</div>
-				))}
-
-				<button
-					type="button"
-					onClick={onAddSubcategory}
-					className="mt-2 flex items-center text-sm text-orange-500 hover:text-orange-700"
-				>
-					<Plus className="h-4 w-4 mr-1" /> Add Subcategory
-				</button>
+					)}
+				</div>
+				<input
+					ref={fileInputRef}
+					type="file"
+					name="image"
+					accept="image/*"
+					onChange={onChange}
+					className="hidden"
+				/>
 			</div>
 
 			<div className="flex justify-end space-x-3 pt-4">

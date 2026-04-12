@@ -32,6 +32,16 @@ const ProductStatusFilter = ({
 				Active ({statusCounts["Active"]})
 			</button>
 			<button
+				onClick={() => onFilterChange("Inactive")}
+				className={`px-3 py-1 rounded-md text-sm ${
+					statusFilter === "Inactive"
+						? "bg-gray-700 text-white"
+						: "bg-gray-100 text-gray-800 hover:bg-gray-200"
+				}`}
+			>
+				Inactive ({statusCounts["Inactive"]})
+			</button>
+			<button
 				onClick={() => onFilterChange("Low Stock")}
 				className={`px-3 py-1 rounded-md text-sm ${
 					statusFilter === "Low Stock"
@@ -50,16 +60,6 @@ const ProductStatusFilter = ({
 				}`}
 			>
 				Out of Stock ({statusCounts["Out of Stock"]})
-			</button>
-			<button
-				onClick={() => onFilterChange("Clearance")}
-				className={`px-3 py-1 rounded-md text-sm ${
-					statusFilter === "Clearance"
-						? "bg-blue-600 text-white"
-						: "bg-blue-100 text-blue-800 hover:bg-blue-200"
-				}`}
-			>
-				Clearance ({statusCounts["Clearance"]})
 			</button>
 		</div>
 	);

@@ -49,9 +49,9 @@ const SwiperHeader = () => {
         }}
         className="swiper-container"
       >
-        <SwiperSlide>TechNova: Hang moi ve hang tuan</SwiperSlide>
-        <SwiperSlide>Giam gia linh kien va phu kien gaming</SwiperSlide>
-        <SwiperSlide>Tra gop 0% cho laptop va dien thoai</SwiperSlide>
+        <SwiperSlide>TechNova: Hàng mới về hàng tuần</SwiperSlide>
+        <SwiperSlide>Giảm giá linh kiện và phụ kiện gaming</SwiperSlide>
+        <SwiperSlide>Trả góp 0% cho laptop và điện thoại</SwiperSlide>
       </Swiper>
       <button
         ref={nextRef}

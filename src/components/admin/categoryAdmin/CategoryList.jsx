@@ -30,34 +30,17 @@ const CategoryList = ({
 								onClick={() => onSort("name")}
 								className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
 							>
-								Category Name{" "}
+								Category Name
 								{sortConfig.key === "name" &&
 									(sortConfig.direction === "asc"
-										? "↑"
-										: "↓")}
-							</th>
-							<th
-								onClick={() => onSort("displayOrder")}
-								className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
-							>
-								Display Order{" "}
-								{sortConfig.key === "displayOrder" &&
-									(sortConfig.direction === "asc"
-										? "↑"
-										: "↓")}
+										? " ^"
+										: " v")}
 							</th>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Products
+								Description
 							</th>
-							<th
-								onClick={() => onSort("lastUpdated")}
-								className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
-							>
-								Last Updated{" "}
-								{sortConfig.key === "lastUpdated" &&
-									(sortConfig.direction === "asc"
-										? "↑"
-										: "↓")}
+							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Image
 							</th>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 								Actions

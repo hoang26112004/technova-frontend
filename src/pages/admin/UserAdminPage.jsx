@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 import LayoutAdmin from "./LayoutAdmin";
 import HeaderAdmin from "@/components/admin/HeaderAdmin";
 import adminUserApi from "@/utils/api/adminUserApi";
@@ -54,7 +54,7 @@ const UserAdminPage = () => {
       const message =
         err?.response?.data?.data?.message ||
         err?.response?.data?.message ||
-        "Khong the tai danh sach user.";
+        "Không thể tải danh sách user.";
       setError(message);
     } finally {
       setLoading(false);
@@ -79,7 +79,7 @@ const UserAdminPage = () => {
       const message =
         err?.response?.data?.data?.message ||
         err?.response?.data?.message ||
-        "Khong the cap nhat trang thai.";
+        "Không thể cập nhật trạng thái.";
       alert(message);
     }
   };
@@ -108,7 +108,7 @@ const UserAdminPage = () => {
       const message =
         err?.response?.data?.data?.message ||
         err?.response?.data?.message ||
-        "Khong the reset mat khau.";
+        "Không thể reset mật khẩu.";
       alert(message);
     }
   };
@@ -132,7 +132,7 @@ const UserAdminPage = () => {
       const message =
         err?.response?.data?.data?.message ||
         err?.response?.data?.message ||
-        "Khong the tao admin.";
+        "Không thể tạo admin.";
       alert(message);
     }
   };
@@ -173,7 +173,7 @@ const UserAdminPage = () => {
                 type="submit"
                 className="rounded-md bg-blue-600 px-4 py-2 text-white"
               >
-                Tim kiem
+                Tìm kiếm
               </button>
             </form>
 
@@ -188,7 +188,7 @@ const UserAdminPage = () => {
 
           <div className="flex items-center justify-between text-sm text-gray-600">
             <span>Tong: {formattedTotal}</span>
-            {loading && <span>Dang tai...</span>}
+            {loading && <span>Äang táº£i...</span>}
           </div>
 
           {error && <p className="text-sm text-red-600">{error}</p>}
@@ -250,7 +250,7 @@ const UserAdminPage = () => {
                 {!loading && users.length === 0 && (
                   <tr>
                     <td colSpan="7" className="px-4 py-6 text-center text-sm">
-                      Khong co user nao.
+                      KhÃ´ng cÃ³ user nÃ o.
                     </td>
                   </tr>
                 )}
@@ -378,3 +378,4 @@ const UserAdminPage = () => {
 };
 
 export default UserAdminPage;
+

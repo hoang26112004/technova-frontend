@@ -53,7 +53,7 @@ const Cart = () => {
       const message =
         error?.response?.data?.data?.message ||
         error?.response?.data?.message ||
-        "Khong lay duoc gio hang.";
+        "Không lấy được giỏ hàng.";
       alert(message);
     }
   };
@@ -79,8 +79,8 @@ const Cart = () => {
           })
           .filter(Boolean)
       );
-    } catch (error) {
-      alert("Cap nhat so luong that bai.");
+    } catch {
+      alert("Cập nhật số lượng thất bại.");
     }
   };
 
@@ -101,8 +101,8 @@ const Cart = () => {
           })
           .filter(Boolean)
       );
-    } catch (error) {
-      alert("Cap nhat so luong that bai.");
+    } catch {
+      alert("Cập nhật số lượng thất bại.");
     }
   };
 
@@ -122,14 +122,14 @@ const Cart = () => {
       await cartApi.removeItem(id);
       setListProducts((prev) => prev.filter((p) => p.id !== id));
       setSelectedProducts((prev) => prev.filter((p) => p.id !== id));
-    } catch (error) {
-      alert("Xoa san pham that bai.");
+    } catch {
+      alert("Xóa sản phẩm thất bại.");
     }
   };
 
   const handleClickBuy = () => {
     if (selectedProducts.length === 0) {
-      alert("Vui long chon san pham de thanh toan.");
+      alert("Vui lòng chọn sản phẩm để thanh toán.");
       return;
     }
 
@@ -142,10 +142,10 @@ const Cart = () => {
     <div>
       <Layout>
         <div className="card-page">
-          <TitleRouter title="Gio hang" />
+          <TitleRouter title="Giỏ hàng" />
           <div className="card">
             <div className="card-container">
-              <h1>Gio hang cua ban</h1>
+              <h1>Giỏ hàng của bạn</h1>
               <div className="card-container__list">
                 {listProducts.map((product) => (
                   <CartItem
@@ -161,14 +161,14 @@ const Cart = () => {
               </div>
               <div className="card-container__total">
                 <p>
-                  Tong tien: <span>{formatNumber(totalPrice)} d</span>
+                  Tổng tiền: <span>{formatNumber(totalPrice)} d</span>
                 </p>
                 <div className="card-container__total-buttons">
                   <button className="btn1" onClick={() => navigate("/")}>
-                    Tiep tuc mua hang
+                    Tiếp tục mua hàng
                   </button>
                   <button className="btn2" onClick={handleClickBuy}>
-                    Thanh toan ngay
+                    Thanh toán ngay
                   </button>
                 </div>
               </div>
@@ -181,3 +181,4 @@ const Cart = () => {
 };
 
 export default Cart;
+

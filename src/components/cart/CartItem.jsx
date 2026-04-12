@@ -15,7 +15,6 @@ const CartItem = ({
   onRemove,
 }) => {
   const isSelected = selectedProducts.some((p) => p.id === product.id);
-  const discount = Number(product?.discount || 0);
 
   return (
     <div className="card-item">
@@ -32,10 +31,7 @@ const CartItem = ({
           <h3>{product.name}</h3>
           <p>{product.type || ""}</p>
           <p className="price">
-            <span className="sale">
-              {formatNumber(product.price * (1 - discount / 100))} d
-            </span>
-            -<span className="real">{formatNumber(product.price)} d</span>
+            <span>{formatNumber(product.price)} d</span>
           </p>
           <div className="quantity">
             <button onClick={() => onDecrease(product.id)}>-</button>
@@ -43,25 +39,19 @@ const CartItem = ({
             <button onClick={() => onIncrease(product.id)}>+</button>
           </div>
           <p className="price__res">
-            {formatNumber(
-              product.quantity * product.price * (1 - discount / 100)
-            )}{" "}
-            d
+            {formatNumber(product.quantity * product.price)} d
           </p>
         </div>
       </div>
 
       <div className="card-item__right">
         <p className="price">
-          {formatNumber(
-            product.quantity * product.price * (1 - discount / 100)
-          )}{" "}
-          d
+          {formatNumber(product.quantity * product.price)} d
         </p>
         <div className="card-item__right-search">
           <MdCancel className="icon-cancel" onClick={() => onRemove(product.id)} />
           <div className="search">
-            <p>Tim kiem san pham tuong tu</p>
+            <p>Tìm kiếm sản phẩm tương tự</p>
             <FaCaretDown className="icon-down" />
           </div>
         </div>

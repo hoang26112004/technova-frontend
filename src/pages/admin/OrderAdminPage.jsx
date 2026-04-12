@@ -130,7 +130,7 @@ const OrderAdminPage = () => {
         <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 10, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
             <OrderFilters

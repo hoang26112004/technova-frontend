@@ -19,7 +19,7 @@ const RightOrder = ({ products, onIncrease, onDecrease, onPlaceOrder }) => {
 
   return (
     <div className="rightOrder">
-      <h1>Don hang ({products.length} san pham)</h1>
+      <h1>Đơn hàng ({products.length} sản phẩm)</h1>
       <div className="rightOrder__list">
         {products.map((product) => (
           <div key={product.id} className="rightOrder__list-item">
@@ -54,18 +54,18 @@ const RightOrder = ({ products, onIncrease, onDecrease, onPlaceOrder }) => {
       <div className="rightOrder__total-container">
         <div className="rightOrder__total-container-item">
           <div className="rightOrder__total-container-item-i">
-            <p>Tam tinh:</p>
+            <p>Tạm tính:</p>
             <p>{formatNumber(total)} d</p>
           </div>
           <div className="rightOrder__total-container-item-i">
-            <p>Phi van chuyen:</p>
+            <p>Phí vận chuyển:</p>
             <p>0 d</p>
           </div>
         </div>
       </div>
       <div className="rightOrder__total-container">
         <div className=" total-item">
-          <p>Tong cong:</p>
+          <p>Tổng cộng:</p>
           <p>{formatNumber(total)} d</p>
         </div>
       </div>
@@ -74,10 +74,10 @@ const RightOrder = ({ products, onIncrease, onDecrease, onPlaceOrder }) => {
           <span>
             <GrFormPrevious />
           </span>
-          Quay lai gio hang
+          Quay lại giỏ hàng
         </p>
         <button className="rightOrder__button-btn" onClick={onPlaceOrder}>
-          Dat hang
+          Đặt hàng
         </button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import LayoutAdmin from "./LayoutAdmin";
 import HeaderAdmin from "@/components/admin/HeaderAdmin";
 import { BarChart2, ShoppingBag, Users, Zap } from "lucide-react";
@@ -17,6 +17,26 @@ import DeleteProductModal from "@/components/admin/productAdmin/DeleteProductMod
 import productApi from "@/utils/api/productApi";
 import categoryApi from "@/utils/api/categoryApi";
 import { buildVariantLabel, resolveImageUrl } from "@/utils/api/mappers";
+import dashboardApi from "@/utils/api/dashboardApi";
+
+const formatCurrency = (value) => {
+  const number = Number(value || 0);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(number);
+};
+
+const formatNumber = (value) =>
+  new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(
+    Number(value || 0)
+  );
+
+const formatOrdersPerUser = (value) =>
+  new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(
+    Number(value || 0)
+  );
 
 const mapProductToAdmin = (product) => {
   const images =
@@ -25,13 +45,16 @@ const mapProductToAdmin = (product) => {
     product?.variants?.length > 0
       ? product.variants.map(buildVariantLabel)
       : [];
+  const isActive = Boolean(product?.isActive);
   return {
     id: product?.id,
     name: product?.name || "",
     category: product?.categoryName || "",
+    categoryId: product?.categoryId || "",
     price: `$${Number(product?.price || 0).toFixed(2)}`,
     stock: product?.stock ?? 0,
-    status: product?.isActive ? "Active" : "Inactive",
+    isActive,
+    status: isActive ? "Active" : "Inactive",
     image: images.length ? images : ["/vite.svg"],
     description: product?.description || "",
     sku: product?.id ? String(product.id).slice(0, 8) : "",
@@ -57,9 +80,32 @@ const dataUrlToFile = (dataUrl, filename) => {
   return new File([u8arr], filename, { type: mime });
 };
 
+const toUploadsPath = (url) => {
+  if (!url || typeof url !== "string") return null;
+  if (url.startsWith("data:")) return null;
+  if (url === "/vite.svg" || url.startsWith("/api/placeholder")) return null;
+
+  if (url.startsWith("/uploads/")) return url;
+  if (url.startsWith("uploads/")) return `/${url}`;
+
+  if (url.startsWith("http")) {
+    try {
+      const u = new URL(url);
+      return u.pathname && u.pathname.startsWith("/uploads/") ? u.pathname : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Unknown non-data url; only keep it if it looks like an uploads path.
+  return url.startsWith("/uploads/") ? url : null;
+};
+
 const ProductAdminPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [dashboard, setDashboard] = useState(null);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
   const [showModal, setShowModal] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,12 +118,19 @@ const ProductAdminPage = () => {
   const [statusFilter, setStatusFilter] = useState("All");
 
   const statusCounts = getProductStatusCounts(products);
+  const lowStockThreshold = 5;
 
   const filteredProducts = products.filter(
     (product) =>
       (product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         String(product.id).toLowerCase().includes(searchQuery.toLowerCase())) &&
-      (statusFilter === "All" || product.status === statusFilter)
+      (statusFilter === "All" ||
+        (statusFilter === "Active" && product.isActive) ||
+        (statusFilter === "Inactive" && !product.isActive) ||
+        (statusFilter === "Low Stock" &&
+          Number(product.stock || 0) > 0 &&
+          Number(product.stock || 0) <= lowStockThreshold) ||
+        (statusFilter === "Out of Stock" && Number(product.stock || 0) === 0))
   );
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -97,9 +150,20 @@ const ProductAdminPage = () => {
 
   const refreshProducts = async () => {
     try {
-      const res = await productApi.getProducts({ page: 0, size: 50, status: true });
-      const items = res?.data?.data?.content || [];
-      setProducts(items.map(mapProductToAdmin));
+      // Backend currently filters by boolean `status`, so to get "All" in admin
+      // we need to load both active and inactive and merge.
+      const [activeRes, inactiveRes] = await Promise.all([
+        productApi.getProducts({ page: 0, size: 200, status: true }),
+        productApi.getProducts({ page: 0, size: 200, status: false }),
+      ]);
+      const activeItems = activeRes?.data?.data?.content || [];
+      const inactiveItems = inactiveRes?.data?.data?.content || [];
+      const merged = [...activeItems, ...inactiveItems];
+      const byId = new Map();
+      merged.forEach((p) => {
+        if (p?.id) byId.set(p.id, p);
+      });
+      setProducts(Array.from(byId.values()).map(mapProductToAdmin));
     } catch (error) {
       console.error("Load products error:", error);
     }
@@ -115,6 +179,18 @@ const ProductAdminPage = () => {
       .catch((error) => {
         console.error("Load categories error:", error);
       });
+
+    setDashboardLoading(true);
+    dashboardApi
+      .getOverview()
+      .then((res) => {
+        setDashboard(res?.data?.data || null);
+      })
+      .catch((error) => {
+        console.error("Load dashboard overview error:", error);
+        setDashboard(null);
+      })
+      .finally(() => setDashboardLoading(false));
   }, []);
 
   useEffect(() => {
@@ -154,7 +230,7 @@ const ProductAdminPage = () => {
       await productApi.toggleStatus(id);
       await refreshProducts();
     } catch (error) {
-      alert("Khong the cap nhat trang thai san pham.");
+      alert("Không thể cập nhật trạng thái sản phẩm.");
     } finally {
       setShowModal(null);
     }
@@ -165,25 +241,17 @@ const ProductAdminPage = () => {
   };
 
   const handleFormSubmit = async (formData) => {
-    const category = categories.find(
-      (c) => c.name.toLowerCase() === String(formData.category).toLowerCase()
-    );
-    if (!category) {
-      alert("Khong tim thay danh muc.");
-      return;
-    }
-
     const payload = formatProductForSave(formData, selectedProduct);
     const form = new FormData();
     form.append("name", payload.name);
     form.append("description", payload.description || "");
     const priceValue = parseFloat(String(payload.price || 0).replace("$", "")) || 0;
     form.append("price", priceValue);
-    form.append("categoryId", category.id);
+    form.append("categoryId", formData.categoryId);
 
-    const existingImageUrls = (payload.image || []).filter(
-      (img) => typeof img === "string" && !img.startsWith("data:")
-    );
+    const existingImageUrls = (payload.image || [])
+      .map((img) => toUploadsPath(img))
+      .filter(Boolean);
     existingImageUrls.forEach((url) => form.append("existingImageUrls", url));
 
     const newImages = (payload.image || []).filter(
@@ -203,7 +271,7 @@ const ProductAdminPage = () => {
       await refreshProducts();
       setShowModal(null);
     } catch (error) {
-      alert("Luu san pham that bai.");
+      alert("Lưu sản phẩm thất bại.");
     }
   };
 
@@ -215,37 +283,51 @@ const ProductAdminPage = () => {
           <motion.div
             className="grid grid-cols-1 gap-5 mb-8 lg:grid-cols-4"
             initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 10, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
             <StatCard
               name="Total Sales"
               icon={Zap}
-              value="$12,345"
+              value={
+                dashboardLoading
+                  ? "..."
+                  : formatCurrency(dashboard?.kpis?.totalSales)
+              }
               color="#6366F1"
             />
             <StatCard
               name="New Users"
               icon={Users}
-              value="1,234"
+              value={
+                dashboardLoading ? "..." : formatNumber(dashboard?.kpis?.newUsers)
+              }
               color="#8B5CF6"
             />
             <StatCard
               name="Total Products"
               icon={ShoppingBag}
-              value="567"
+              value={
+                dashboardLoading
+                  ? "..."
+                  : formatNumber(dashboard?.kpis?.totalProducts)
+              }
               color="#EC4899"
             />
             <StatCard
-              name="Conversion Rate"
+              name="Orders / User"
               icon={BarChart2}
-              value="12,5%"
+              value={
+                dashboardLoading
+                  ? "..."
+                  : formatOrdersPerUser(dashboard?.kpis?.ordersPerUser)
+              }
               color="#10B981"
             />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 10, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
             <ProductFilters
@@ -285,7 +367,7 @@ const ProductAdminPage = () => {
                 isOpen={true}
                 onClose={() => setShowModal(null)}
                 onSubmit={handleFormSubmit}
-                onVariantsUpdated={refreshProducts}
+                categories={categories}
                 initialData={showModal === "edit" ? selectedProduct : null}
                 formType={showModal}
               />
@@ -307,3 +389,4 @@ const ProductAdminPage = () => {
 };
 
 export default ProductAdminPage;
+

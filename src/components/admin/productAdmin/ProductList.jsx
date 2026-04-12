@@ -41,22 +41,7 @@ const ProductList = ({
 							>
 								Price{" "}
 								{sortConfig.key === "price" &&
-									(sortConfig.direction === "asc"
-										? "↑"
-										: "↓")}
-							</th>
-							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Stock
-							</th>
-							<th
-								onClick={() => onSort("status")}
-								className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
-							>
-								Status{" "}
-								{sortConfig.key === "status" &&
-									(sortConfig.direction === "asc"
-										? "↑"
-										: "↓")}
+									(sortConfig.direction === "asc" ? "â†‘" : "â†“")}
 							</th>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 								Actions

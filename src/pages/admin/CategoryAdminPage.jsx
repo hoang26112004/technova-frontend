@@ -13,19 +13,11 @@ import {
 } from "@/components/admin/categoryAdmin/categoryExcel";
 import categoryApi from "@/utils/api/categoryApi";
 
-const mapCategoryToAdmin = (category, index) => ({
+const mapCategoryToAdmin = (category) => ({
   id: category?.id,
   name: category?.name || "",
   description: category?.description || "",
-  icon: "",
-  displayOrder: index + 1,
-  subcategories: [],
-  productCount: 0,
-  lastUpdated: new Date().toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }),
+  imageUrl: category?.imageUrl || "",
 });
 
 const CategoryAdminPage = () => {
@@ -38,7 +30,7 @@ const CategoryAdminPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortConfig, setSortConfig] = useState({
-    key: "displayOrder",
+    key: "name",
     direction: "asc",
   });
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -61,18 +53,8 @@ const CategoryAdminPage = () => {
     id: `CAT-${Math.floor(1000 + Math.random() * 9000)}`,
     name: "",
     description: "",
-    icon: "",
-    displayOrder:
-      categories.length > 0
-        ? Math.max(...categories.map((c) => Number(c.displayOrder))) + 1
-        : 1,
-    subcategories: [],
-    productCount: 0,
-    lastUpdated: new Date().toLocaleDateString("en-US", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    }),
+    imageUrl: "",
+    image: null,
   });
 
   const filteredCategories = categories.filter(
@@ -121,6 +103,9 @@ const CategoryAdminPage = () => {
     const form = new FormData();
     form.append("name", formData.name);
     form.append("description", formData.description || "");
+    if (formData.image) {
+      form.append("image", formData.image);
+    }
     try {
       if (modalType === "add") {
         await categoryApi.create(form);
@@ -156,7 +141,7 @@ const CategoryAdminPage = () => {
         <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 10, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
             <CategoryFilters

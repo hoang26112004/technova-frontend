@@ -26,19 +26,19 @@ const InformationDetail = ({ product }) => {
             className={`${typeMenu === "info" ? "active" : ""}`}
             onClick={() => setTypeMenu("info")}
           >
-            Thong tin san pham
+            Thông tin sản phẩm
           </li>
           <li
             className={`${typeMenu === "exchangePolicy" ? "active" : ""}`}
             onClick={() => setTypeMenu("exchangePolicy")}
           >
-            Chinh sach doi tra
+            Chính sách đổi trả
           </li>
           <li
             className={`${typeMenu === "comment" ? "active" : ""}`}
             onClick={() => setTypeMenu("comment")}
           >
-            Danh gia san pham
+            Đánh giá sản phẩm
           </li>
         </ul>
       </div>
@@ -55,7 +55,7 @@ const InformationDetail = ({ product }) => {
       {typeMenu === "comment" &&
         (comments.length === 0 ? (
           <div data-aos="fade-up" className="comment__no">
-            Chua co danh gia nao
+            Chưa có đánh giá nào
           </div>
         ) : (
           <div data-aos="fade-up" className="comment__have">
@@ -76,7 +76,7 @@ const InformationDetail = ({ product }) => {
                 </span>
               </div>
               <div className="comment__have__rate-count">
-                <span>{comments.length}</span> Danh gia
+                <span>{comments.length}</span> Đánh giá
               </div>
             </div>
             <div className="comment__have__list">
@@ -99,7 +99,7 @@ const InformationDetail = ({ product }) => {
               ))}
             </div>
             <div className="comment__have__write">
-              <button>Viet danh gia</button>
+              <button>Viết đánh giá</button>
             </div>
           </div>
         ))}

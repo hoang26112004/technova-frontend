@@ -1,26 +1,31 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
-
 .tech-hero {
-  --accent: #ff7a59;
-  --accent-2: #ff9a7c;
-  --text: #3b2f2a;
-  --muted: #8b7a73;
-  font-family: "Space Grotesk", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --text: var(--ink);
+  --muted: var(--muted-2);
+  font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 24px;
-  background: linear-gradient(135deg, #fff6f2 0%, #f9f2ee 60%);
-  border: 1px solid #efe6e1;
+  background:
+    radial-gradient(520px 520px at 12% 18%, rgba(255, 99, 71, 0.14), transparent 60%),
+    radial-gradient(720px 720px at 92% 10%, rgba(255, 138, 118, 0.12), transparent 62%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.92) 100%);
+  border: 1px solid rgba(226, 232, 240, 0.92);
   border-radius: 24px;
   padding: 32px;
   position: relative;
   overflow: hidden;
   color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+.tech-hero--compact {
+  grid-template-columns: 1fr;
 }
 
 .tech-hero__eyebrow {
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-size: 12px;
@@ -29,6 +34,7 @@
 .tech-hero h1 {
   font-size: 42px;
   margin: 12px 0;
+  letter-spacing: -0.03em;
 }
 
 .tech-hero__sub {
@@ -43,26 +49,6 @@
   margin: 20px 0 24px;
 }
 
-.btn {
-  border: none;
-  border-radius: 12px;
-  padding: 12px 18px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.btn--primary {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #fff;
-}
-
-.btn--ghost {
-  background: transparent;
-  border: 1px solid #f0d7cd;
-  color: var(--text);
-}
-
 .tech-hero__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -70,8 +56,8 @@
 }
 
 .tech-hero__stats div {
-  background: #fff;
-  border: 1px solid #efe6e1;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(226, 232, 240, 0.92);
   border-radius: 12px;
   padding: 12px;
   text-align: center;
@@ -87,55 +73,9 @@
   font-size: 12px;
 }
 
-.tech-hero__visual {
-  position: relative;
-  min-height: 320px;
-}
-
-.glow {
-  position: absolute;
-  width: 260px;
-  height: 260px;
-  background: radial-gradient(circle, rgba(255, 154, 124, 0.45), transparent 70%);
-  top: -40px;
-  right: -20px;
-}
-
-.device {
-  position: absolute;
-  border-radius: 18px;
-  background: linear-gradient(160deg, #f4e9e4, #efe2dc);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 20px 40px rgba(120, 80, 60, 0.12);
-}
-
-.device--laptop {
-  width: 320px;
-  height: 190px;
-  right: 20px;
-  top: 40px;
-}
-
-.device--phone {
-  width: 110px;
-  height: 210px;
-  right: 250px;
-  top: 120px;
-}
-
-.device--buds {
-  width: 140px;
-  height: 80px;
-  right: 40px;
-  top: 250px;
-}
-
 @media (max-width: 1024px) {
   .tech-hero {
     grid-template-columns: 1fr;
-  }
-  .tech-hero__visual {
-    min-height: 260px;
   }
 }
 

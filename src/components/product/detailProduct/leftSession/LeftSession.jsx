@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
@@ -7,9 +7,7 @@ import "./LeftSession.scss";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import "./LeftSession.scss";
-
-const LeftSession = ({product}) => {
+const LeftSession = ({ images = [] }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const swiperRef = useRef(null);
@@ -39,13 +37,15 @@ const LeftSession = ({product}) => {
   }, [updateNavigation]);
 
   useEffect(() => {
-    console.log("indexImage", indexImage);
-  }, [indexImage]);
+    // When the image set changes (e.g. user selects a variant), reset to the first image.
+    setIndexImage(0);
+    swiperRef.current?.slideTo?.(0);
+  }, [images?.length, images?.[0]]);
 
   return (
     <div className="left-session">
       <div className="left-session__left-images">
-        {product.images.map((image, index) => (
+        {images.map((image, index) => (
           <div
             onClick={() => {
               setIndexImage(index);
@@ -88,7 +88,7 @@ const LeftSession = ({product}) => {
           }}
           className="swiper-container"
         >
-          {product.images.map((image, index) => (
+          {images.map((image, index) => (
             <SwiperSlide key={index}>
               <div className="swiper-image_item">
                 <img src={image} alt="product" />

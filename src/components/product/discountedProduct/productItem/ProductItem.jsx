@@ -33,7 +33,6 @@ const ProductItem = ({ product }) => {
     }
   };
 
-  const discount = Number(product?.discount || 0);
   const images = product?.image || ["/vite.svg"];
   const count = product?.count || 0;
 
@@ -41,17 +40,17 @@ const ProductItem = ({ product }) => {
     e.stopPropagation();
     const variantId = product?.variants?.[0]?.id;
     if (!variantId) {
-      alert("San pham chua co bien the de mua.");
+      alert("Sản phẩm chưa có biến thể để mua.");
       return;
     }
     try {
       await cartApi.addItem(variantId, 1);
-      alert("Da them vao gio hang.");
+      alert("Đã thêm vào giỏ hàng.");
     } catch (error) {
       const message =
         error?.response?.data?.data?.message ||
         error?.response?.data?.message ||
-        "Them vao gio hang that bai.";
+        "Thêm vào giỏ hàng thất bại.";
       alert(message);
     }
   };
@@ -61,9 +60,6 @@ const ProductItem = ({ product }) => {
       onClick={() => navigate(`/product/${product.id}`)}
       className="product-item"
     >
-      {discount > 0 && (
-        <button className="product-item_discount">- {discount}%</button>
-      )}
       <div
         className={`product-item_following ${isLiked(product) ? "active" : ""}`}
         onClick={(e) => e.stopPropagation()}
@@ -74,7 +70,7 @@ const ProductItem = ({ product }) => {
         <img src={images[indexImage]} alt={product.name} />
       </div>
       <button className="product-item_add-to-card" onClick={handleAddToCart}>
-        Them vao gio hang
+        Thêm vào giỏ hàng
       </button>
       <div className="product-item_img-list">
         {images.map((image, index) => (
@@ -91,15 +87,10 @@ const ProductItem = ({ product }) => {
       </div>
       <p className="product-item_name">{product.name}</p>
       <p className="product-item_sold">
-        So luong: <span>{count}</span>
+        Số lượng: <span>{count}</span>
       </p>
       <div className="product-item_price">
-        <p className="product-item_price-fake">
-          {formatNumber(product.price * (1 - discount / 100))}d
-        </p>
-        <p className="product-item_price-real">
-          {formatNumber(product.price)} d
-        </p>
+        <p className="product-item_price-current">{formatNumber(product.price)} d</p>
       </div>
     </div>
   );

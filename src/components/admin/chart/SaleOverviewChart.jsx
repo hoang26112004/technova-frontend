@@ -10,58 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const SALE_DATA = [
-  {
-    name: "Jul",
-    sales: 4200,
-  },
-  {
-    name: "Aug",
-    sales: 3000,
-  },
-  {
-    name: "Sep",
-    sales: 2000,
-  },
-  {
-    name: "Oct",
-    sales: 2780,
-  },
-  {
-    name: "Nov",
-    sales: 1890,
-  },
-  {
-    name: "Dec",
-    sales: 2390,
-  },
-  {
-    name: "Jan",
-    sales: 3490,
-  },
-  {
-    name: "Feb",
-    sales: 3290,
-  },
-  {
-    name: "Mar",
-    sales: 4290,
-  },
-  {
-    name: "Apr",
-    sales: 7100,
-  },
-  {
-    name: "May",
-    sales: 4290,
-  },
-  {
-    name: "Jun",
-    sales: 8000,
-  },
-];
-
-const SaleOverviewChart = () => {
+const SaleOverviewChart = ({ data = [] }) => {
   return (
     <motion.div
       className=" bg-[#FFFDD0] bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6"
@@ -72,7 +21,7 @@ const SaleOverviewChart = () => {
       <h2 className="text-lg font-medium mb-4 text-black">Sale Overview</h2>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={SALE_DATA}>
+          <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
             <XAxis dataKey={"name"} stroke="#000000"/>
             <YAxis stroke="#000000" />

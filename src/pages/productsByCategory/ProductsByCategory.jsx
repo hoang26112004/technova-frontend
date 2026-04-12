@@ -1,7 +1,5 @@
 /* eslint-disable*/
 import Layout from "@/components/commons/layout/Layout";
-import CategoryHeader from "@/components/product/listProductByCategory/categoryHeader/CategoryHeader";
-import MenuSidebar from "@/components/product/listProductByCategory/menuSidebar/MenuSidebar";
 import ProductsContainer from "@/components/product/listProductByCategory/productsContainer/ProductsContainer";
 import TitleRouter from "@/components/product/titleRouter/TitleRouter";
 import React from "react";
@@ -15,10 +13,8 @@ const ProductsByCategory = () => {
     <Layout>
       <div className="productsByCategory">
         <TitleRouter title={categoryName} />
-        <CategoryHeader />
         <div className="productsByCategory__container">
           <ProductsContainer categoryName={categoryName} />
-          <MenuSidebar />
         </div>
       </div>
     </Layout>

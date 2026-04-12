@@ -7,73 +7,223 @@ import { FaTruck } from "react-icons/fa";
 import { PiHandCoinsFill } from "react-icons/pi";
 import { FaHeart } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import "./RightSession.scss";
 import { formatNumber } from "@/utils/function";
 import cartApi from "@/utils/api/cartApi";
+import { buildVariantLabel, resolveImageUrl } from "@/utils/api/mappers";
+import { setOrderList } from "@/store/orderSlice";
 
-const RightSession = ({ product }) => {
-  const [infoSelect, setInfoSelect] = useState({
-    type: 0,
-    quantity: "1",
-  });
+const RightSession = ({
+  product,
+  selectedType = 0,
+  onSelectType = () => {},
+}) => {
+  const [quantity, setQuantity] = useState("1");
   const [isLike, setIsLike] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const variants = product?.variants || [];
   const selectedVariant = useMemo(
-    () => variants[infoSelect.type],
-    [variants, infoSelect.type]
+    () => variants[selectedType],
+    [variants, selectedType]
   );
+
+  const selectedAttrMap = useMemo(() => {
+    const map = {};
+    const attrs = selectedVariant?.attributes || [];
+    for (const a of attrs) {
+      if (!a?.type || a?.value == null) continue;
+      map[a.type] = String(a.value);
+    }
+    return map;
+  }, [selectedVariant]);
+
+  const attributeGroups = useMemo(() => {
+    // Map<type, Map<value, Variant[]>>
+    const groups = new Map();
+
+    for (const v of variants) {
+      const attrs = v?.attributes || [];
+      for (const a of attrs) {
+        if (!a?.type || a?.value == null) continue;
+        const type = a.type;
+        const value = String(a.value);
+
+        if (!groups.has(type)) groups.set(type, new Map());
+        const valueMap = groups.get(type);
+        if (!valueMap.has(value)) valueMap.set(value, []);
+        valueMap.get(value).push(v);
+      }
+    }
+
+    const priority = ["STORAGE", "COLOR"];
+    const keys = Array.from(groups.keys()).sort((a, b) => {
+      const ai = priority.indexOf(a);
+      const bi = priority.indexOf(b);
+      if (ai !== -1 || bi !== -1) {
+        if (ai === -1) return 1;
+        if (bi === -1) return -1;
+        return ai - bi;
+      }
+      return a.localeCompare(b);
+    });
+
+    const labelOf = (type) => {
+      if (type === "STORAGE") return "Phiên bản";
+      if (type === "COLOR") return "Màu sắc";
+      return type;
+    };
+
+    return keys.map((type) => {
+      const valueMap = groups.get(type);
+      const values = Array.from(valueMap.keys()).map((value) => {
+        const candidates = valueMap.get(value) || [];
+        const anyInStock = candidates.some((c) => Number(c?.stock || 0) > 0);
+        const representative =
+          candidates.find((c) => Number(c?.stock || 0) > 0) || candidates[0];
+
+        return {
+          value,
+          disabled: !anyInStock,
+          imageUrl:
+            type === "COLOR" ? resolveImageUrl(representative?.imageUrl) : "",
+        };
+      });
+
+      return { type, label: labelOf(type), values };
+    });
+  }, [variants]);
+
+  const pickVariantIndexForOption = (type, value) => {
+    // Choose the "closest" variant that has (type=value).
+    // Prefer matching other selected attributes, then in-stock.
+    let bestIdx = -1;
+    let bestScore = -1;
+    let bestInStock = false;
+
+    for (let i = 0; i < variants.length; i++) {
+      const v = variants[i];
+      const attrs = v?.attributes || [];
+      const map = {};
+      let hasPair = false;
+
+      for (const a of attrs) {
+        if (!a?.type || a?.value == null) continue;
+        map[a.type] = String(a.value);
+        if (a.type === type && String(a.value) === String(value)) hasPair = true;
+      }
+      if (!hasPair) continue;
+
+      let score = 0;
+      for (const [k, sv] of Object.entries(selectedAttrMap)) {
+        if (k === type) continue;
+        if (map[k] != null && String(map[k]) === String(sv)) score++;
+      }
+
+      const inStock = Number(v?.stock || 0) > 0;
+      if (
+        score > bestScore ||
+        (score === bestScore && inStock && !bestInStock) ||
+        (score === bestScore && inStock === bestInStock && bestIdx === -1)
+      ) {
+        bestIdx = i;
+        bestScore = score;
+        bestInStock = inStock;
+      }
+    }
+
+    return bestIdx;
+  };
   const unitPrice =
     selectedVariant?.price != null ? selectedVariant.price : product?.price;
-  const discount = Number(product?.discount || 0);
 
   const benefits = [
     {
       icon: <ImHeadphones />,
-      title: "Giao hang toan quoc",
-      desc: "Thanh toan (COD) khi nhan hang",
+      title: "Giao hàng toàn quốc",
+      desc: "Thanh toán (COD) khi nhận hàng",
     },
     {
       icon: <FiPackage />,
-      title: "Mien phi giao hang",
-      desc: "Theo chinh sach",
+      title: "Miễn phí giao hàng",
+      desc: "Theo chính sách",
     },
     {
       icon: <FaTruck />,
-      title: "Doi tra trong 7 ngay",
-      desc: "Ke tu ngay giao hang",
+      title: "Đổi trả trong 7 ngày",
+      desc: "Kể từ ngày giao hàng",
     },
     {
       icon: <PiHandCoinsFill />,
-      title: "Ho tro 24/7",
-      desc: "Theo chinh sach",
+      title: "Hỗ trợ 24/7",
+      desc: "Theo chính sách",
     },
   ];
 
-  const handleAddToCart = async () => {
+  const addToCart = async ({ silent = false } = {}) => {
     const variantId = selectedVariant?.id;
     if (!variantId) {
-      alert("San pham chua co bien the de mua.");
+      alert("Sản phẩm chưa có biến thể để mua.");
       return;
     }
-    const qty = Math.max(1, Number(infoSelect.quantity || 1));
+    const qty = Math.max(1, Number(quantity || 1));
     try {
       await cartApi.addItem(variantId, qty);
-      alert("Da them vao gio hang.");
+      if (!silent) alert("Đã thêm vào giỏ hàng.");
     } catch (error) {
       const message =
         error?.response?.data?.data?.message ||
         error?.response?.data?.message ||
-        "Them vao gio hang that bai.";
+        "Thêm vào giỏ hàng thất bại.";
       alert(message);
+      throw error;
     }
   };
 
+  const handleAddToCart = async () => {
+    await addToCart();
+  };
+
   const handleBuyNow = async () => {
-    await handleAddToCart();
-    navigate("/cart");
+    const variantId = selectedVariant?.id;
+    if (!variantId) {
+      alert("Sản phẩm chưa có biến thể để mua.");
+      return;
+    }
+
+    const qty = Math.max(1, Number(quantity || 1));
+    const unitPrice =
+      selectedVariant?.price != null ? selectedVariant.price : product?.price;
+    const image =
+      resolveImageUrl(selectedVariant?.imageUrl) ||
+      (Array.isArray(product?.images) ? product.images[0] : "") ||
+      "/vite.svg";
+
+    try {
+      // Keep current backend flow: order placement removes items from cart.
+      await addToCart({ silent: true });
+    } catch {
+      return;
+    }
+
+    dispatch(
+      setOrderList([
+        {
+          id: variantId,
+          variantId,
+          name: product?.name || "",
+          image: [image],
+          price: Number(unitPrice || 0),
+          quantity: qty,
+          discount: 0,
+          type: buildVariantLabel(selectedVariant),
+        },
+      ])
+    );
+    navigate("/order");
   };
 
   return (
@@ -96,43 +246,84 @@ const RightSession = ({ product }) => {
         </div>
       </div>
       <div className="right-session__price">
-        <span
-          className={`right-session__price__sale ${
-            discount > 0 ? "" : "hidden"
-          }`}
-        >
-          {formatNumber(unitPrice * (1 - discount / 100))} d
-        </span>
-        <span className="right-session__price__real">
+        <span className="right-session__price__current">
           {formatNumber(unitPrice)} d
         </span>
       </div>
-      <div className="right-session__type">
-        <p>Phan loai</p>
-        <div className="right-session__type__buttons">
-          {(product.types || ["Default"]).map((type, index) => (
-            <button
-              onClick={() => setInfoSelect({ ...infoSelect, type: index })}
-              key={index}
-              className={`${infoSelect.type === index ? "active" : ""}`}
-            >
-              {type}
-            </button>
+      {attributeGroups.length > 0 ? (
+        <div className="right-session__attrs">
+          {attributeGroups.map((group) => (
+            <div key={group.type} className="right-session__attr-group">
+              <p>{group.label}</p>
+              <div className="right-session__attr-options">
+                {group.values.map((opt) => {
+                  const isActive =
+                    String(selectedAttrMap?.[group.type] || "") ===
+                    String(opt.value);
+                  return (
+                    <button
+                      key={`${group.type}:${opt.value}`}
+                      type="button"
+                      disabled={opt.disabled}
+                      className={[
+                        "right-session__attr-option",
+                        isActive ? "active" : "",
+                        opt.disabled ? "disabled" : "",
+                        group.type === "COLOR" ? "color" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onClick={() => {
+                        const idx = pickVariantIndexForOption(
+                          group.type,
+                          opt.value
+                        );
+                        if (idx >= 0) onSelectType(idx);
+                      }}
+                      title={opt.disabled ? "Hết hàng" : ""}
+                    >
+                      {group.type === "COLOR" && opt.imageUrl ? (
+                        <img
+                          className="right-session__attr-thumb"
+                          src={opt.imageUrl}
+                          alt={opt.value}
+                        />
+                      ) : null}
+                      <span className="right-session__attr-value">
+                        {opt.value}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
-      </div>
+      ) : (
+        <div className="right-session__type">
+          <p>Phân loại</p>
+          <div className="right-session__type__buttons">
+            {(product.types || ["Default"]).map((type, index) => (
+              <button
+                onClick={() => onSelectType(index)}
+                key={index}
+                className={`${selectedType === index ? "active" : ""}`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="right-session__quantity-group">
-        <p>So luong</p>
+        <p>Số lượng</p>
         <div className="right-session__quantity-group__quantity">
           <div className="right-session__quantity-group__quantity-buttons">
             <button
               onClick={() =>
-                setInfoSelect({
-                  ...infoSelect,
-                  quantity:
-                    Number(infoSelect.quantity) > 1
-                      ? Number(infoSelect.quantity) - 1
-                      : 1,
+                setQuantity((prev) => {
+                  const cur = Number(prev || 1);
+                  return String(cur > 1 ? cur - 1 : 1);
                 })
               }
             >
@@ -140,28 +331,25 @@ const RightSession = ({ product }) => {
             </button>
             <input
               name="quantity"
-              value={infoSelect.quantity}
+              value={quantity}
               onChange={(e) =>
-                setInfoSelect({ ...infoSelect, quantity: e.target.value })
+                setQuantity(e.target.value)
               }
             />
             <button
               onClick={() =>
-                setInfoSelect({
-                  ...infoSelect,
-                  quantity: Number(infoSelect.quantity) + 1,
-                })
+                setQuantity((prev) => String(Number(prev || 1) + 1))
               }
             >
               +
             </button>
           </div>
-          <p>Tim kiem san pham tuong tu</p>
+          <p>Tìm kiếm sản phẩm tương tự</p>
         </div>
       </div>
       <div className="right-session__button">
         <button className="right-session__button-add" onClick={handleAddToCart}>
-          Them vao gio hang
+          Thêm vào giỏ hàng
         </button>
         <button className="right-session__button-buy" onClick={handleBuyNow}>
           Mua ngay

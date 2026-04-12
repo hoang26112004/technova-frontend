@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
@@ -167,3 +167,4 @@ const SearchBox = ({ blogs }) => {
 };
 
 export default SearchBox;
+

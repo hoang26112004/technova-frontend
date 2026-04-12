@@ -1,4 +1,4 @@
-/* eslint-disable*/
+﻿/* eslint-disable*/
 import React, { useState } from "react";
 
 import "./FollowingProducts.scss";
@@ -42,3 +42,4 @@ const FollowingProducts = () => {
 };
 
 export default FollowingProducts;
+

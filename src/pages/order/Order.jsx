@@ -62,20 +62,20 @@ const Order = () => {
   };
 
   const handleAddAddress = () => {
-    alert("Vui long them dia chi trong trang tai khoan.");
+    alert("Vui lòng thêm địa chỉ trong trang tài khoản.");
   };
 
   const handlePlaceOrder = async () => {
     if (!selectedProducts.length) {
-      alert("Khong co san pham de dat hang.");
+      alert("Không có sản phẩm để đặt hàng.");
       return;
     }
     if (!selectedAddressId) {
-      alert("Vui long chon dia chi giao hang.");
+      alert("Vui lòng chọn địa chỉ giao hàng.");
       return;
     }
     if (paymentMethod === "MOMO") {
-      alert("Chua ho tro thanh toan Momo.");
+      alert("Chưa hỗ trợ thanh toán Momo.");
       return;
     }
     const payload = {
@@ -106,13 +106,13 @@ const Order = () => {
           cartApi.removeItem(item.variantId || item.id)
         )
       );
-      alert("Dat hang thanh cong.");
+      alert("Đặt hàng thành công.");
       dispatch(setOrderList([]));
     } catch (error) {
       const message =
         error?.response?.data?.data?.message ||
         error?.response?.data?.message ||
-        "Dat hang that bai.";
+        "Đặt hàng thất bại.";
       alert(message);
     } finally {
       setPlacing(false);

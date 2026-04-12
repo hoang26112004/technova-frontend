@@ -12,22 +12,19 @@ const CategoryFormModal = ({
 	const [formData, setFormData] = useState(initialData);
 
 	const handleChange = (e) => {
-		const { name, value } = e.target;
+		const { name, value, files } = e.target;
+		if (name === "image") {
+			setFormData((prev) => ({
+				...prev,
+				image: files && files.length > 0 ? files[0] : null,
+			}));
+			return;
+		}
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleAddSubcategory = () => {
-		setFormData((prev) => ({
-			...prev,
-			subcategories: [...prev.subcategories, ""],
-		}));
-	};
-
-	const handleRemoveSubcategory = (index) => {
-		setFormData((prev) => ({
-			...prev,
-			subcategories: prev.subcategories.filter((_, i) => i !== index),
-		}));
+	const handleClearImage = () => {
+		setFormData((prev) => ({ ...prev, image: null }));
 	};
 
 	const handleSubmit = (e) => {
@@ -55,11 +52,10 @@ const CategoryFormModal = ({
 					<CategoryForm
 						formData={formData}
 						onChange={handleChange}
+						onClearImage={handleClearImage}
 						onSubmit={handleSubmit}
 						formType={formType}
 						onClose={onClose}
-						onAddSubcategory={handleAddSubcategory}
-						onRemoveSubcategory={handleRemoveSubcategory}
 					/>
 				</div>
 			</div>

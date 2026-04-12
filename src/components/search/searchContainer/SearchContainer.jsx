@@ -12,7 +12,6 @@ const SearchContainer = () => {
    const [pageSize, setPageSize] = useState(8);
    const [displayProducts, setDisplayProducts] = useState([]);
 
-   const inputImage = useSelector((state) => state.search.inputImage);
    const products = useSelector((state) => state.search.result);
 
    useEffect(() => {
@@ -28,11 +27,6 @@ const SearchContainer = () => {
 
    return (
      <div data-aos="fade-up" className="search-container">
-       {inputImage && (
-         <div className="search-container__image">
-           <img src={inputImage} alt="" />
-         </div>
-       )}
        <p className="search-total">Có {total} kết quả tìm kiếm</p>
        <div className="search-container__list">
          {displayProducts.map((product, index) => (

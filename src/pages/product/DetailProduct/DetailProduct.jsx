@@ -21,6 +21,7 @@ const DetailProduct = () => {
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedType, setSelectedType] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -60,13 +61,33 @@ const DetailProduct = () => {
     };
   }, [id]);
 
+  useEffect(() => {
+    // When navigating between products, reset variant selection
+    setSelectedType(0);
+  }, [id]);
+
+  useEffect(() => {
+    // If API returns fewer variants than previously selected, clamp back to 0
+    const max = (product?.variants || []).length - 1;
+    if (max < 0) return;
+    if (selectedType > max) setSelectedType(0);
+  }, [product, selectedType]);
+
   const productView = useMemo(() => {
     if (!product) return null;
-    const images =
-      product?.images?.map((img) => resolveImageUrl(img?.imageUrl)) || [];
     const variants = product?.variants || [];
     const types = variants.map(buildVariantLabel);
     const stock = product?.stock ?? 0;
+
+    const baseImages =
+      product?.images?.map((img) => resolveImageUrl(img?.imageUrl)) || [];
+    const selectedVariantImage = resolveImageUrl(
+      variants?.[selectedType]?.imageUrl
+    );
+    const images = Array.from(
+      new Set([selectedVariantImage, ...baseImages].filter(Boolean))
+    );
+
     return {
       id: product?.id,
       name: product?.name || "",
@@ -74,29 +95,33 @@ const DetailProduct = () => {
       price: Number(product?.price || 0),
       discount: 0,
       count: stock,
-      status: product?.isActive && stock > 0 ? "Con hang" : "Het hang",
+      status: product?.isActive && stock > 0 ? "Còn hàng" : "Hết hàng",
       types,
       description: product?.description || "",
-      exchangePolicy: "Doi tra trong 7 ngay.",
+      exchangePolicy: "Đổi trả trong 7 ngày.",
       comments: reviews,
       variants,
     };
-  }, [product, reviews]);
+  }, [product, reviews, selectedType]);
 
   if (loading || !productView) {
     return (
       <Layout>
-        <div className="detail-product_info">Dang tai...</div>
+        <div className="detail-product_info">Đang tải...</div>
       </Layout>
     );
   }
 
   return (
     <Layout>
-      <TitleRouter title={productView?.name || "Chi tiet"} />
+      <TitleRouter title={productView?.name || "Chi tiết"} />
       <div data-aos="fade-up" className="detail-product_info">
-        <LeftSession product={productView} />
-        <RightSession product={productView} />
+        <LeftSession images={productView.images} />
+        <RightSession
+          product={productView}
+          selectedType={selectedType}
+          onSelectType={setSelectedType}
+        />
       </div>
       <InformationDetail product={productView} />
     </Layout>

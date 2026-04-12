@@ -1,4 +1,4 @@
-/* eslint-disable */
+﻿/* eslint-disable */
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -17,3 +17,4 @@ const TitleRouter = ({title}) => {
 }
 
 export default TitleRouter;
+

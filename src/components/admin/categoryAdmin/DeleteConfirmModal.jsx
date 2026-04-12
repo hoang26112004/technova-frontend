@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 
 const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, category }) => {
 	if (!isOpen) return null;
@@ -31,3 +31,4 @@ const DeleteConfirmModal = ({ isOpen, onClose, onConfirm, category }) => {
 };
 
 export default DeleteConfirmModal;
+

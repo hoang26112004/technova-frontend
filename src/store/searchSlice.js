@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initState = {
   inputValue: "",
-  inputImage: "",
   loading: false,
   result: [],
 };
@@ -14,9 +13,6 @@ const searchSlice = createSlice({
     setInputValue: (state, action) => {
       state.inputValue = action.payload;
     },
-    setInputImage: (state, action) => {
-      state.inputImage = action.payload;
-    },
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
@@ -26,6 +22,6 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setInputValue, setInputImage, setLoading, setResult } =
+export const { setInputValue, setLoading, setResult } =
   searchSlice.actions;
 export default searchSlice.reducer;

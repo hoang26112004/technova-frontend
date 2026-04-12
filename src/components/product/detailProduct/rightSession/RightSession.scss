@@ -1,7 +1,7 @@
 .right-session {
   width: 50%;
-  height: 500px;
   padding-left: 50px;
+  min-height: 500px;
 
   .right-session__product-name {
     width: 100%;
@@ -44,21 +44,10 @@
     align-items: end;
     margin-bottom: 10px;
 
-    .right-session__price__sale {
+    .right-session__price__current {
       font-size: 30px;
-      font-weight: 500;
+      font-weight: 600;
       color: #ff6347;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .right-session__price__real {
-      font-size: 20px;
-      font-weight: 500;
-      color: #c9c9c9;
-      text-decoration: line-through;
     }
   }
 
@@ -94,6 +83,77 @@
         background-color: #ff6347;
         border: none;
         color: #ffffff;
+      }
+    }
+  }
+
+  .right-session__attrs {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    .right-session__attr-group {
+      p {
+        font-size: 15px;
+        font-weight: 500;
+        color: #000000;
+        margin-bottom: 10px;
+      }
+
+      .right-session__attr-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .right-session__attr-option {
+        border: 1px solid #d9d9d9;
+        border-radius: 14px;
+        padding: 10px 12px;
+        background: #fff;
+        cursor: pointer;
+        min-width: 150px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+
+        .right-session__attr-thumb {
+          width: 34px;
+          height: 34px;
+          border-radius: 10px;
+          object-fit: cover;
+          border: 1px solid #eee;
+          flex: 0 0 auto;
+        }
+
+        .right-session__attr-value {
+          display: flex;
+          flex-direction: column;
+          font-size: 14px;
+          font-weight: 500;
+          color: #111;
+        }
+
+        &:hover {
+          border-color: #ff6347;
+        }
+
+        &.active {
+          border-color: #ff6347;
+          box-shadow: 0 0 0 2px rgba(255, 99, 71, 0.15);
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+
+          &:hover {
+            border-color: #d9d9d9;
+          }
+        }
       }
     }
   }
@@ -280,10 +340,7 @@
     }
 
     .right-session__price{
-      .right-session__price__sale{
-        font-size: 20px;
-      }
-      .right-session__price__real{
+      .right-session__price__current{
         font-size: 15px;
       }
     }

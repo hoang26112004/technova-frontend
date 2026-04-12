@@ -5,36 +5,23 @@ const CategoryListItem = ({ category, onView, onEdit, onDelete }) => {
 	return (
 		<tr className="hover:bg-gray-50">
 			<td className="px-4 py-4 whitespace-nowrap">
-				<div className="flex items-center">
-					<div className="h-10 w-10 bg-orange-100 rounded-lg flex items-center justify-center text-xl">
-						{category.icon || "📂"}
-					</div>
-					<div className="ml-4">
-						<div className="font-medium text-gray-900">
-							{category.name}
-						</div>
-						<div className="text-sm text-gray-500">
-							{category.subcategories.length > 0
-								? `${category.subcategories.length} subcategories`
-								: "No subcategories"}
-						</div>
-					</div>
+				<div className="font-medium text-gray-900">{category.name}</div>
+			</td>
+			<td className="px-4 py-4">
+				<div className="text-sm text-gray-500">
+					{category.description || "-"}
 				</div>
 			</td>
 			<td className="px-4 py-4 whitespace-nowrap">
-				<div className="text-sm text-gray-500">
-					{category.displayOrder}
-				</div>
-			</td>
-			<td className="px-4 py-4 whitespace-nowrap">
-				<div className="text-sm text-gray-500">
-					{category.productCount > 0
-						? `${category.productCount} products`
-						: "No products"}
-				</div>
-			</td>
-			<td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-				{category.lastUpdated}
+				{category.imageUrl ? (
+					<img
+						src={category.imageUrl}
+						alt={`${category.name || "Category"} image`}
+						className="h-10 w-10 rounded-lg border border-gray-200 object-cover"
+					/>
+				) : (
+					<div className="text-sm text-gray-500">No image</div>
+				)}
 			</td>
 			<td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
 				<div className="flex space-x-2">

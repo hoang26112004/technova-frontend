@@ -1,4 +1,4 @@
-import LayoutBlog from "@/pages/blog/LayoutBlog";
+﻿import LayoutBlog from "@/pages/blog/LayoutBlog";
 import React, { useEffect, useState } from "react";
 import BlogCard from "./BlogCard";
 import { motion } from "framer-motion";
@@ -60,3 +60,4 @@ const BlogList = () => {
 };
 
 export default BlogList;
+
