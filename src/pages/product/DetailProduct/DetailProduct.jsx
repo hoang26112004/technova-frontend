@@ -7,7 +7,7 @@ import Layout from "@/components/commons/layout/Layout";
 import TitleRouter from "@/components/product/titleRouter/TitleRouter";
 import LeftSession from "@/components/product/detailProduct/leftSession/LeftSession";
 import RightSession from "@/components/product/detailProduct/rightSession/RightSession";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import productApi from "@/utils/api/productApi";
 import reviewApi from "@/utils/api/reviewApi";
 import {
@@ -18,10 +18,12 @@ import {
 
 const DetailProduct = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState(0);
+  const autoReview = String(searchParams.get("review") || "") === "1";
 
   useEffect(() => {
     if (!id) return;
@@ -47,15 +49,20 @@ const DetailProduct = () => {
   useEffect(() => {
     if (!id) return;
     let isMounted = true;
-    reviewApi
-      .getByProduct(id)
-      .then((res) => {
-        const data = res?.data?.data || [];
-        if (isMounted) setReviews(data.map(mapReviewToComment));
-      })
-      .catch((error) => {
+
+    const load = async () => {
+      try {
+        const res = await reviewApi.getByProduct(id);
+        const page = res?.data?.data;
+        const items = page?.content || [];
+        if (isMounted) setReviews(items.map(mapReviewToComment));
+      } catch (error) {
         console.error("Load reviews error:", error);
-      });
+        if (isMounted) setReviews([]);
+      }
+    };
+
+    load();
     return () => {
       isMounted = false;
     };
@@ -123,7 +130,21 @@ const DetailProduct = () => {
           onSelectType={setSelectedType}
         />
       </div>
-      <InformationDetail product={productView} />
+      <InformationDetail
+        product={productView}
+        initialMenu={autoReview ? "comment" : undefined}
+        autoOpenWrite={autoReview}
+        onRefreshReviews={async () => {
+          try {
+            const res = await reviewApi.getByProduct(id);
+            const page = res?.data?.data;
+            const items = page?.content || [];
+            setReviews(items.map(mapReviewToComment));
+          } catch (error) {
+            console.error("Refresh reviews error:", error);
+          }
+        }}
+      />
     </Layout>
   );
 };

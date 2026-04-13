@@ -1,12 +1,20 @@
 import { MapPin, Package, Truck, User, X } from "lucide-react";
 import React from "react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OrderStatusBadge from "./OrderStatusBadge";
 import OrderItemsGallery from "./OrderItemsGallery";
 
-const OrderViewModal = ({ order, onClose }) => {
+const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) => {
 	const [activeTab, setActiveTab] = useState("details"); // 'details' or 'items'
+	const [nextStatus, setNextStatus] = useState(order?.status || "PENDING");
+	const [updating, setUpdating] = useState(false);
+	const [updateError, setUpdateError] = useState("");
+
+	useEffect(() => {
+		setNextStatus(order?.status || "PENDING");
+		setUpdateError("");
+	}, [order?.status, order?.orderUuid, order?.id]);
 
 	if (!order) return null;
 
@@ -80,7 +88,7 @@ const OrderViewModal = ({ order, onClose }) => {
 															{new Date(
 																order.orderDate
 															).toLocaleDateString(
-																"en-US",
+																"vi-VN",
 																{
 																	year: "numeric",
 																	month: "long",
@@ -103,6 +111,70 @@ const OrderViewModal = ({ order, onClose }) => {
 															/>
 														</div>
 													</div>
+													{typeof onChangeStatus === "function" ? (
+														<div className="mt-3">
+															<div className="text-xs text-gray-500 mb-1">
+																Cập nhật trạng thái
+															</div>
+															<div className="flex flex-wrap items-center gap-2">
+																<select
+																	value={nextStatus}
+																	onChange={(e) => setNextStatus(e.target.value)}
+																	className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+																>
+																	{(statusOptions?.length
+																		? statusOptions
+																		: [
+																				"PENDING",
+																				"CONFIRMED",
+																				"PAID",
+																				"SHIPPED",
+																				"DELIVERED",
+																				"CANCELLED",
+																		  ]
+																	).map((s) => (
+																		<option key={s} value={s}>
+																			{s}
+																		</option>
+																	))}
+																</select>
+																<button
+																	type="button"
+																	onClick={async () => {
+																		if (updating) return;
+																		setUpdateError("");
+																		setUpdating(true);
+																		try {
+																			await onChangeStatus(order.orderUuid, nextStatus);
+																		} catch (e) {
+																			setUpdateError(
+																				e?.message || "Cập nhật trạng thái thất bại."
+																			);
+																		} finally {
+																			setUpdating(false);
+																		}
+																	}}
+																	disabled={
+																		updating ||
+																		!order.orderUuid ||
+																		nextStatus === order.status
+																	}
+																	className={`px-3 py-2 rounded-lg text-sm text-white ${
+																		updating || nextStatus === order.status
+																			? "bg-gray-400"
+																			: "bg-orange-600 hover:bg-orange-700"
+																	}`}
+																>
+																	{updating ? "Đang cập nhật..." : "Cập nhật"}
+																</button>
+															</div>
+															{updateError ? (
+																<div className="mt-2 text-xs text-red-600">
+																	{updateError}
+																</div>
+															) : null}
+														</div>
+													) : null}
 												</div>
 											</div>
 										</div>
@@ -346,7 +418,7 @@ const OrderViewModal = ({ order, onClose }) => {
 						onClick={onClose}
 						className="px-4 py-2 bg-gray-200 rounded-lg text-gray-800 hover:bg-gray-300"
 					>
-						Close
+						Đóng
 					</button>
 				</div>
 			</div>

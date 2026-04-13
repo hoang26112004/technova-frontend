@@ -90,7 +90,7 @@ const ProductItem = ({ product }) => {
         Số lượng: <span>{count}</span>
       </p>
       <div className="product-item_price">
-        <p className="product-item_price-current">{formatNumber(product.price)} d</p>
+        <p className="product-item_price-current">{formatNumber(product.price)} đ</p>
       </div>
     </div>
   );

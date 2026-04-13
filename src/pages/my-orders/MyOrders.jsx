@@ -38,15 +38,12 @@ const MyOrders = () => {
   const statusOptions = useMemo(
     () => [
       { value: "", label: "Tất cả trạng thái" },
-      { value: "PENDING", label: "PENDING" },
-      { value: "CONFIRMED", label: "CONFIRMED" },
-      { value: "PROCESSING", label: "PROCESSING" },
-      { value: "SHIPPING", label: "SHIPPING" },
-      { value: "DELIVERED", label: "DELIVERED" },
-      { value: "CANCELLED", label: "CANCELLED" },
-      { value: "CANCELED", label: "CANCELED" },
-      { value: "FAILED", label: "FAILED" },
-      { value: "PAID", label: "PAID" },
+      { value: "PENDING", label: "Chờ xử lý" },
+      { value: "CONFIRMED", label: "Đã xác nhận" },
+      { value: "PAID", label: "Đã thanh toán" },
+      { value: "SHIPPED", label: "Đang giao" },
+      { value: "DELIVERED", label: "Đã giao" },
+      { value: "CANCELLED", label: "Đã hủy" },
     ],
     []
   );

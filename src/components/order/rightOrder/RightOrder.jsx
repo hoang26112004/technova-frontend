@@ -45,7 +45,7 @@ const RightOrder = ({ products, onIncrease, onDecrease, onPlaceOrder }) => {
                     +
                   </button>
                 </div>
-                <p>{formatNumber(product.price * product.quantity)} d</p>
+                <p>{formatNumber(product.price * product.quantity)} đ</p>
               </div>
             </div>
           </div>
@@ -55,18 +55,18 @@ const RightOrder = ({ products, onIncrease, onDecrease, onPlaceOrder }) => {
         <div className="rightOrder__total-container-item">
           <div className="rightOrder__total-container-item-i">
             <p>Tạm tính:</p>
-            <p>{formatNumber(total)} d</p>
+            <p>{formatNumber(total)} đ</p>
           </div>
           <div className="rightOrder__total-container-item-i">
             <p>Phí vận chuyển:</p>
-            <p>0 d</p>
+            <p>0 đ</p>
           </div>
         </div>
       </div>
       <div className="rightOrder__total-container">
         <div className=" total-item">
           <p>Tổng cộng:</p>
-          <p>{formatNumber(total)} d</p>
+          <p>{formatNumber(total)} đ</p>
         </div>
       </div>
       <div className="rightOrder__button">

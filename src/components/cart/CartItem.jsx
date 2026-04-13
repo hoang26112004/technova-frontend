@@ -31,7 +31,7 @@ const CartItem = ({
           <h3>{product.name}</h3>
           <p>{product.type || ""}</p>
           <p className="price">
-            <span>{formatNumber(product.price)} d</span>
+            <span>{formatNumber(product.price)} đ</span>
           </p>
           <div className="quantity">
             <button onClick={() => onDecrease(product.id)}>-</button>
@@ -39,14 +39,14 @@ const CartItem = ({
             <button onClick={() => onIncrease(product.id)}>+</button>
           </div>
           <p className="price__res">
-            {formatNumber(product.quantity * product.price)} d
+            {formatNumber(product.quantity * product.price)} đ
           </p>
         </div>
       </div>
 
       <div className="card-item__right">
         <p className="price">
-          {formatNumber(product.quantity * product.price)} d
+          {formatNumber(product.quantity * product.price)} đ
         </p>
         <div className="card-item__right-search">
           <MdCancel className="icon-cancel" onClick={() => onRemove(product.id)} />

@@ -46,11 +46,12 @@ export const exportOrdersToExcel = (orders, filename = 'Orders_Export') => {
 
 export const getOrderStatusCounts = (orders) => {
   const counts = {
-    'Delivered': 0,
-    'Shipping': 0,
-    'Pending': 0,
-    'Cancelled': 0,
-    'Processing': 0
+    PENDING: 0,
+    CONFIRMED: 0,
+    PAID: 0,
+    SHIPPED: 0,
+    DELIVERED: 0,
+    CANCELLED: 0,
   };
   
   orders.forEach(order => {

@@ -6,6 +6,7 @@ import Layout from "@/components/commons/layout/Layout";
 import LeftOrder from "@/components/order/leftOrder/LeftOrder";
 import RightOrder from "@/components/order/rightOrder/RightOrder";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import addressApi from "@/utils/api/addressApi";
 import orderApi from "@/utils/api/orderApi";
 import paymentApi from "@/utils/api/paymentApi";
@@ -15,6 +16,7 @@ import { setOrderList } from "@/store/orderSlice";
 const Order = () => {
   const selectedProducts = useSelector((state) => state.order.orderList);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("COD");
@@ -108,6 +110,15 @@ const Order = () => {
       );
       alert("Đặt hàng thành công.");
       dispatch(setOrderList([]));
+
+      const ref = (order?.reference || "").trim();
+      if (ref) {
+        navigate(`/order-tracking?reference=${encodeURIComponent(ref)}`, {
+          replace: true,
+        });
+      } else {
+        navigate("/my-orders", { replace: true });
+      }
     } catch (error) {
       const message =
         error?.response?.data?.data?.message ||

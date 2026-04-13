@@ -161,7 +161,7 @@ const Cart = () => {
               </div>
               <div className="card-container__total">
                 <p>
-                  Tổng tiền: <span>{formatNumber(totalPrice)} d</span>
+                  Tổng tiền: <span>{formatNumber(totalPrice)} đ</span>
                 </p>
                 <div className="card-container__total-buttons">
                   <button className="btn1" onClick={() => navigate("/")}>
@@ -181,4 +181,3 @@ const Cart = () => {
 };
 
 export default Cart;
-

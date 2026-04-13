@@ -18,14 +18,14 @@ const placeholderItem = {
   size: "N/A",
 };
 
-const statusMap = {
-  PENDING: "Pending",
-  CONFIRMED: "Processing",
-  PAID: "Delivered",
-  SHIPPED: "Shipping",
-  DELIVERED: "Delivered",
-  CANCELLED: "Cancelled",
-};
+const ADMIN_ORDER_STATUSES = [
+  "PENDING",
+  "CONFIRMED",
+  "PAID",
+  "SHIPPED",
+  "DELIVERED",
+  "CANCELLED",
+];
 
 const mapOrderToAdmin = (order) => {
   const items =
@@ -38,14 +38,17 @@ const mapOrderToAdmin = (order) => {
       ...placeholderItem,
     })) || [];
 
-  const mappedStatus = statusMap[order?.status] || order?.status || "Pending";
+  const rawStatus = order?.status || "PENDING";
   return {
-    id: order?.reference || order?.id,
+    // Display ID in UI should be the human-friendly reference if available.
+    id: order?.reference || String(order?.id || ""),
+    reference: order?.reference || null,
+    orderUuid: order?.id || null,
     orderDate: order?.createdDate || new Date().toISOString(),
     sellerName: "TechNova",
     storeName: "TechNova Official",
     sellerContact: "N/A",
-    status: mappedStatus,
+    status: rawStatus,
     shippingMethod: "Standard Delivery",
     shippingFee: "Free",
     estimatedDelivery: "N/A",
@@ -53,7 +56,7 @@ const mapOrderToAdmin = (order) => {
     recipientPhone: "N/A",
     deliveryAddress: "N/A",
     paymentMethod: order?.paymentMethod || "N/A",
-    paymentStatus: order?.status === "PAID" ? "Paid" : "Pending",
+    paymentStatus: rawStatus === "PAID" ? "Paid" : "Pending",
     subtotal: `$${Number(order?.totalAmount || 0).toFixed(2)}`,
     discount: null,
     tax: null,
@@ -119,6 +122,35 @@ const OrderAdminPage = () => {
     setShowModal(true);
   };
 
+  const handleChangeStatus = async (orderUuid, nextStatus) => {
+    if (!orderUuid) {
+      throw new Error("Missing order id");
+    }
+    if (!ADMIN_ORDER_STATUSES.includes(nextStatus)) {
+      throw new Error("Invalid status");
+    }
+
+    await orderApi.changeStatus(orderUuid, nextStatus);
+
+    // Update local state immediately; keep other fields as-is.
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.orderUuid === orderUuid
+          ? {
+              ...o,
+              status: nextStatus,
+              paymentStatus: nextStatus === "PAID" ? "Paid" : o.paymentStatus,
+            }
+          : o
+      )
+    );
+    setSelectedOrder((prev) =>
+      prev && prev.orderUuid === orderUuid
+        ? { ...prev, status: nextStatus }
+        : prev
+    );
+  };
+
   const handleExportExcel = () => {
     exportOrdersToExcel(filteredOrders);
   };
@@ -157,6 +189,8 @@ const OrderAdminPage = () => {
             {showModal && selectedOrder && (
               <OrderViewModal
                 order={selectedOrder}
+                statusOptions={ADMIN_ORDER_STATUSES}
+                onChangeStatus={handleChangeStatus}
                 onClose={() => setShowModal(false)}
               />
             )}

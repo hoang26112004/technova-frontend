@@ -8,7 +8,7 @@ const Footer = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="footer" data-aos="fade-up">
+    <div className="footer">
       <div className="header-desktop__logo">
         <img className="footer__logo-img" src={logo} alt="TechNova" />
       </div>

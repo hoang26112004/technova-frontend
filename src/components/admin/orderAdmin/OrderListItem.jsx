@@ -6,7 +6,7 @@ const OrderListItem = ({ order, onView }) => {
 	const itemsCount = order.items.length;
 
 	const formattedDate = new Date(order.orderDate).toLocaleDateString(
-		"en-US",
+		"vi-VN",
 		{
 			year: "numeric",
 			month: "short",
@@ -28,7 +28,7 @@ const OrderListItem = ({ order, onView }) => {
 						.slice(0, 2)
 						.map((item) => item.name)
 						.join(", ")}
-					{itemsCount > 2 ? `, +${itemsCount - 2} more` : ""}
+					{itemsCount > 2 ? `, +${itemsCount - 2} thêm` : ""}
 				</div>
 			</td>
 			<td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -47,7 +47,7 @@ const OrderListItem = ({ order, onView }) => {
 				<button
 					onClick={() => onView(order)}
 					className="cursor-pointer text-blue-600 hover:text-blue-900"
-					title="View Order Details"
+					title="Xem chi tiết"
 				>
 					<Eye className="h-4 w-4" />
 				</button>

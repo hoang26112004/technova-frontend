@@ -18,7 +18,7 @@ const LeftOrder = ({
 }) => {
   return (
     <div className="leftOrder">
-      <h1>Dia chi nhan hang</h1>
+      <h1>Địa chỉ nhận hàng</h1>
       <div className="leftOrder__address">
         {addresses.map((address) => (
           <div key={address.id} className="leftOrder__address-item">
@@ -45,7 +45,7 @@ const LeftOrder = ({
           onClick={onAddAddress}
         >
           <MdAddCircleOutline className="leftOrder__address-addAddress-icon" />
-          <p>Them dia chi moi</p>
+          <p>Thêm địa chỉ mới</p>
         </div>
       </div>
       <h1>Phuong thuc thanh toan</h1>
@@ -60,7 +60,7 @@ const LeftOrder = ({
           <div className="leftOrder__payment-item-info">
             <img src={cod} />
             <div className="leftOrder__payment-item-info-detail">
-              <p className="title">Thanh toan khi nhan hang</p>
+              <p className="title">Thanh toán khi nhận hàng</p>
               <div className="detailt-item">
                 <p>COD</p>
               </div>
@@ -85,24 +85,7 @@ const LeftOrder = ({
             </div>
           </div>
         </div>
-        <div className="leftOrder__payment-item">
-          <input
-            type="radio"
-            name="payment"
-            checked={paymentMethod === "MOMO"}
-            onChange={() => onSelectPayment("MOMO")}
-          />
-          <div className="leftOrder__payment-item-info">
-            <img src={momo} />
-            <div className="leftOrder__payment-item-info-detail">
-              <p className="title">Vi dien tu</p>
-              <div className="detailt-item">
-                <p>Momo</p>
-                <img src={momoIcon} />
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   );

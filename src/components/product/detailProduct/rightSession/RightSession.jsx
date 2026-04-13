@@ -247,7 +247,7 @@ const RightSession = ({
       </div>
       <div className="right-session__price">
         <span className="right-session__price__current">
-          {formatNumber(unitPrice)} d
+          {formatNumber(unitPrice)} đ
         </span>
       </div>
       {attributeGroups.length > 0 ? (

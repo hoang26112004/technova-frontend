@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
-import { useRoutes } from "react-router-dom";
+import { useLocation, useRoutes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -16,6 +16,8 @@ import MarketSystemPage from "./pages/market-system/MarketSystemPage";
 import Order from "./pages/order/Order";
 import OrderTracking from "./pages/order-tracking/OrderTracking";
 import MyOrders from "./pages/my-orders/MyOrders";
+import PaymentSuccess from "./pages/payment/PaymentSuccess";
+import PaymentFailed from "./pages/payment/PaymentFailed";
 import BlogList from "./components/blog/BlogList";
 import BlogDetail from "./components/blog/BlogDetail";
 import SearchResultPage from "./pages/blog/SearchResultPage";
@@ -29,12 +31,24 @@ import AttributeAdminPage from "./pages/admin/AttributeAdminPage";
 import FollowingProducts from "./pages/followingProducts/FollowingProducts";
 import AdminGuard from "./components/commons/guards/AdminGuard";
 const App = () => {
+  const location = useLocation();
   useEffect(() => {
     AOS.init({
       duration: 1000, // Thời gian hiệu ứng (ms)
       once: true, // Chỉ chạy một lần khi cuộn
     });
   }, []);
+
+  useEffect(() => {
+    // Ensure AOS recalculates positions after initial paint and on route changes.
+    // This avoids elements staying hidden until a resize (e.g. opening DevTools).
+    const t = setTimeout(() => {
+      try {
+        AOS.refreshHard();
+      } catch {}
+    }, 0);
+    return () => clearTimeout(t);
+  }, [location.pathname, location.search]);
 
   const routes = useRoutes([
     {
@@ -88,6 +102,14 @@ const App = () => {
     {
       path: "/my-orders",
       element: <MyOrders />,
+    },
+    {
+      path: "/payment-success",
+      element: <PaymentSuccess />,
+    },
+    {
+      path: "/payment-failed",
+      element: <PaymentFailed />,
     },
     {
       path: "/blog",
