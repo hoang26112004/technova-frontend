@@ -1,57 +1,68 @@
 .swiper-header {
   width: 100%;
-  background-color: #ff7a59;
-  border-bottom: 1px solid #efe6e1;
-  padding: 10px 130px;
+  background: linear-gradient(90deg, rgba(255, 99, 71, 0.96), rgba(255, 138, 118, 0.94));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.swiper-header__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
-  color: #e8ecf4;
+  gap: 10px;
+}
 
-  .swiper-button {
-    padding: 4px;
-    background-color: #fff;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    border: 1px solid #ffe1d7;
+.swiper-container {
+  width: 100%;
+  min-width: 0;
+}
 
-    .swiper-icon {
-      width: 20px;
-      height: 20px;
-      color: #ff7a59;
-    }
+.swiper-container .swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-wrap: balance;
+}
+
+.swiper-header__close {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  transition: transform 120ms ease, background 160ms ease;
+}
+
+.swiper-header__close:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.20);
+}
+
+@media screen and (max-width: 640px) {
+  .swiper-header__inner {
+    padding: 8px 12px;
   }
-
-  .swiper-button_disabled {
-    opacity: 0.5;
+  .swiper-header__close {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
   }
-
-  .swiper-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .swiper-slide {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 16px;
-      font-weight: 500;
-      color: #fff;
-    }
-  }
-
-  @media screen and (max-width: 767.98px) {
-    padding: 10px 20px;
-  }
-
-  @media screen and (max-width: 444.98px) {
-    padding: 10px 20px;
-    .swiper-button {
-      display: none;
-    }
+  .swiper-container .swiper-slide {
+    font-size: 12px;
   }
 }

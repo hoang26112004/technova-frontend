@@ -1,14 +1,18 @@
 .tech-hero {
   --text: var(--ink);
   --muted: var(--muted-2);
+  --heroA: rgba(255, 99, 71, 0.14);
+  --heroB: rgba(255, 138, 118, 0.12);
+  --heroC: rgba(59, 130, 246, 0.10);
   font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
     sans-serif;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 24px;
   background:
-    radial-gradient(520px 520px at 12% 18%, rgba(255, 99, 71, 0.14), transparent 60%),
-    radial-gradient(720px 720px at 92% 10%, rgba(255, 138, 118, 0.12), transparent 62%),
+    radial-gradient(520px 520px at 12% 18%, var(--heroA), transparent 60%),
+    radial-gradient(720px 720px at 92% 10%, var(--heroB), transparent 62%),
+    radial-gradient(640px 640px at 92% 92%, var(--heroC), transparent 62%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.92) 100%);
   border: 1px solid rgba(226, 232, 240, 0.92);
   border-radius: 24px;
@@ -19,8 +23,33 @@
   box-shadow: var(--shadow-sm);
 }
 
+.tech-hero--tone-sale {
+  --heroA: rgba(255, 99, 71, 0.18);
+  --heroB: rgba(245, 158, 11, 0.14);
+  --heroC: rgba(255, 138, 118, 0.10);
+}
+
+.tech-hero--tone-work {
+  --heroA: rgba(59, 130, 246, 0.14);
+  --heroB: rgba(255, 99, 71, 0.10);
+  --heroC: rgba(34, 211, 238, 0.10);
+}
+
+.tech-hero--tone-gaming {
+  --heroA: rgba(168, 85, 247, 0.12);
+  --heroB: rgba(59, 130, 246, 0.12);
+  --heroC: rgba(255, 99, 71, 0.10);
+}
+
 .tech-hero--compact {
   grid-template-columns: 1fr;
+}
+
+.tech-hero__topline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .tech-hero__eyebrow {
@@ -29,6 +58,19 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-size: 12px;
+  margin: 0;
+}
+
+.tech-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 99, 71, 0.14);
+  border: 1px solid rgba(255, 99, 71, 0.25);
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: -0.01em;
 }
 
 .tech-hero h1 {
@@ -41,6 +83,21 @@
   color: var(--muted);
   line-height: 1.6;
   max-width: 520px;
+}
+
+.tech-hero__slide {
+  animation: heroSlideIn 220ms ease-out;
+}
+
+@keyframes heroSlideIn {
+  from {
+    opacity: 0.72;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .tech-hero__actions {
@@ -71,6 +128,119 @@
 .tech-hero__stats span {
   color: var(--muted);
   font-size: 12px;
+}
+
+.tech-hero__ad {
+  position: relative;
+  border-radius: 22px;
+  border: 1px solid rgba(226, 232, 240, 0.92);
+  background: rgba(255, 255, 255, 0.70);
+  box-shadow: 0 12px 20px rgba(11, 18, 32, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 220px;
+}
+
+.tech-hero__adFrame {
+  height: 100%;
+  min-height: 220px;
+  background:
+    radial-gradient(520px 520px at 20% 18%, var(--heroA), transparent 60%),
+    radial-gradient(620px 620px at 90% 12%, var(--heroB), transparent 62%),
+    radial-gradient(520px 520px at 70% 92%, rgba(15, 23, 42, 0.06), transparent 60%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.88));
+}
+
+.tech-hero__controls {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tech-hero__nav {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  background: rgba(255, 255, 255, 0.78);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 120ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.tech-hero__nav:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 20px rgba(11, 18, 32, 0.10);
+}
+
+.tech-hero__dots {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.tech-hero__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(71, 85, 105, 0.35);
+  background: rgba(71, 85, 105, 0.18);
+  cursor: pointer;
+  transition: transform 120ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.tech-hero__dot.is-active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: rgba(255, 99, 71, 0.55);
+  transform: scale(1.1);
+}
+
+.tech-hero__adMeta {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.92);
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(6px);
+}
+
+.tech-hero__adKicker {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(255, 99, 71, 0.95);
+}
+
+.tech-hero__adLine {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: rgba(11, 18, 32, 0.92);
+}
+
+.tech-hero__adLine--muted {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(71, 85, 105, 0.78);
 }
 
 @media (max-width: 1024px) {

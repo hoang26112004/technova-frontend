@@ -1,65 +1,68 @@
 /* eslint-disable */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
-import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 import "./SwiperHeader.scss";
+
+const STORAGE_KEY = "technova_announce_hidden_v1";
+
 const SwiperHeader = () => {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-  const swiperRef = useRef(null);
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      const swiperInstance = swiperRef.current.swiper;
-      const updateNavigation = () => {
-        setIsBeginning(swiperInstance.isBeginning);
-        setIsEnd(swiperInstance.isEnd);
-      };
-
-      swiperInstance.on("slideChange", updateNavigation);
-      updateNavigation();
-
-      return () => {
-        swiperInstance.off("slideChange", updateNavigation);
-      };
+    try {
+      setHidden(localStorage.getItem(STORAGE_KEY) === "1");
+    } catch {
+      setHidden(false);
     }
   }, []);
 
+  const slides = useMemo(
+    () => [
+      "TechNova: Hàng mới về hàng tuần",
+      "Giảm giá linh kiện và phụ kiện gaming",
+      "Trả góp 0% cho laptop và điện thoại",
+    ],
+    []
+  );
+
+  if (hidden) return null;
+
   return (
     <div className="swiper-header">
-      <button
-        ref={prevRef}
-        className={`swiper-button ${isBeginning ? "swiper-button_disabled" : ""}`}
-        disabled={isBeginning}
-      >
-        <GrFormPrevious className="swiper-icon" />
-      </button>
-      <Swiper
-        modules={[Navigation]}
-        ref={swiperRef}
-        navigation={{
-          prevEl: prevRef.current,
-          nextEl: nextRef.current,
-        }}
-        className="swiper-container"
-      >
-        <SwiperSlide>TechNova: Hàng mới về hàng tuần</SwiperSlide>
-        <SwiperSlide>Giảm giá linh kiện và phụ kiện gaming</SwiperSlide>
-        <SwiperSlide>Trả góp 0% cho laptop và điện thoại</SwiperSlide>
-      </Swiper>
-      <button
-        ref={nextRef}
-        className={`swiper-button ${isEnd ? "swiper-button_disabled" : ""}`}
-        disabled={isEnd}
-      >
-        <GrFormNext className="swiper-icon" />
-      </button>
+      <div className="swiper-header__inner">
+        <Swiper
+          modules={[Autoplay]}
+          autoplay={{
+            delay: 3800,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          loop={slides.length > 1}
+          speed={650}
+          className="swiper-container"
+          aria-label="Thông báo"
+        >
+          {slides.map((text) => (
+            <SwiperSlide key={text}>{text}</SwiperSlide>
+          ))}
+        </Swiper>
+        <button
+          type="button"
+          className="swiper-header__close"
+          aria-label="Đóng thông báo"
+          onClick={() => {
+            setHidden(true);
+            try {
+              localStorage.setItem(STORAGE_KEY, "1");
+            } catch {}
+          }}
+        >
+          &times;
+        </button>
+      </div>
     </div>
   );
 };
