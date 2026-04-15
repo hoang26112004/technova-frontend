@@ -36,7 +36,26 @@ export const mapReviewToComment = (review) => ({
 export const buildVariantLabel = (variant) => {
   const attrs = variant?.attributes || [];
   if (!attrs.length) return "Default";
+
+  const normalizeAttributeType = (type) => {
+    const raw = String(type || "").trim();
+    if (!raw) return "";
+    const lower = raw.toLowerCase();
+    const aliases = {
+      color: "COLOR",
+      size: "SIZE",
+      material: "MATERIAL",
+      storage: "STORAGE",
+      ram: "RAM",
+      weight: "WEIGHT",
+    };
+    return aliases[lower] || raw.toUpperCase();
+  };
+
   return attrs
-    .map((attr) => `${attr?.type || ""}: ${attr?.value || ""}`.trim())
+    .map((attr) => {
+      const t = normalizeAttributeType(attr?.type);
+      return `${t || attr?.type || ""}: ${attr?.value || ""}`.trim();
+    })
     .join(" / ");
 };

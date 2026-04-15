@@ -474,7 +474,7 @@ const VariantAdminPage = () => {
 									</div>
 									{attributeDrafts.length === 0 ? (
 										<p className="text-xs text-gray-500 mt-2">
-											ChÆ°a cÃ³ thuá»™c tÃ­nh. Báº¡n cÃ³ thá»ƒ thÃªm sau.
+
 										</p>
 									) : (
 										<div className="mt-3 space-y-2">

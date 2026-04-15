@@ -31,14 +31,36 @@ const RightSession = ({
     [variants, selectedType]
   );
 
-  const selectedAttrMap = useMemo(() => {
+  const normalizeAttributeType = (type) => {
+    const raw = String(type || "").trim();
+    if (!raw) return "";
+    const lower = raw.toLowerCase();
+    // Support both enum-name ("STORAGE") and enum-value ("storage") styles.
+    const aliases = {
+      color: "COLOR",
+      size: "SIZE",
+      material: "MATERIAL",
+      storage: "STORAGE",
+      ram: "RAM",
+      weight: "WEIGHT",
+    };
+    return aliases[lower] || raw.toUpperCase();
+  };
+
+  const getNormalizedAttrMap = (variant) => {
     const map = {};
-    const attrs = selectedVariant?.attributes || [];
+    const attrs = variant?.attributes || [];
     for (const a of attrs) {
       if (!a?.type || a?.value == null) continue;
-      map[a.type] = String(a.value);
+      const type = normalizeAttributeType(a.type);
+      if (!type) continue;
+      map[type] = String(a.value);
     }
     return map;
+  };
+
+  const selectedAttrMap = useMemo(() => {
+    return getNormalizedAttrMap(selectedVariant);
   }, [selectedVariant]);
 
   const attributeGroups = useMemo(() => {
@@ -46,12 +68,8 @@ const RightSession = ({
     const groups = new Map();
 
     for (const v of variants) {
-      const attrs = v?.attributes || [];
-      for (const a of attrs) {
-        if (!a?.type || a?.value == null) continue;
-        const type = a.type;
-        const value = String(a.value);
-
+      const map = getNormalizedAttrMap(v);
+      for (const [type, value] of Object.entries(map)) {
         if (!groups.has(type)) groups.set(type, new Map());
         const valueMap = groups.get(type);
         if (!valueMap.has(value)) valueMap.set(value, []);
@@ -74,6 +92,8 @@ const RightSession = ({
     const labelOf = (type) => {
       if (type === "STORAGE") return "Phiên bản";
       if (type === "COLOR") return "Màu sắc";
+      if (type === "SIZE") return "Kích thước";
+      if (type === "MATERIAL") return "Chất liệu";
       return type;
     };
 
@@ -106,15 +126,8 @@ const RightSession = ({
 
     for (let i = 0; i < variants.length; i++) {
       const v = variants[i];
-      const attrs = v?.attributes || [];
-      const map = {};
-      let hasPair = false;
-
-      for (const a of attrs) {
-        if (!a?.type || a?.value == null) continue;
-        map[a.type] = String(a.value);
-        if (a.type === type && String(a.value) === String(value)) hasPair = true;
-      }
+      const map = getNormalizedAttrMap(v);
+      const hasPair = String(map?.[type] || "") === String(value);
       if (!hasPair) continue;
 
       let score = 0;
