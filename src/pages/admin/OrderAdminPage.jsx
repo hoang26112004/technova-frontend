@@ -31,7 +31,7 @@ const mapOrderToAdmin = (order) => {
   const items =
     order?.items?.map((item) => ({
       id: item.variantId,
-      name: `Variant ${item.variantId}`,
+      name: `Biến thể ${item.variantId}`,
       price: `$${Number(item.price || 0).toFixed(2)}`,
       quantity: item.quantity,
       subtotal: `$${Number(item.price || 0) * item.quantity}`,
@@ -158,7 +158,7 @@ const OrderAdminPage = () => {
   return (
     <LayoutAdmin>
       <div className="flex-1 overflow-auto relative z-10">
-        <HeaderAdmin title={"Orders"} />
+        <HeaderAdmin title={"Đơn hàng"} />
         <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, x: 30 }}

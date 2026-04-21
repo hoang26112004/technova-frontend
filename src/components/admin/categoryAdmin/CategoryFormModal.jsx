@@ -39,7 +39,7 @@ const CategoryFormModal = ({
 			<div className="bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
 				<div className="flex justify-between items-center p-4 border-b">
 					<h3 className="text-lg font-semibold">
-						{formType === "add" ? "Add Category" : "Edit Category"}
+						{formType === "add" ? "Thêm danh mục" : "Sửa danh mục"}
 					</h3>
 					<button
 						onClick={onClose}

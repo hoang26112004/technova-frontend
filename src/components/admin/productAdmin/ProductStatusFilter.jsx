@@ -9,7 +9,7 @@ const ProductStatusFilter = ({
 	return (
 		<div className="w-full sm:w-auto flex flex-wrap gap-2">
 			<span className="text-sm font-medium text-gray-700 self-center mr-2">
-				Status:
+				Trạng thái:
 			</span>
 			<button
 				onClick={() => onFilterChange("All")}
@@ -19,7 +19,7 @@ const ProductStatusFilter = ({
 						: "bg-gray-100 text-gray-700 hover:bg-gray-200"
 				}`}
 			>
-				All ({totalCount})
+				Tất cả ({totalCount})
 			</button>
 			<button
 				onClick={() => onFilterChange("Active")}
@@ -29,7 +29,7 @@ const ProductStatusFilter = ({
 						: "bg-green-100 text-green-800 hover:bg-green-200"
 				}`}
 			>
-				Active ({statusCounts["Active"]})
+				Đang bán ({statusCounts["Active"]})
 			</button>
 			<button
 				onClick={() => onFilterChange("Inactive")}
@@ -39,7 +39,7 @@ const ProductStatusFilter = ({
 						: "bg-gray-100 text-gray-800 hover:bg-gray-200"
 				}`}
 			>
-				Inactive ({statusCounts["Inactive"]})
+				Ngừng bán ({statusCounts["Inactive"]})
 			</button>
 			<button
 				onClick={() => onFilterChange("Low Stock")}
@@ -49,7 +49,7 @@ const ProductStatusFilter = ({
 						: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
 				}`}
 			>
-				Low Stock ({statusCounts["Low Stock"]})
+				Sắp hết hàng ({statusCounts["Low Stock"]})
 			</button>
 			<button
 				onClick={() => onFilterChange("Out of Stock")}
@@ -59,7 +59,7 @@ const ProductStatusFilter = ({
 						: "bg-red-100 text-red-800 hover:bg-red-200"
 				}`}
 			>
-				Out of Stock ({statusCounts["Out of Stock"]})
+				Hết hàng ({statusCounts["Out of Stock"]})
 			</button>
 		</div>
 	);

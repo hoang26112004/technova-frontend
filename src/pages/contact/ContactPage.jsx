@@ -17,9 +17,7 @@ const ContactPage = () => {
       brand: "TechNova",
       email: "support@technova.com",
       phone: "+84 345 736 388 ",
-      address: "266 Đội Cấn, Ba Đình, Hà Nội",
-      mapEmbedSrc:
-        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.9168302083826!2d105.81122397484918!3d21.036013580615144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab128b832837%3A0x277dc2c7fae28e1!2zMjY2IFAuIMSQ4buZaSBD4bqlbiwgTGnhu4V1IEdpYWksIEJhIMSQw6xuaCwgSMOgIE7hu5lpLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1744481168247!5m2!1svi!2s",
+      address: "Nhuận Tây - Đường An - TP.Hải Phòng",
     }),
     []
   );
@@ -104,66 +102,10 @@ const ContactPage = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-            <div>
-              <iframe
-                src={contact.mapEmbedSrc}
-                width="100%"
-                height="100%"
-                className="rounded-md border border-gray-300 min-h-[340px]"
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Bản đồ"
-              />
-            </div>
 
-            <form className="space-y-4" onSubmit={onSubmit}>
-              <input
-                type="text"
-                required
-                placeholder="Họ và tên"
-                value={form.name}
-                onChange={onChange("name")}
-                className="w-full bg-gray-50 border border-gray-300 px-4 py-3 rounded-md focus:ring-0 focus:outline-none placeholder-gray-400"
-              />
-              <input
-                type="email"
-                required
-                placeholder="Email"
-                value={form.email}
-                onChange={onChange("email")}
-                className="w-full bg-gray-50 border border-gray-300 px-4 py-3 rounded-md focus:ring-0 focus:outline-none placeholder-gray-400"
-              />
-              <input
-                type="tel"
-                required
-                placeholder="Điện thoại"
-                value={form.phone}
-                onChange={onChange("phone")}
-                className="w-full bg-gray-50 border border-gray-300 px-4 py-3 rounded-md focus:ring-0 focus:outline-none placeholder-gray-400"
-              />
-              <textarea
-                rows={6}
-                required
-                placeholder="Nội dung"
-                value={form.message}
-                onChange={onChange("message")}
-                className="w-full bg-gray-50 border border-gray-300 px-4 py-3 rounded-md focus:ring-0 focus:outline-none placeholder-gray-400"
-              />
-              <div>
-                <button
-                  type="submit"
-                  className="px-6 py-3 cursor-pointer text-white bg-[#FF6347] rounded-md hover:bg-white hover:text-[#FF6347] hover:border-[#ff6347] border border-transparent hover:border duration-200"
-                >
-                  Gửi thông tin
-                </button>
-                <p className="text-xs text-gray-500 mt-3">
-                  Form này sẽ mở ứng dụng email của bạn để gửi tới {contact.email}.
-                </p>
-              </div>
-            </form>
-          </div>
+
+
+
         </div>
       </motion.div>
     </Layout>

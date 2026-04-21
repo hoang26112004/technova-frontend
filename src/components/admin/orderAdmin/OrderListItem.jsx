@@ -4,6 +4,10 @@ import OrderStatusBadge from "./OrderStatusBadge";
 
 const OrderListItem = ({ order, onView }) => {
 	const itemsCount = order.items.length;
+	const formatShippingFee = (fee) => {
+		if (!fee || fee === "N/A") return "-";
+		return fee === "Free" ? "Miễn phí" : fee;
+	};
 
 	const formattedDate = new Date(order.orderDate).toLocaleDateString(
 		"vi-VN",
@@ -38,7 +42,7 @@ const OrderListItem = ({ order, onView }) => {
 				{order.totalAmount}
 			</td>
 			<td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-				{order.shippingFee ? order.shippingFee : "Free"}
+				{formatShippingFee(order.shippingFee)}
 			</td>
 			<td className="px-4 py-4 whitespace-nowrap">
 				<OrderStatusBadge status={order.status} />

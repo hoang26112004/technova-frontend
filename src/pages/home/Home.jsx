@@ -96,23 +96,29 @@ const Home = () => {
           <div id="home-voucher">
             <Voucher />
           </div>
-
-          <div id="home-deals">
-            <HomeProductRail
-              title="Giá tốt hôm nay"
-              subtitle="Chọn nhanh theo mức giá dễ mua, cập nhật liên tục"
-              params={{ sortedBy: "price", sortDirection: "asc" }}
-              viewAllLabel="Xem nhanh"
-            />
-          </div>
-
+          <section className="tech-section tech-home__cats" data-aos="fade-up">
+            <header className="tech-section__header">
+              <div>
+                <h2>Danh mục</h2>
+                <p>Chọn nhanh theo nhu cầu</p>
+              </div>
+            </header>
+            <Category />
+          </section>
           <div id="home-reco">
             <RecoHeroRail
               title="Gợi ý cho bạn"
               subtitle="Kết quả từ thuật toán đề xuất sản phẩm"
             />
           </div>
-
+          <div id="home-deals">
+            <HomeProductRail
+                title="Giá tốt hôm nay"
+                subtitle="Chọn nhanh theo mức giá dễ mua, cập nhật liên tục"
+                params={{ sortedBy: "price", sortDirection: "asc" }}
+                viewAllLabel="Xem nhanh"
+            />
+          </div>
           <HomeProductRail
             title="Hàng mới về"
             subtitle="Sản phẩm mới cập nhật gần đây"
@@ -124,50 +130,43 @@ const Home = () => {
             <TopRatedRail />
           </div>
 
-          <section className="tech-section tech-home__cats" data-aos="fade-up">
-            <header className="tech-section__header">
-              <div>
-                <h2>Danh mục</h2>
-                <p>Chọn nhanh theo nhu cầu</p>
-              </div>
-              <button
-                type="button"
-                className="btn btn--soft btn--small"
-                onClick={() => navigate("/search")}
-              >
-                Xem tất cả
-              </button>
-            </header>
-            <Category />
-          </section>
+          {/*<section className="tech-section tech-home__cats" data-aos="fade-up">*/}
+          {/*  <header className="tech-section__header">*/}
+          {/*    <div>*/}
+          {/*      <h2>Danh mục</h2>*/}
+          {/*      <p>Chọn nhanh theo nhu cầu</p>*/}
+          {/*    </div>*/}
+          {/*  </header>*/}
+          {/*  <Category />*/}
+          {/*</section>*/}
 
-          <section className="tech-home__cta" data-aos="fade-up">
-            <div className="tech-home__ctaInner">
-              <div>
-                <h2>Muốn mua nhanh hơn?</h2>
-                <p>
-                  Vào trang tìm kiếm để lọc theo giá, danh mục, và xem sản phẩm đang
-                  có hàng.
-                </p>
-              </div>
-              <div className="tech-home__ctaActions">
-                <button
-                  type="button"
-                  className="btn btn--primary"
-                  onClick={() => navigate("/search")}
-                >
-                  Tìm sản phẩm phù hợp
-                </button>
-                <button
-                  type="button"
-                  className="btn btn--soft"
-                  onClick={() => scrollToId("home-deals")}
-                >
-                  Xem giá tốt
-                </button>
-              </div>
-            </div>
-          </section>
+          {/*<section className="tech-home__cta" data-aos="fade-up">*/}
+          {/*  <div className="tech-home__ctaInner">*/}
+          {/*    <div>*/}
+          {/*      <h2>Muốn mua nhanh hơn?</h2>*/}
+          {/*      <p>*/}
+          {/*        Vào trang tìm kiếm để lọc theo giá, danh mục, và xem sản phẩm đang*/}
+          {/*        có hàng.*/}
+          {/*      </p>*/}
+          {/*    </div>*/}
+          {/*    <div className="tech-home__ctaActions">*/}
+          {/*      <button*/}
+          {/*        type="button"*/}
+          {/*        className="btn btn--primary"*/}
+          {/*        onClick={() => navigate("/search")}*/}
+          {/*      >*/}
+          {/*        Tìm sản phẩm phù hợp*/}
+          {/*      </button>*/}
+          {/*      <button*/}
+          {/*        type="button"*/}
+          {/*        className="btn btn--soft"*/}
+          {/*        onClick={() => scrollToId("home-deals")}*/}
+          {/*      >*/}
+          {/*        Xem giá tốt*/}
+          {/*      </button>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*</section>*/}
         </div>
       </div>
     </Layout>

@@ -13,7 +13,7 @@ const CategoryDistributionChart = ({ data = [] }) => {
       transition={{ delay: 0.3 }}
     >
       <h2 className="text-lg font-medium mb-4 text-black">
-        Category Distribution
+        Cơ cấu theo danh mục
       </h2>
       <div className="h-80">
         <ResponsiveContainer width={"100%"} height={"100%"}>

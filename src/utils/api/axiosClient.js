@@ -25,12 +25,22 @@ const storeAuthTokens = (data) => {
     const expiresAt = Date.now() + Number(expiresIn) * 1000;
     localStorage.setItem("accessTokenExpiresAt", String(expiresAt));
   }
+  try {
+    window.dispatchEvent(new CustomEvent("auth:changed"));
+  } catch {
+    // Ignore non-browser environments.
+  }
 };
 
 const clearAuthTokens = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("accessTokenExpiresAt");
+  try {
+    window.dispatchEvent(new CustomEvent("auth:changed"));
+  } catch {
+    // Ignore non-browser environments.
+  }
 };
 
 const getExpiresAt = () => Number(localStorage.getItem("accessTokenExpiresAt") || 0);

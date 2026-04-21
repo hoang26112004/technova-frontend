@@ -10,7 +10,7 @@ const ProductViewModal = ({ product, onClose, onEdit }) => {
 				<div className="p-6">
 					<div className="flex justify-between items-center mb-6">
 						<h3 className="text-lg text-gray font-semibold">
-							Product Details
+							Chi tiết sản phẩm
 						</h3>
 						<button
 							onClick={onClose}
@@ -40,20 +40,20 @@ const ProductViewModal = ({ product, onClose, onEdit }) => {
 							<h2 className="text-xl font-semibold mb-2">{product.name}</h2>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 								<div>
-									<div className="text-sm text-gray-500">Product ID</div>
+									<div className="text-sm text-gray-500">Mã sản phẩm</div>
 									<div className="font-medium">{product.id}</div>
 								</div>
 								<div>
-									<div className="text-sm text-gray-500">Category</div>
+									<div className="text-sm text-gray-500">Danh mục</div>
 									<div className="font-medium">{product.category}</div>
 								</div>
 								<div>
-									<div className="text-sm text-gray-500">Price</div>
+									<div className="text-sm text-gray-500">Giá</div>
 									<div className="font-medium text-lg">{product.price}</div>
 								</div>
 							</div>
 							<div className="mb-4">
-								<div className="text-sm text-gray-500 mb-1">Description</div>
+								<div className="text-sm text-gray-500 mb-1">Mô tả</div>
 								<p className="text-gray-700">{product.description}</p>
 							</div>
 						</div>
@@ -63,13 +63,13 @@ const ProductViewModal = ({ product, onClose, onEdit }) => {
 							onClick={onClose}
 							className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
 						>
-							Close
+							Đóng
 						</button>
 						<button
 							onClick={() => onEdit(product)}
 							className="px-4 py-2 border border-gray-300 bg-orange-500 rounded-lg text-white "
 						>
-							Edit Product
+							Sửa sản phẩm
 						</button>
 					</div>
 				</div>

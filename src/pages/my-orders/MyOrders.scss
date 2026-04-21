@@ -55,7 +55,7 @@
 .my-orders__link {
   cursor: pointer;
   color: var(--accent);
-  font-weight: 900;
+  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -102,14 +102,107 @@
 .my-orders__label {
   color: #64748b;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 .my-orders__value {
   color: #0b1220;
-  font-weight: 900;
+  font-weight: 500;
   font-size: 13px;
   word-break: break-word;
+}
+
+.my-orders__items {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.my-orders__subRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.my-orders__sub {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.my-orders__itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.my-orders__item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  background: rgba(248, 250, 252, 0.7);
+}
+
+.my-orders__itemThumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  background: #ffffff;
+}
+
+.my-orders__itemThumb--link {
+  cursor: pointer;
+}
+
+.my-orders__itemBody {
+  min-width: 0;
+}
+
+.my-orders__itemTitle {
+  font-weight: 500;
+  font-size: 13px;
+  color: #0b1220;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.my-orders__itemTitle--link {
+  cursor: pointer;
+}
+
+.my-orders__itemTitle--link:hover {
+  color: rgba(255, 99, 71, 0.95);
+}
+
+.my-orders__itemMeta {
+  margin-top: 4px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.my-orders__itemSku {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.my-orders__muted {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 13px;
 }
 
 .my-orders__actions {
@@ -122,7 +215,7 @@
   border: 1px solid transparent;
   border-radius: 14px;
   padding: 10px 12px;
-  font-weight: 900;
+  font-weight: 500;
   cursor: pointer;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: #0b1220;
@@ -165,5 +258,15 @@
   .my-orders__row {
     grid-template-columns: 1fr;
     gap: 6px;
+  }
+
+  .my-orders__item {
+    grid-template-columns: 48px 1fr;
+  }
+
+  .my-orders__itemThumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
   }
 }

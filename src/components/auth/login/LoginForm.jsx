@@ -41,6 +41,8 @@ const LoginForm = ({ setIsLogin, compact = false }) => {
         const expiresAt = Date.now() + Number(expiresIn) * 1000;
         localStorage.setItem("accessTokenExpiresAt", String(expiresAt));
       }
+      // Notify same-tab listeners (e.g. favorites) that auth state changed.
+      window.dispatchEvent(new CustomEvent("auth:changed"));
       navigate("/");
     } catch (error) {
       const message =
@@ -137,12 +139,6 @@ const LoginForm = ({ setIsLogin, compact = false }) => {
               <button type="submit">
                 Đăng nhập
               </button>
-              <p
-                className="p_forgotPassword"
-                onClick={() => setIsForgotPassword(true)}
-              >
-                Quên mật khẩu?
-              </p>
               {isFogotPassword && <ForgotPassword />}
               <p>
                 Bạn chưa có tài khoản?{" "}

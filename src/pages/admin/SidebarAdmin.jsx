@@ -15,43 +15,43 @@ import logo from "@/assets/images/logo.png";
 
 const SIDEBAR_ITEMS = [
 	{
-		name: "Overview",
+		name: "Tổng quan",
 		icon: BarChart2,
 		color: "#6366f1",
 		href: "/admin",
 	},
 	{
-		name: "Categories",
+		name: "Danh mục",
 		icon: TrendingUp,
 		color: "#8B5CF6",
 		href: "/admin/categories",
 	},
 	{
-		name: "Products",
+		name: "Sản phẩm",
 		icon: ShoppingBag,
 		color: "#EC4899",
 		href: "/admin/products",
 	},
 	{
-		name: "Variants",
+		name: "Phiên bản",
 		icon: Layers,
 		color: "#059669",
 		href: "/admin/variants",
 	},
+	// {
+	// 	name: "Attributes",
+	// 	icon: SlidersHorizontal,
+	// 	color: "#0ea5e9",
+	// 	href: "/admin/attributes",
+	// },
 	{
-		name: "Attributes",
-		icon: SlidersHorizontal,
-		color: "#0ea5e9",
-		href: "/admin/attributes",
-	},
-	{
-		name: "Orders",
+		name: "Đơn hàng",
 		icon: DollarSign,
 		color: "#10b981",
 		href: "/admin/orders",
 	},
 	{
-		name: "Users",
+		name: "Người dùng",
 		icon: Users,
 		color: "#0ea5e9",
 		href: "/admin/users",

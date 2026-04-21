@@ -94,7 +94,7 @@ const OrderList = ({
 				onItemsPerPageChange={onOrdersPerPageChange}
 				indexOfFirstItem={indexOfFirstItem}
 				indexOfLastItem={indexOfLastItem}
-				itemName="orders"
+				itemName="đơn hàng"
 			/>
 		</div>
 	);

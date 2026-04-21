@@ -19,6 +19,7 @@ const OAuthCallback = () => {
       hashParams.get("accessToken");
     if (token) {
       localStorage.setItem("accessToken", token);
+      window.dispatchEvent(new CustomEvent("auth:changed"));
       navigate("/", { replace: true });
       return;
     }

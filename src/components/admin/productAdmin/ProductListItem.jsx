@@ -30,14 +30,14 @@ const ProductListItem = ({ product, onView, onEdit, onDelete }) => {
 					<button
 						onClick={() => onView(product)}
 						className="cursor-pointer text-blue-600 hover:text-blue-900"
-						title="View Details"
+						title="Xem chi tiết"
 					>
 						<Eye className="h-4 w-4" />
 					</button>
 					<button
 						onClick={() => onEdit(product)}
 						className="cursor-pointer text-orange-500 hover:text-orange-700"
-						title="Edit Product"
+						title="Sửa sản phẩm"
 					>
 						<Edit className="h-4 w-4" />
 					</button>

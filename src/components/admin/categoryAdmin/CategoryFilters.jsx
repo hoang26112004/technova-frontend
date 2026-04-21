@@ -13,7 +13,7 @@ const CategoryFilters = ({
 				<div className="relative">
 					<input
 						type="text"
-						placeholder="Search categories..."
+						placeholder="Tìm kiếm danh mục..."
 						value={searchQuery}
 						onChange={(e) => onSearchChange(e.target.value)}
 						className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
@@ -28,14 +28,14 @@ const CategoryFilters = ({
 					className="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
 				>
 					<Download className="h-4 w-4 mr-2" />
-					Export
+					Xuất Excel
 				</button>
 				<button
 					onClick={onAddCategory}
 					className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
 				>
 					<Plus className="h-4 w-4 mr-2" />
-					Add Category
+					Thêm danh mục
 				</button>
 			</div>
 		</div>

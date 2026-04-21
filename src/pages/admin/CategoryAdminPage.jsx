@@ -115,7 +115,7 @@ const CategoryAdminPage = () => {
       await refreshCategories();
       setShowFormModal(false);
     } catch (error) {
-      alert("Luu danh muc that bai.");
+      alert("Lưu danh mục thất bại.");
     }
   };
 
@@ -124,7 +124,7 @@ const CategoryAdminPage = () => {
       await categoryApi.remove(selectedCategory.id);
       await refreshCategories();
     } catch (error) {
-      alert("Xoa danh muc that bai.");
+      alert("Xóa danh mục thất bại.");
     } finally {
       setShowDeleteModal(false);
     }
@@ -137,7 +137,7 @@ const CategoryAdminPage = () => {
   return (
     <LayoutAdmin>
       <div className="flex-1 overflow-auto relative z-10">
-        <HeaderAdmin title={"Categories"} />
+        <HeaderAdmin title={"Danh mục"} />
         <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, x: 30 }}

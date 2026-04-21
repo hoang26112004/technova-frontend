@@ -14,7 +14,7 @@ const Footer = () => {
       </div>
       <ul className="footer__list">
         <li className="footer__title">Công ty</li>
-        <li className="footer__item">Địa chỉ: 266 Đội Cấn, Ba Đình, Hà Nội</li>
+        <li className="footer__item">Địa chỉ: Nhuận Tây - Đường An - TP.Hải Phòng</li>
         <li className="footer__item">Email: support@technova.com</li>
         <li className="footer__item">Hotline: +84 345 736 388</li>
       </ul>

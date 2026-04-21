@@ -30,20 +30,20 @@ const CategoryList = ({
 								onClick={() => onSort("name")}
 								className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
 							>
-								Category Name
+								Tên danh mục
 								{sortConfig.key === "name" &&
 									(sortConfig.direction === "asc"
-										? " ^"
-										: " v")}
+										? " ↑"
+										: " ↓")}
 							</th>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Description
+								Mô tả
 							</th>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Image
+								Hình ảnh
 							</th>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Actions
+								Thao tác
 							</th>
 						</tr>
 					</thead>
@@ -70,7 +70,7 @@ const CategoryList = ({
 				onItemsPerPageChange={onItemsPerPageChange}
 				indexOfFirstItem={indexOfFirstItem}
 				indexOfLastItem={indexOfLastItem}
-				itemName="categories"
+				itemName="danh mục"
 			/>
 		</div>
 	);

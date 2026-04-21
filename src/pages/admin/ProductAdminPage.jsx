@@ -278,7 +278,7 @@ const ProductAdminPage = () => {
   return (
     <LayoutAdmin>
       <div className="flex-1 overflow-auto relative z-10">
-        <HeaderAdmin title={"Products"} />
+        <HeaderAdmin title={"Sản phẩm"} />
         <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
           <motion.div
             className="grid grid-cols-1 gap-5 mb-8 lg:grid-cols-4"
@@ -286,44 +286,44 @@ const ProductAdminPage = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <StatCard
-              name="Total Sales"
-              icon={Zap}
-              value={
-                dashboardLoading
-                  ? "..."
-                  : formatCurrency(dashboard?.kpis?.totalSales)
-              }
-              color="#6366F1"
-            />
-            <StatCard
-              name="New Users"
-              icon={Users}
-              value={
-                dashboardLoading ? "..." : formatNumber(dashboard?.kpis?.newUsers)
-              }
-              color="#8B5CF6"
-            />
-            <StatCard
-              name="Total Products"
-              icon={ShoppingBag}
-              value={
-                dashboardLoading
-                  ? "..."
-                  : formatNumber(dashboard?.kpis?.totalProducts)
-              }
-              color="#EC4899"
-            />
-            <StatCard
-              name="Orders / User"
-              icon={BarChart2}
-              value={
-                dashboardLoading
-                  ? "..."
-                  : formatOrdersPerUser(dashboard?.kpis?.ordersPerUser)
-              }
-              color="#10B981"
-            />
+            {/*<StatCard*/}
+            {/*  name="Tổng doanh số"*/}
+            {/*  icon={Zap}*/}
+            {/*  value={*/}
+            {/*    dashboardLoading*/}
+            {/*      ? "..."*/}
+            {/*      : formatCurrency(dashboard?.kpis?.totalSales)*/}
+            {/*  }*/}
+            {/*  color="#6366F1"*/}
+            {/*/>*/}
+            {/*<StatCard*/}
+            {/*  name="Người dùng mới"*/}
+            {/*  icon={Users}*/}
+            {/*  value={*/}
+            {/*    dashboardLoading ? "..." : formatNumber(dashboard?.kpis?.newUsers)*/}
+            {/*  }*/}
+            {/*  color="#8B5CF6"*/}
+            {/*/>*/}
+            {/*<StatCard*/}
+            {/*  name="Tổng sản phẩm"*/}
+            {/*  icon={ShoppingBag}*/}
+            {/*  value={*/}
+            {/*    dashboardLoading*/}
+            {/*      ? "..."*/}
+            {/*      : formatNumber(dashboard?.kpis?.totalProducts)*/}
+            {/*  }*/}
+            {/*  color="#EC4899"*/}
+            {/*/>*/}
+            {/*<StatCard*/}
+            {/*  name="Đơn hàng / người dùng"*/}
+            {/*  icon={BarChart2}*/}
+            {/*  value={*/}
+            {/*    dashboardLoading*/}
+            {/*      ? "..."*/}
+            {/*      : formatOrdersPerUser(dashboard?.kpis?.ordersPerUser)*/}
+            {/*  }*/}
+            {/*  color="#10B981"*/}
+            {/*/>*/}
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 30 }}
@@ -389,4 +389,3 @@ const ProductAdminPage = () => {
 };
 
 export default ProductAdminPage;
-

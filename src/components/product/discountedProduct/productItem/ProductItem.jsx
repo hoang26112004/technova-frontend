@@ -4,36 +4,31 @@ import { useNavigate } from "react-router-dom";
 import { formatNumber } from "@/utils/function";
 import { FaRegHeart } from "react-icons/fa";
 import cartApi from "@/utils/api/cartApi";
+import { isLikedProductId, subscribeLikeProducts, toggleLikeProduct } from "@/utils/favorites";
 
 import "./ProductItem.scss";
 
 const ProductItem = ({ product }) => {
   const [indexImage, setIndexImage] = useState(0);
   const navigate = useNavigate();
-  const [isFettching, setIsFetching] = useState(false);
-  const [likeProducts, setLikeProducts] = useState(
-    JSON.parse(localStorage.getItem("likeProducts")) || []
-  );
+  const [liked, setLiked] = useState(() => isLikedProductId(product?.id));
 
   useEffect(() => {
-    setLikeProducts(JSON.parse(localStorage.getItem("likeProducts")) || []);
-  }, [isFettching]);
-
-  const isLiked = (item) => likeProducts.some((p) => p.id === item.id);
+    setLiked(isLikedProductId(product?.id));
+    return subscribeLikeProducts(() => {
+      setLiked(isLikedProductId(product?.id));
+    });
+  }, [product?.id]);
 
   const handleLike = (item) => {
-    setIsFetching(!isFettching);
-    const isLike = isLiked(item);
-    if (isLike) {
-      const updatedLikeProducts = likeProducts.filter((p) => p.id !== item.id);
-      localStorage.setItem("likeProducts", JSON.stringify(updatedLikeProducts));
-    } else {
-      likeProducts.push(item);
-      localStorage.setItem("likeProducts", JSON.stringify(likeProducts));
-    }
+    const res = toggleLikeProduct(item);
+    setLiked(!!res?.liked);
   };
 
-  const images = product?.image || ["/vite.svg"];
+  const images =
+    (Array.isArray(product?.image) && product.image.length ? product.image : null) ||
+    (Array.isArray(product?.images) && product.images.length ? product.images : null) ||
+    ["/vite.svg"];
   const count = product?.count || 0;
 
   const handleAddToCart = async (e) => {
@@ -61,7 +56,7 @@ const ProductItem = ({ product }) => {
       className="product-item"
     >
       <div
-        className={`product-item_following ${isLiked(product) ? "active" : ""}`}
+        className={`product-item_following ${liked ? "active" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         <FaRegHeart onClick={() => handleLike(product)} />

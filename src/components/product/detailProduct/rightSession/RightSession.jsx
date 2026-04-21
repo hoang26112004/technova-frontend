@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { ImHeadphones } from "react-icons/im";
 import { FiPackage } from "react-icons/fi";
@@ -14,6 +14,7 @@ import { formatNumber } from "@/utils/function";
 import cartApi from "@/utils/api/cartApi";
 import { buildVariantLabel, resolveImageUrl } from "@/utils/api/mappers";
 import { setOrderList } from "@/store/orderSlice";
+import { isLikedProductId, subscribeLikeProducts, toggleLikeProduct } from "@/utils/favorites";
 
 const RightSession = ({
   product,
@@ -21,7 +22,7 @@ const RightSession = ({
   onSelectType = () => {},
 }) => {
   const [quantity, setQuantity] = useState("1");
-  const [isLike, setIsLike] = useState(false);
+  const [isLike, setIsLike] = useState(() => isLikedProductId(product?.id));
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -94,6 +95,7 @@ const RightSession = ({
       if (type === "COLOR") return "Màu sắc";
       if (type === "SIZE") return "Kích thước";
       if (type === "MATERIAL") return "Chất liệu";
+      if (type === "RAM") return "Cấu hình";
       return type;
     };
 
@@ -152,6 +154,33 @@ const RightSession = ({
   };
   const unitPrice =
     selectedVariant?.price != null ? selectedVariant.price : product?.price;
+
+  const likeCard = useMemo(() => {
+    const images = Array.isArray(product?.images)
+      ? product.images
+      : Array.isArray(product?.image)
+        ? product.image
+        : [];
+
+    return {
+      id: product?.id,
+      name: product?.name || "",
+      image: images.length ? images : ["/vite.svg"],
+      discount: 0,
+      price: Number(product?.price || 0),
+      count: Number(product?.count || 0),
+      variants: Array.isArray(product?.variants) ? product.variants : [],
+      categoryName: product?.categoryName || "",
+      isActive: true,
+    };
+  }, [product]);
+
+  useEffect(() => {
+    setIsLike(isLikedProductId(product?.id));
+    return subscribeLikeProducts(() => {
+      setIsLike(isLikedProductId(product?.id));
+    });
+  }, [product?.id]);
 
   const benefits = [
     {
@@ -246,12 +275,18 @@ const RightSession = ({
         <div className="right-session__product-name__icons">
           {isLike ? (
             <FaHeart
-              onClick={() => setIsLike(!isLike)}
+              onClick={() => {
+                const res = toggleLikeProduct(likeCard);
+                setIsLike(!!res?.liked);
+              }}
               style={{ fontSize: "24px", cursor: "pointer", color: "#ff6347" }}
             />
           ) : (
             <FaRegHeart
-              onClick={() => setIsLike(!isLike)}
+              onClick={() => {
+                const res = toggleLikeProduct(likeCard);
+                setIsLike(!!res?.liked);
+              }}
               style={{ fontSize: "24px", cursor: "pointer" }}
             />
           )}
@@ -357,7 +392,7 @@ const RightSession = ({
               +
             </button>
           </div>
-          <p>Tìm kiếm sản phẩm tương tự</p>
+          {/*<p>Tìm kiếm sản phẩm tương tự</p>*/}
         </div>
       </div>
       <div className="right-session__button">

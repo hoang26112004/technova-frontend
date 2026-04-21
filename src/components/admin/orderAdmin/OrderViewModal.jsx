@@ -18,6 +18,32 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 
 	if (!order) return null;
 
+	const paymentLabel =
+		order.paymentStatus === "Paid" ? "Đã thanh toán" : "Chưa thanh toán";
+
+	const formatNA = (value) => {
+		if (!value || value === "N/A") return "-";
+		return value;
+	};
+
+	const formatShippingMethod = (value) => {
+		const v = formatNA(value);
+		if (v === "Standard Delivery") return "Giao hàng tiêu chuẩn";
+		return v;
+	};
+
+	const formatShippingFee = (value) => {
+		const v = formatNA(value);
+		if (v === "Free") return "Miễn phí";
+		return v;
+	};
+
+	const formatPaymentMethod = (value) => {
+		const v = formatNA(value);
+		if (v === "Credit Card") return "Thẻ tín dụng";
+		return v;
+	};
+
 	return (
 		<div className="fixed inset-0 bg-[#0000009e] bg-opacity-50 flex items-center justify-center z-50 p-4 ">
 			<div className="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -236,9 +262,8 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 															Phương thức vận
 															chuyển:
 														</div>
-														<div>
-															{order.shippingMethod ||
-																"Standard Delivery"}
+															<div>
+															{formatShippingMethod(order.shippingMethod)}
 														</div>
 													</div>
 													<div className="grid grid-cols-2 gap-2">
@@ -246,8 +271,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 															Phí vận chuyển:
 														</div>
 														<div>
-															{order.shippingFee ||
-																"Free"}
+															{formatShippingFee(order.shippingFee)}
 														</div>
 													</div>
 													<div className="grid grid-cols-2 gap-2">
@@ -255,8 +279,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 															Ngày giao hàng:
 														</div>
 														<div>
-															{order.estimatedDelivery ||
-																"N/A"}
+															{formatNA(order.estimatedDelivery)}
 														</div>
 													</div>
 												</div>
@@ -279,8 +302,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 															Người nhận:
 														</div>
 														<div>
-															{order.recipient ||
-																"N/A"}
+															{formatNA(order.recipient)}
 														</div>
 													</div>
 													<div className="grid grid-cols-2 gap-2">
@@ -288,8 +310,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 															Số điện thoại:
 														</div>
 														<div>
-															{order.recipientPhone ||
-																"N/A"}
+															{formatNA(order.recipientPhone)}
 														</div>
 													</div>
 													<div className="grid grid-cols-2 gap-2">
@@ -297,8 +318,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 															Địa chỉ:
 														</div>
 														<div>
-															{order.deliveryAddress ||
-																"N/A"}
+															{formatNA(order.deliveryAddress)}
 														</div>
 													</div>
 												</div>
@@ -318,8 +338,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 												Phương thức thanht toán
 											</div>
 											<div>
-												{order.paymentMethod ||
-													"Credit Card"}
+												{formatPaymentMethod(order.paymentMethod)}
 											</div>
 										</div>
 										<div>
@@ -334,7 +353,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 														: "bg-yellow-100 text-yellow-800"
 												}`}
 											>
-												{order.paymentStatus || "Paid"}
+												{paymentLabel}
 											</div>
 										</div>
 									</div>
@@ -375,7 +394,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 												Phí vận chuyển:
 											</span>
 											<span>
-												{order.shippingFee || "Free"}
+												{formatShippingFee(order.shippingFee)}
 											</span>
 										</div>
 										{order.discount && (

@@ -30,21 +30,21 @@ const ProductList = ({
 					<thead className="bg-gray-50">
 						<tr>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Product
+								Sản phẩm
 							</th>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Category
+								Danh mục
 							</th>
 							<th
 								onClick={() => onSort("price")}
 								className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
 							>
-								Price{" "}
+								Giá{" "}
 								{sortConfig.key === "price" &&
-									(sortConfig.direction === "asc" ? "â†‘" : "â†“")}
+									(sortConfig.direction === "asc" ? "↑" : "↓")}
 							</th>
 							<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Actions
+								Thao tác
 							</th>
 						</tr>
 					</thead>
@@ -71,7 +71,7 @@ const ProductList = ({
 				onItemsPerPageChange={onProductsPerPageChange}
 				indexOfFirstItem={indexOfFirstProduct}
 				indexOfLastItem={indexOfLastProduct}
-				itemName="products"
+				itemName="sản phẩm"
 			/>
 		</div>
 	);

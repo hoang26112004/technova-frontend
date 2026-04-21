@@ -359,7 +359,7 @@ const ProductVariantModal = ({
 									type="submit"
 									className="rounded-md bg-emerald-600 px-4 py-2 text-white"
 								>
-									Luu
+									Lưu
 								</button>
 							</div>
 						</form>
@@ -493,7 +493,7 @@ const ProductVariantModal = ({
 											type="submit"
 											className="rounded-md bg-blue-600 px-3 py-2 text-sm text-white"
 										>
-											Luu
+											Lưu
 										</button>
 									</div>
 								</div>

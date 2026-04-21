@@ -64,7 +64,7 @@ const RecoHeroRail = ({ title = "Goi y cho ban", subtitle = "Tu thuat toan de xu
     <section className="reco-rail" data-aos="fade-up">
       <header className="reco-rail__header">
         <div>
-          <p className="reco-rail__eyebrow">Personalized</p>
+          {/*<p className="reco-rail__eyebrow">Personalized</p>*/}
           <h2>{title}</h2>
           <p className="reco-rail__sub">{subtitle}</p>
         </div>

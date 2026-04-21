@@ -16,11 +16,11 @@ const CategoryListItem = ({ category, onView, onEdit, onDelete }) => {
 				{category.imageUrl ? (
 					<img
 						src={category.imageUrl}
-						alt={`${category.name || "Category"} image`}
+						alt={`${category.name || "Danh mục"} image`}
 						className="h-10 w-10 rounded-lg border border-gray-200 object-cover"
 					/>
 				) : (
-					<div className="text-sm text-gray-500">No image</div>
+					<div className="text-sm text-gray-500">Không có ảnh</div>
 				)}
 			</td>
 			<td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
@@ -28,21 +28,21 @@ const CategoryListItem = ({ category, onView, onEdit, onDelete }) => {
 					<button
 						onClick={() => onView(category)}
 						className="cursor-pointer text-blue-600 hover:text-blue-900"
-						title="View Details"
+						title="Xem chi tiết"
 					>
 						<Eye className="h-4 w-4" />
 					</button>
 					<button
 						onClick={() => onEdit(category)}
 						className="cursor-pointer text-orange-500 hover:text-orange-700"
-						title="Edit Category"
+						title="Sửa danh mục"
 					>
 						<Edit className="h-4 w-4" />
 					</button>
 					<button
 						onClick={() => onDelete(category)}
 						className="cursor-pointer text-red-500 hover:text-red-700"
-						title="Delete Category"
+						title="Xóa danh mục"
 					>
 						<Trash className="h-4 w-4" />
 					</button>

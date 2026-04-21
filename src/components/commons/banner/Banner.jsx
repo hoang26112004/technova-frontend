@@ -118,20 +118,8 @@ const Banner = ({ onPrimary, onSecondary, compact = false, slides }) => {
             </button>
           </div>
 
-          <div className="tech-hero__stats">
-            <div>
-              <strong>10k+</strong>
-              <span>Khách hàng tin dùng</span>
-            </div>
-            <div>
-              <strong>500+</strong>
-              <span>Sản phẩm công nghệ</span>
-            </div>
-            <div>
-              <strong>4.9/5</strong>
-              <span>Đánh giá trung bình</span>
-            </div>
-          </div>
+
+
         </div>
       </div>
 

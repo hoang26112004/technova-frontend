@@ -10,12 +10,12 @@ import variantApi from "@/utils/api/variantApi";
 import { buildVariantLabel, resolveImageUrl } from "@/utils/api/mappers";
 
 const ATTRIBUTE_TYPES = [
-	{ label: "Color", value: "COLOR" },
-	{ label: "Size", value: "SIZE" },
-	{ label: "Material", value: "MATERIAL" },
-	{ label: "Storage", value: "STORAGE" },
+	{ label: "Màu sắc", value: "COLOR" },
+	{ label: "Kích thước", value: "SIZE" },
+	{ label: "Chất liệu", value: "MATERIAL" },
+	{ label: "Bộ nhớ", value: "STORAGE" },
 	{ label: "RAM", value: "RAM" },
-	{ label: "Weight", value: "WEIGHT" },
+	{ label: "Khối lượng", value: "WEIGHT" },
 ];
 
 const dataUrlToFile = (dataUrl, filename) => {
@@ -134,7 +134,7 @@ const VariantAdminPage = () => {
 			return;
 		}
 		if (formData.price === "" || formData.stock === "") {
-			alert("Nhap gia va ton kho.");
+			alert("Nhập giá và tồn kho.");
 			return;
 		}
 		const existingIds = variants
@@ -194,7 +194,7 @@ const VariantAdminPage = () => {
 	};
 
 	const handleDelete = async (variant) => {
-		if (!window.confirm("Xoa variant nay?")) return;
+		if (!window.confirm("Xóa phiên bản này?")) return;
 		try {
 			await variantApi.remove(variant.id);
 			await refreshProducts();
@@ -250,7 +250,7 @@ const VariantAdminPage = () => {
 	return (
 		<LayoutAdmin>
 			<div className="flex-1 overflow-auto relative z-10">
-				<HeaderAdmin title={"Variants"} />
+				<HeaderAdmin title={"Phiên bản"} />
 				<main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
 					<div className="bg-white rounded-lg shadow-sm p-4 mb-6">
 						<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -259,7 +259,7 @@ const VariantAdminPage = () => {
 									type="text"
 									value={searchQuery}
 									onChange={(e) => setSearchQuery(e.target.value)}
-									placeholder="Search by variant, product, or attributes..."
+									placeholder="Tìm kiếm theo phiên bản, sản phẩm hoặc thuộc tính..."
 									className="w-full rounded-lg border border-gray-200 px-3 py-2"
 								/>
 								<select
@@ -267,7 +267,7 @@ const VariantAdminPage = () => {
 									onChange={(e) => setSelectedProductId(e.target.value)}
 									className="w-full rounded-lg border border-gray-200 px-3 py-2 sm:w-64"
 								>
-									<option value="">All products</option>
+									<option value="">Tất cả sản phẩm</option>
 									{products.map((product) => (
 										<option key={product.id} value={product.id}>
 											{product.name || product.id}
@@ -281,7 +281,7 @@ const VariantAdminPage = () => {
 									onClick={openAddModal}
 									className="rounded-lg bg-orange-500 px-4 py-2 text-white hover:bg-orange-600"
 								>
-									Add Variant
+									Thêm phiên bản
 								</button>
 							</div>
 						</div>
@@ -293,22 +293,22 @@ const VariantAdminPage = () => {
 								<thead className="bg-gray-50">
 									<tr>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Variant
+											Phiên bản
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Product
+											Sản phẩm
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Price
+											Giá
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Stock
+											Tồn kho
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Image
+											Hình ảnh
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Actions
+											Thao tác
 										</th>
 									</tr>
 								</thead>
@@ -316,7 +316,7 @@ const VariantAdminPage = () => {
 									{loading ? (
 										<tr>
 											<td className="px-4 py-6 text-sm text-gray-500" colSpan={6}>
-												Äang táº£i...
+												Đang tải...
 											</td>
 										</tr>
 									) : (
@@ -356,7 +356,7 @@ const VariantAdminPage = () => {
 															type="button"
 															onClick={() => openEditModal(variant)}
 															className="text-orange-500 hover:text-orange-700"
-															title="Edit"
+															title="Sửa"
 														>
 															<Edit className="h-4 w-4" />
 														</button>
@@ -368,7 +368,7 @@ const VariantAdminPage = () => {
 																)
 															}
 															className="text-emerald-600 hover:text-emerald-800"
-															title="Attributes"
+															title="Thuộc tính"
 														>
 															<Layers className="h-4 w-4" />
 														</button>
@@ -376,7 +376,7 @@ const VariantAdminPage = () => {
 															type="button"
 															onClick={() => handleDelete(variant)}
 															className="text-red-500 hover:text-red-700"
-															title="Delete"
+															title="Xóa"
 														>
 															<Trash className="h-4 w-4" />
 														</button>
@@ -388,7 +388,7 @@ const VariantAdminPage = () => {
 									{!loading && filteredVariants.length === 0 && (
 										<tr>
 											<td className="px-4 py-6 text-sm text-gray-500" colSpan={6}>
-												KhÃ´ng cÃ³ biáº¿n thá»ƒ.
+												Không có phiên bản nào.
 											</td>
 										</tr>
 									)}
@@ -404,7 +404,7 @@ const VariantAdminPage = () => {
 					<div className="w-full max-w-lg rounded-lg bg-white p-6">
 						<div className="flex items-center justify-between">
 							<h3 className="text-lg font-semibold">
-								{formType === "add" ? "Add Variant" : "Edit Variant"}
+								{formType === "add" ? "Thêm phiên bản" : "Sửa phiên bản"}
 							</h3>
 							<button
 								type="button"
@@ -425,7 +425,7 @@ const VariantAdminPage = () => {
 									}))
 								}
 							>
-								<option value="">Select product</option>
+								<option value="">Chọn sản phẩm</option>
 								{products.map((product) => (
 									<option key={product.id} value={product.id}>
 										{product.name || product.id}
@@ -436,7 +436,7 @@ const VariantAdminPage = () => {
 								type="number"
 								step="0.01"
 								className="w-full rounded-md border border-gray-200 px-3 py-2"
-								placeholder="Price"
+								placeholder="Giá"
 								value={formData.price}
 								onChange={(e) =>
 									setFormData((prev) => ({ ...prev, price: e.target.value }))
@@ -445,7 +445,7 @@ const VariantAdminPage = () => {
 							<input
 								type="number"
 								className="w-full rounded-md border border-gray-200 px-3 py-2"
-								placeholder="Stock"
+								placeholder="Tồn kho"
 								value={formData.stock}
 								onChange={(e) =>
 									setFormData((prev) => ({ ...prev, stock: e.target.value }))
@@ -461,7 +461,7 @@ const VariantAdminPage = () => {
 								<div className="rounded-lg border border-gray-200 p-3">
 									<div className="flex items-center justify-between">
 										<p className="text-sm font-medium text-gray-700">
-											Attributes (optional)
+											Thuộc tính (tùy chọn)
 										</p>
 										<button
 											type="button"
@@ -469,12 +469,12 @@ const VariantAdminPage = () => {
 											className="inline-flex items-center gap-2 text-sm text-orange-600"
 										>
 											<Plus className="h-4 w-4" />
-											Add
+											Thêm
 										</button>
 									</div>
 									{attributeDrafts.length === 0 ? (
 										<p className="text-xs text-gray-500 mt-2">
-
+											Chưa có thuộc tính.
 										</p>
 									) : (
 										<div className="mt-3 space-y-2">
@@ -503,7 +503,7 @@ const VariantAdminPage = () => {
 													<input
 														type="text"
 														className="flex-1 rounded-md border border-gray-200 px-3 py-2"
-														placeholder="Value"
+														placeholder="Giá trị"
 														value={attr.value}
 														onChange={(e) =>
 															handleUpdateAttributeRow(
@@ -518,7 +518,7 @@ const VariantAdminPage = () => {
 														onClick={() => handleRemoveAttributeRow(index)}
 														className="text-xs text-red-500"
 													>
-														Remove
+														Xóa
 													</button>
 												</div>
 											))}
@@ -532,13 +532,13 @@ const VariantAdminPage = () => {
 									onClick={() => setModalOpen(false)}
 									className="rounded-md border border-gray-200 px-4 py-2"
 								>
-									Huy
+									Hủy
 								</button>
 								<button
 									type="submit"
 									className="rounded-md bg-emerald-600 px-4 py-2 text-white"
 								>
-									Luu
+									Lưu
 								</button>
 							</div>
 						</form>
@@ -550,4 +550,3 @@ const VariantAdminPage = () => {
 };
 
 export default VariantAdminPage;
-

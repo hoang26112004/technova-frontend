@@ -1,14 +1,22 @@
 ﻿/* eslint-disable*/
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./FollowingProducts.scss";
 import Layout from "@/components/commons/layout/Layout";
 import TitleRouter from "@/components/product/titleRouter/TitleRouter";
 import ProductItem from "@/components/product/discountedProduct/productItem/ProductItem";
 import { Pagination } from "antd";
+import { readLikeProducts, subscribeLikeProducts } from "@/utils/favorites";
 const FollowingProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const likeProducts = JSON.parse(localStorage.getItem("likeProducts")) || [];
+  const [likeProducts, setLikeProducts] = useState(() => readLikeProducts());
+
+  useEffect(() => {
+    setLikeProducts(readLikeProducts());
+    return subscribeLikeProducts((list) => {
+      setLikeProducts(list);
+    });
+  }, []);
 
   const handleChangePage = (page) => {
     setCurrentPage(page);

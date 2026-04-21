@@ -9,7 +9,7 @@ const ProductPagination = ({
 	onItemsPerPageChange,
 	indexOfFirstItem,
 	indexOfLastItem,
-	itemName = "items",
+	itemName = "mục",
 }) => {
 	const getPaginationItems = () => {
 		const maxPagesToShow = 6;
@@ -49,19 +49,19 @@ const ProductPagination = ({
 	return (
 		<div className="px-4 py-3 bg-gray-50 border-t border-gray-200 sm:px-6 flex items-center justify-between flex-wrap gap-3">
 			<div className="text-sm text-gray-700">
-				Showing{" "}
-				<span className="font-medium">{indexOfFirstItem + 1}</span> to{" "}
+				Hiển thị{" "}
+				<span className="font-medium">{indexOfFirstItem + 1}</span> -{" "}
 				<span className="font-medium">
 					{Math.min(indexOfLastItem, totalItems)}
 				</span>{" "}
-				of <span className="font-medium">{totalItems}</span> {itemName}
+				trên tổng <span className="font-medium">{totalItems}</span>{" "}
+				{itemName}
 			</div>
 
 			{/* Items Per Page Selector */}
 			<div className="flex items-center gap-2">
 				<label htmlFor="itemsPerPage" className="text-sm text-gray-700">
-					{itemName.charAt(0).toUpperCase() + itemName.slice(1)} per
-					page:
+					Số {itemName}/trang:
 				</label>
 				<select
 					id="itemsPerPage"
@@ -87,7 +87,7 @@ const ProductPagination = ({
 							: "text-gray-700 hover:bg-gray-200"
 					}`}
 				>
-					Previous
+					Trước
 				</button>
 
 				{getPaginationItems().map((page, index) => (
@@ -118,7 +118,7 @@ const ProductPagination = ({
 							: "text-gray-700 hover:bg-gray-200"
 					}`}
 				>
-					Next
+					Sau
 				</button>
 			</div>
 		</div>

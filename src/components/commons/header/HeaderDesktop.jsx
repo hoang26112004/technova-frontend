@@ -1,5 +1,4 @@
-﻿﻿/* eslint-disable */
-import React, { useEffect, useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setInputValue, setResult } from "@/store/searchSlice";
@@ -156,7 +155,7 @@ const HeaderDesktop = () => {
     setIsShowNotifications(false);
 
     if (n.type === "ORDER" || n.type === "PAYMENT") {
-      navigate("/order");
+      navigate("/my-orders");
     }
   };
 
@@ -235,6 +234,7 @@ const HeaderDesktop = () => {
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("accessTokenExpiresAt");
       clearAdminFlag();
+      window.dispatchEvent(new CustomEvent("auth:changed"));
       setIsShow(false);
       navigate("/auth");
     }
@@ -395,4 +395,3 @@ const HeaderDesktop = () => {
 };
 
 export default HeaderDesktop;
-

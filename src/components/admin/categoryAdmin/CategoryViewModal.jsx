@@ -8,7 +8,7 @@ const CategoryViewModal = ({ category, onClose, onEdit }) => {
 		<div className="fixed inset-0 bg-[#0000009e] bg-opacity-50 flex items-center justify-center z-50 p-4">
 			<div className="bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
 				<div className="flex justify-between items-center p-4 border-b">
-					<h3 className="text-lg font-semibold">Category Details</h3>
+					<h3 className="text-lg font-semibold">Chi tiết danh mục</h3>
 					<button
 						onClick={onClose}
 						className="text-gray-400 hover:text-gray-600"
@@ -21,12 +21,12 @@ const CategoryViewModal = ({ category, onClose, onEdit }) => {
 						{category.imageUrl ? (
 							<img
 								src={category.imageUrl}
-								alt={`${category.name || "Category"} image`}
+								alt={`${category.name || "Danh mục"} image`}
 								className="h-16 w-16 rounded-lg border border-gray-200 object-cover"
 							/>
 						) : (
 							<div className="h-16 w-16 bg-gray-100 rounded-lg flex items-center justify-center text-sm text-gray-500">
-								No image
+								Không có ảnh
 							</div>
 						)}
 						<div className="ml-4">
@@ -39,7 +39,7 @@ const CategoryViewModal = ({ category, onClose, onEdit }) => {
 					{category.description && (
 						<div className="mb-6">
 							<h4 className="text-sm font-medium text-gray-700 mb-2">
-								Description
+								Mô tả
 							</h4>
 							<p className="text-gray-600">
 								{category.description}
@@ -52,13 +52,13 @@ const CategoryViewModal = ({ category, onClose, onEdit }) => {
 							onClick={onClose}
 							className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
 						>
-							Close
+							Đóng
 						</button>
 						<button
 							onClick={() => onEdit(category)}
 							className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
 						>
-							Edit Category
+							Sửa danh mục
 						</button>
 					</div>
 				</div>

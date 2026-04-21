@@ -8,13 +8,18 @@ import attributeApi from "@/utils/api/attributeApi";
 import { buildVariantLabel } from "@/utils/api/mappers";
 
 const ATTRIBUTE_TYPES = [
-	{ label: "Color", value: "COLOR" },
-	{ label: "Size", value: "SIZE" },
-	{ label: "Material", value: "MATERIAL" },
-	{ label: "Storage", value: "STORAGE" },
+	{ label: "Màu sắc", value: "COLOR" },
+	{ label: "Kích thước", value: "SIZE" },
+	{ label: "Chất liệu", value: "MATERIAL" },
+	{ label: "Bộ nhớ", value: "STORAGE" },
 	{ label: "RAM", value: "RAM" },
-	{ label: "Weight", value: "WEIGHT" },
+	{ label: "Khối lượng", value: "WEIGHT" },
 ];
+
+const formatAttributeType = (type) => {
+	const found = ATTRIBUTE_TYPES.find((item) => item.value === type);
+	return found ? found.label : String(type || "-");
+};
 
 const AttributeAdminPage = () => {
 	const location = useLocation();
@@ -107,7 +112,7 @@ const AttributeAdminPage = () => {
 
 	const openAddModal = () => {
 		if (!selectedVariantId) {
-			alert("Chon variant truoc.");
+			alert("Chọn phiên bản trước.");
 			return;
 		}
 		setFormType("add");
@@ -134,11 +139,11 @@ const AttributeAdminPage = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!formData.variantId) {
-			alert("Chon variant.");
+			alert("Chọn phiên bản.");
 			return;
 		}
 		if (!formData.value.trim()) {
-			alert("Nhap gia tri.");
+			alert("Nhập giá trị.");
 			return;
 		}
 		try {
@@ -168,7 +173,7 @@ const AttributeAdminPage = () => {
 	};
 
 	const handleDelete = async (attr) => {
-		if (!window.confirm("Xoa thuoc tinh nay?")) return;
+		if (!window.confirm("Xóa thuộc tính này?")) return;
 		try {
 			await attributeApi.remove(attr.id);
 			if (selectedVariantId) {
@@ -189,7 +194,7 @@ const AttributeAdminPage = () => {
 	return (
 		<LayoutAdmin>
 			<div className="flex-1 overflow-auto relative z-10">
-				<HeaderAdmin title={"Attributes"} />
+				<HeaderAdmin title={"Thuộc tính"} />
 				<main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
 					<div className="bg-white rounded-lg shadow-sm p-4 mb-6">
 						<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -198,7 +203,7 @@ const AttributeAdminPage = () => {
 									type="text"
 									value={searchQuery}
 									onChange={(e) => setSearchQuery(e.target.value)}
-									placeholder="Search by type or value..."
+									placeholder="Tìm theo loại hoặc giá trị..."
 									className="w-full rounded-lg border border-gray-200 px-3 py-2"
 								/>
 								<select
@@ -206,7 +211,7 @@ const AttributeAdminPage = () => {
 									onChange={(e) => setSelectedProductId(e.target.value)}
 									className="w-full rounded-lg border border-gray-200 px-3 py-2 sm:w-64"
 								>
-									<option value="">All products</option>
+									<option value="">Tất cả sản phẩm</option>
 									{products.map((product) => (
 										<option key={product.id} value={product.id}>
 											{product.name || product.id}
@@ -218,7 +223,7 @@ const AttributeAdminPage = () => {
 									onChange={(e) => setSelectedVariantId(e.target.value)}
 									className="w-full rounded-lg border border-gray-200 px-3 py-2 sm:w-72"
 								>
-									<option value="">Select variant</option>
+									<option value="">Chọn phiên bản</option>
 									{filteredVariants.map((variant) => (
 										<option key={variant.id} value={variant.id}>
 											{buildVariantLabel(variant)}
@@ -232,7 +237,7 @@ const AttributeAdminPage = () => {
 									onClick={openAddModal}
 									className="rounded-lg bg-orange-500 px-4 py-2 text-white hover:bg-orange-600"
 								>
-									Add Attribute
+									Thêm thuộc tính
 								</button>
 							</div>
 						</div>
@@ -244,16 +249,16 @@ const AttributeAdminPage = () => {
 								<thead className="bg-gray-50">
 									<tr>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Variant
+											Phiên bản
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Type
+											Loại
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Value
+											Giá trị
 										</th>
 										<th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-											Actions
+											Thao tác
 										</th>
 									</tr>
 								</thead>
@@ -261,14 +266,14 @@ const AttributeAdminPage = () => {
 									{!selectedVariantId && (
 										<tr>
 											<td className="px-4 py-6 text-sm text-gray-500" colSpan={4}>
-												Chon variant de hien thi thuoc tinh.
+												Chọn phiên bản để hiển thị thuộc tính.
 											</td>
 										</tr>
 									)}
 									{selectedVariantId && loading && (
 										<tr>
 											<td className="px-4 py-6 text-sm text-gray-500" colSpan={4}>
-												Äang táº£i...
+												Đang tải...
 											</td>
 										</tr>
 									)}
@@ -282,7 +287,7 @@ const AttributeAdminPage = () => {
 														: selectedVariantId}
 												</td>
 												<td className="px-4 py-4 text-sm text-gray-500">
-													{attr.type}
+													{formatAttributeType(attr.type)}
 												</td>
 												<td className="px-4 py-4 text-sm text-gray-500">
 													{attr.value}
@@ -293,7 +298,7 @@ const AttributeAdminPage = () => {
 															type="button"
 															onClick={() => openEditModal(attr)}
 															className="text-orange-500 hover:text-orange-700"
-															title="Edit"
+															title="Sửa"
 														>
 															<Edit className="h-4 w-4" />
 														</button>
@@ -301,7 +306,7 @@ const AttributeAdminPage = () => {
 															type="button"
 															onClick={() => handleDelete(attr)}
 															className="text-red-500 hover:text-red-700"
-															title="Delete"
+															title="Xóa"
 														>
 															<Trash className="h-4 w-4" />
 														</button>
@@ -312,7 +317,7 @@ const AttributeAdminPage = () => {
 									{selectedVariantId && !loading && filteredAttributes.length === 0 && (
 										<tr>
 											<td className="px-4 py-6 text-sm text-gray-500" colSpan={4}>
-												KhÃ´ng cÃ³ thuá»™c tÃ­nh.
+												Không có thuộc tính.
 											</td>
 										</tr>
 									)}
@@ -328,7 +333,7 @@ const AttributeAdminPage = () => {
 					<div className="w-full max-w-lg rounded-lg bg-white p-6">
 						<div className="flex items-center justify-between">
 							<h3 className="text-lg font-semibold">
-								{formType === "add" ? "Add Attribute" : "Edit Attribute"}
+								{formType === "add" ? "Thêm thuộc tính" : "Sửa thuộc tính"}
 							</h3>
 							<button
 								type="button"
@@ -350,7 +355,7 @@ const AttributeAdminPage = () => {
 								}
 								disabled={formType === "edit"}
 							>
-								<option value="">Select variant</option>
+								<option value="">Chọn phiên bản</option>
 								{filteredVariants.map((variant) => (
 									<option key={variant.id} value={variant.id}>
 										{buildVariantLabel(variant)}
@@ -373,7 +378,7 @@ const AttributeAdminPage = () => {
 							<input
 								type="text"
 								className="w-full rounded-md border border-gray-200 px-3 py-2"
-								placeholder="Value"
+								placeholder="Giá trị"
 								value={formData.value}
 								onChange={(e) =>
 									setFormData((prev) => ({ ...prev, value: e.target.value }))
@@ -385,13 +390,13 @@ const AttributeAdminPage = () => {
 									onClick={() => setModalOpen(false)}
 									className="rounded-md border border-gray-200 px-4 py-2"
 								>
-									Huy
+									Hủy
 								</button>
 								<button
 									type="submit"
 									className="rounded-md bg-emerald-600 px-4 py-2 text-white"
 								>
-									Luu
+									Lưu
 								</button>
 							</div>
 						</form>
@@ -403,4 +408,3 @@ const AttributeAdminPage = () => {
 };
 
 export default AttributeAdminPage;
-

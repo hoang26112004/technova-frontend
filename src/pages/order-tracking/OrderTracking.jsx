@@ -6,6 +6,7 @@ import orderApi from "@/utils/api/orderApi";
 import productApi from "@/utils/api/productApi";
 import variantApi from "@/utils/api/variantApi";
 import { resolveImageUrl } from "@/utils/api/mappers";
+import { formatOrderStatusVi } from "@/utils/formatters/orderStatus";
 
 import "./OrderTracking.scss";
 
@@ -282,7 +283,9 @@ const OrderTracking = () => {
               </div>
               <div className="order-tracking__row">
                 <div className="order-tracking__label">Trạng thái</div>
-                <div className="order-tracking__value">{String(order.status || "-")}</div>
+                <div className="order-tracking__value">
+                  {formatOrderStatusVi(order.status)}
+                </div>
               </div>
               <div className="order-tracking__row">
                 <div className="order-tracking__label">Thanh toán</div>

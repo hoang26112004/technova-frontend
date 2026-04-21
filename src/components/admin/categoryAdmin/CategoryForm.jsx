@@ -43,7 +43,7 @@ const CategoryForm = ({
 		<form onSubmit={onSubmit} className="space-y-4">
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
-					Category Name
+					Tên danh mục
 				</label>
 				<input
 					type="text"
@@ -57,7 +57,7 @@ const CategoryForm = ({
 
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
-					Description
+					Mô tả
 				</label>
 				<textarea
 					name="description"
@@ -70,7 +70,7 @@ const CategoryForm = ({
 
 			<div>
 				<label className="block text-sm font-medium text-gray-700">
-					Image
+					Hình ảnh
 				</label>
 				<div
 					onDrop={handleDrop}
@@ -89,25 +89,25 @@ const CategoryForm = ({
 						{activeImageUrl ? (
 							<img
 								src={activeImageUrl}
-								alt={`${formData.name || "Category"} image`}
+								alt={`${formData.name || "Danh mục"} image`}
 								className="h-14 w-14 rounded-md object-cover"
 							/>
 						) : (
 							<span className="text-xs text-gray-400">
-								No image
+								Không có ảnh
 							</span>
 						)}
 					</div>
 					<div className="flex-1">
 						<div className="text-sm font-medium text-gray-700">
-							Drop an image here or click to upload
+							Kéo thả ảnh vào đây hoặc bấm để tải lên
 						</div>
 						<div className="text-xs text-gray-500">
-							PNG, JPG up to 5MB
+							PNG, JPG tối đa 5MB
 						</div>
 						{formData.image?.name && (
 							<div className="mt-1 text-xs text-gray-600">
-								Selected: {formData.image.name}
+								Đã chọn: {formData.image.name}
 							</div>
 						)}
 					</div>
@@ -120,7 +120,7 @@ const CategoryForm = ({
 							}}
 							className="rounded-md border border-gray-200 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
 						>
-							Remove
+							Gỡ
 						</button>
 					)}
 				</div>
@@ -140,13 +140,13 @@ const CategoryForm = ({
 					onClick={onClose}
 					className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
 				>
-					Cancel
+					Hủy
 				</button>
 				<button
 					type="submit"
 					className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
 				>
-					{formType === "add" ? "Add Category" : "Save Changes"}
+					{formType === "add" ? "Thêm danh mục" : "Lưu thay đổi"}
 				</button>
 			</div>
 		</form>

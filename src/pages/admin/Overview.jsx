@@ -72,7 +72,7 @@ const Overview = () => {
 	return (
 		<LayoutAdmin>
 			<div className="flex-1 overflow-auto relative z-10">
-				<HeaderAdmin title={"Overview"} />
+				<HeaderAdmin title={"Tổng quan"} />
 				<main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
 					<motion.div
 						className="grid grid-cols-1 gap-5 mb-8 lg:grid-cols-4"
@@ -81,25 +81,25 @@ const Overview = () => {
 						transition={{ duration: 0.5 }}
 					>
 						<StatCard
-							name="Total Sales"
+							name="Tổng doanh số"
 							icon={Zap}
 							value={statValues.totalSales}
 							color="#6366F1"
 						/>
 						<StatCard
-							name="New Users"
+							name="Người dùng mới"
 							icon={Users}
 							value={statValues.newUsers}
 							color="#8B5CF6"
 						/>
 						<StatCard
-							name="Total Products"
+							name="Tổng sản phẩm"
 							icon={ShoppingBag}
 							value={statValues.totalProducts}
 							color="#EC4899"
 						/>
 						<StatCard
-							name="Orders / User"
+							name="Đơn hàng / người dùng"
 							icon={BarChart2}
 							value={statValues.ordersPerUser}
 							color="#10B981"

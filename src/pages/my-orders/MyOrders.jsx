@@ -3,6 +3,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/commons/layout/Layout";
 import { useNavigate } from "react-router-dom";
 import orderApi from "@/utils/api/orderApi";
+import productApi from "@/utils/api/productApi";
+import variantApi from "@/utils/api/variantApi";
+import { resolveImageUrl } from "@/utils/api/mappers";
+import { formatOrderStatusVi } from "@/utils/formatters/orderStatus";
 import { Pagination } from "antd";
 
 import "./MyOrders.scss";
@@ -34,6 +38,8 @@ const MyOrders = () => {
   const [size] = useState(10);
   const [status, setStatus] = useState("");
   const [data, setData] = useState(null);
+  const [productsById, setProductsById] = useState({});
+  const [variantsById, setVariantsById] = useState({});
 
   const statusOptions = useMemo(
     () => [
@@ -99,6 +105,97 @@ const MyOrders = () => {
   const currentPage = Number(data?.page ?? page) + 1;
   const pageSize = Number(data?.size ?? size);
 
+  useEffect(() => {
+    // Load product info to display variant thumbnails + product name inside each order card.
+    const items = orders.flatMap((o) => (Array.isArray(o?.items) ? o.items : []));
+    if (!items.length) return;
+
+    const uniqueIds = Array.from(new Set(items.map((it) => it?.productId).filter(Boolean)));
+    const missing = uniqueIds.filter((pid) => !productsById[pid]);
+    if (!missing.length) return;
+
+    let cancelled = false;
+    Promise.all(
+      missing.map((pid) =>
+        productApi
+          .getById(pid)
+          .then((res) => ({ pid, data: res?.data?.data }))
+          .catch(() => ({ pid, data: null }))
+      )
+    ).then((results) => {
+      if (cancelled) return;
+      setProductsById((prev) => {
+        const next = { ...prev };
+        results.forEach((r) => {
+          if (r?.pid && r?.data) next[r.pid] = r.data;
+        });
+        return next;
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [orders, productsById]);
+
+  useEffect(() => {
+    // Fallback: if item doesn't have productId, still try variant API for image/name.
+    const items = orders.flatMap((o) => (Array.isArray(o?.items) ? o.items : []));
+    if (!items.length) return;
+
+    const uniqueVariantIds = Array.from(
+      new Set(items.map((it) => it?.variantId).filter(Boolean))
+    );
+    const missing = uniqueVariantIds.filter((vid) => !variantsById[vid]);
+    if (!missing.length) return;
+
+    let cancelled = false;
+    Promise.all(
+      missing.map((vid) =>
+        variantApi
+          .getById(vid)
+          .then((res) => ({ vid, data: res?.data?.data }))
+          .catch(() => ({ vid, data: null }))
+      )
+    ).then((results) => {
+      if (cancelled) return;
+      setVariantsById((prev) => {
+        const next = { ...prev };
+        results.forEach((r) => {
+          if (r?.vid && r?.data) next[r.vid] = r.data;
+        });
+        return next;
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [orders, variantsById]);
+
+  const getItemDisplay = (it) => {
+    const productId = it?.productId;
+    const product = productId ? productsById[productId] : null;
+    const variantId = it?.variantId;
+    const variantInfo = variantId ? variantsById[variantId] : null;
+
+    const variant = product?.variants?.find((v) => String(v?.id) === String(variantId));
+    const thumbUrl =
+      resolveImageUrl(variant?.imageUrl) ||
+      resolveImageUrl(variantInfo?.imageUrl) ||
+      resolveImageUrl(product?.images?.[0]?.imageUrl) ||
+      "/vite.svg";
+
+    return {
+      productId,
+      name:
+        product?.name ||
+        variantInfo?.productName ||
+        `Variant: ${String(variantId || "-")}`,
+      thumbUrl,
+    };
+  };
+
   return (
     <Layout>
       <div className="my-orders">
@@ -151,7 +248,13 @@ const MyOrders = () => {
                   </div>
                   <div className="my-orders__row">
                     <div className="my-orders__label">Trạng thái</div>
-                    <div className="my-orders__value">{String(o.status || "-")}</div>
+                    <div className="my-orders__value">{formatOrderStatusVi(o.status)}</div>
+                  </div>
+                  <div className="my-orders__row">
+                    <div className="my-orders__label">Thanh toán</div>
+                    <div className="my-orders__value">
+                      {String(o.paymentMethod || "-")}
+                    </div>
                   </div>
                   <div className="my-orders__row">
                     <div className="my-orders__label">Tổng tiền</div>
@@ -168,17 +271,63 @@ const MyOrders = () => {
                     </div>
                   </div>
 
-                  <div className="my-orders__actions">
-                    <button
-                      className="my-orders__btn"
-                      onClick={() =>
-                        navigate(`/order-tracking?reference=${encodeURIComponent(o.reference || "")}`)
-                      }
-                      disabled={!o.reference}
-                    >
-                      Xem chi tiết
-                    </button>
-                  </div>
+                  <section className="my-orders__items" aria-label="Sản phẩm trong đơn">
+                    <div className="my-orders__subRow">
+                      <h3 className="my-orders__sub">Sản phẩm</h3>
+                    </div>
+                    {Array.isArray(o.items) && o.items.length ? (
+                      <div className="my-orders__itemList">
+                        {o.items.map((it, idx) => {
+                          const display = getItemDisplay(it);
+                          const canOpen = !!display?.productId;
+                          return (
+                            <div
+                              key={`${it?.variantId || "v"}-${idx}`}
+                              className="my-orders__item"
+                            >
+                              <img
+                                className={[
+                                  "my-orders__itemThumb",
+                                  canOpen ? "my-orders__itemThumb--link" : "",
+                                ]
+                                  .filter(Boolean)
+                                  .join(" ")}
+                                src={display.thumbUrl}
+                                alt={display.name}
+                                onClick={() =>
+                                  canOpen && navigate("/product/" + display.productId)
+                                }
+                              />
+                              <div className="my-orders__itemBody">
+                                <div
+                                  className={[
+                                    "my-orders__itemTitle",
+                                    canOpen ? "my-orders__itemTitle--link" : "",
+                                  ]
+                                    .filter(Boolean)
+                                    .join(" ")}
+                                  onClick={() =>
+                                    canOpen && navigate("/product/" + display.productId)
+                                  }
+                                >
+                                  {display.name}
+                                </div>
+                                <div className="my-orders__itemMeta">
+                                  SL: {it?.quantity ?? "-"} | Giá:{" "}
+                                  {formatMoney(it?.price)}
+                                </div>
+                                <div className="my-orders__itemSku">
+                                  Variant: {String(it?.variantId || "-")}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="my-orders__muted">Không có sản phẩm.</div>
+                    )}
+                  </section>
                 </div>
               ))
             ) : (

@@ -75,11 +75,11 @@ const ProductFormModal = ({
 
 		const priceNum = parseFloat(formData.price);
 		if (isNaN(priceNum) || priceNum <= 0) {
-			alert("Please enter a valid price.");
+			alert("Vui lòng nhập giá hợp lệ.");
 			return;
 		}
 		if (!formData.name.trim() || !formData.categoryId) {
-			alert("Name and category are required.");
+			alert("Tên sản phẩm và danh mục là bắt buộc.");
 			return;
 		}
 
@@ -92,7 +92,7 @@ const ProductFormModal = ({
 				<form onSubmit={handleSubmit} className="p-6">
 					<div className="flex justify-between items-center mb-6">
 						<h3 className="text-lg font-semibold">
-							{formType === "add" ? "Add Product" : "Edit Product"}
+							{formType === "add" ? "Thêm sản phẩm" : "Sửa sản phẩm"}
 						</h3>
 						<button
 							type="button"
@@ -105,7 +105,7 @@ const ProductFormModal = ({
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 						<div>
 							<label className="block text-sm font-medium text-gray-700">
-								Product Name
+								Tên sản phẩm
 							</label>
 							<input
 								type="text"
@@ -118,7 +118,7 @@ const ProductFormModal = ({
 						</div>
 						<div>
 							<label className="block text-sm font-medium text-gray-700">
-								Category
+								Danh mục
 							</label>
 							<select
 								name="categoryId"
@@ -128,7 +128,7 @@ const ProductFormModal = ({
 								required
 							>
 								<option value="" disabled>
-									Select category
+									Chọn danh mục
 								</option>
 								{categories.map((category) => (
 									<option key={category.id} value={category.id}>
@@ -139,7 +139,7 @@ const ProductFormModal = ({
 						</div>
 						<div>
 							<label className="block text-sm font-medium text-gray-700">
-								Price ($)
+								Giá ($)
 							</label>
 							<input
 								type="number"
@@ -155,7 +155,7 @@ const ProductFormModal = ({
 					</div>
 					<div className="mt-6">
 						<label className="block text-sm font-medium text-gray-700">
-							Description
+							Mô tả
 						</label>
 						<textarea
 							name="description"
@@ -179,13 +179,13 @@ const ProductFormModal = ({
 							onClick={onClose}
 							className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
 						>
-							Cancel
+							Hủy
 						</button>
 						<button
 							type="submit"
 							className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
 						>
-							{formType === "add" ? "Add Product" : "Save Changes"}
+							{formType === "add" ? "Thêm sản phẩm" : "Lưu thay đổi"}
 						</button>
 					</div>
 				</form>

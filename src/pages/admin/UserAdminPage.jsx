@@ -4,10 +4,21 @@ import HeaderAdmin from "@/components/admin/HeaderAdmin";
 import adminUserApi from "@/utils/api/adminUserApi";
 
 const STATUS_OPTIONS = [
-  { label: "All", value: "" },
-  { label: "Active", value: "ACTIVE" },
-  { label: "Locked", value: "LOCKED" },
+  { label: "Tất cả", value: "" },
+  { label: "Hoạt động", value: "ACTIVE" },
+  { label: "Đã khóa", value: "LOCKED" },
 ];
+
+const formatUserStatus = (status) => {
+  switch (status) {
+    case "ACTIVE":
+      return "Hoạt động";
+    case "LOCKED":
+      return "Đã khóa";
+    default:
+      return String(status || "-");
+  }
+};
 
 const UserAdminPage = () => {
   const [users, setUsers] = useState([]);
@@ -54,7 +65,7 @@ const UserAdminPage = () => {
       const message =
         err?.response?.data?.data?.message ||
         err?.response?.data?.message ||
-        "Không thể tải danh sách user.";
+        "Không thể tải danh sách người dùng.";
       setError(message);
     } finally {
       setLoading(false);
@@ -93,7 +104,7 @@ const UserAdminPage = () => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (!resetPassword.trim()) {
-      alert("Nhap mat khau moi.");
+      alert("Nhập mật khẩu mới.");
       return;
     }
     try {
@@ -116,7 +127,7 @@ const UserAdminPage = () => {
   const handleCreateAdmin = async (e) => {
     e.preventDefault();
     if (!createForm.email || !createForm.fullName || !createForm.password) {
-      alert("Nhap day du thong tin admin.");
+      alert("Nhập đầy đủ thông tin admin.");
       return;
     }
     try {
@@ -144,7 +155,7 @@ const UserAdminPage = () => {
   return (
     <LayoutAdmin>
       <div className="space-y-6">
-        <HeaderAdmin title={"Users"} />
+        <HeaderAdmin title={"Người dùng"} />
 
         <div className="flex flex-col gap-4 rounded-xl bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -153,8 +164,8 @@ const UserAdminPage = () => {
               className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center"
             >
               <input
-                className="w-full rounded-md border border-gray-200 px-3 py-2"
-                placeholder="Tim theo email, ten..."
+                className="w-full rounded-md border border-gray-200 px-3 py-2 sm:w-72 lg:w-80"
+                placeholder="Tìm theo email, tên..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
@@ -182,13 +193,13 @@ const UserAdminPage = () => {
               onClick={() => setShowCreate(true)}
               className="rounded-md bg-emerald-600 px-4 py-2 text-white"
             >
-              Tao admin
+              Tạo tài khoản admin
             </button>
           </div>
 
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <span>Tong: {formattedTotal}</span>
-            {loading && <span>Äang táº£i...</span>}
+            <span>Tổng: {formattedTotal}</span>
+            {loading && <span>Đang tải...</span>}
           </div>
 
           {error && <p className="text-sm text-red-600">{error}</p>}
@@ -199,11 +210,11 @@ const UserAdminPage = () => {
                 <tr>
                   <th className="px-4 py-3">ID</th>
                   <th className="px-4 py-3">Email</th>
-                  <th className="px-4 py-3">Ten</th>
-                  <th className="px-4 py-3">Phone</th>
-                  <th className="px-4 py-3">Roles</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+                  <th className="px-4 py-3">Tên</th>
+                  <th className="px-4 py-3">SĐT</th>
+                  <th className="px-4 py-3">Vai trò</th>
+                  <th className="px-4 py-3">Trạng thái</th>
+                  <th className="px-4 py-3 text-right">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -224,7 +235,7 @@ const UserAdminPage = () => {
                             : "bg-red-100 text-red-700"
                         }`}
                       >
-                        {user.status}
+                        {formatUserStatus(user.status)}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-right">
@@ -234,14 +245,14 @@ const UserAdminPage = () => {
                           onClick={() => handleStatusToggle(user)}
                           className="rounded-md border border-gray-200 px-3 py-1 text-xs"
                         >
-                          {user.status === "ACTIVE" ? "Lock" : "Unlock"}
+                          {user.status === "ACTIVE" ? "Khóa" : "Mở khóa"}
                         </button>
                         <button
                           type="button"
                           onClick={() => handleOpenReset(user)}
                           className="rounded-md border border-gray-200 px-3 py-1 text-xs"
                         >
-                          Reset pass
+                          Đặt lại mật khẩu
                         </button>
                       </div>
                     </td>
@@ -250,7 +261,7 @@ const UserAdminPage = () => {
                 {!loading && users.length === 0 && (
                   <tr>
                     <td colSpan="7" className="px-4 py-6 text-center text-sm">
-                      KhÃ´ng cÃ³ user nÃ o.
+                      Không có người dùng nào.
                     </td>
                   </tr>
                 )}
@@ -378,4 +389,3 @@ const UserAdminPage = () => {
 };
 
 export default UserAdminPage;
-
