@@ -120,6 +120,123 @@
   cursor: not-allowed;
 }
 
+.account-button-secondary {
+  background: #f3f6ff;
+  color: #1d3b8b;
+  border: 1px solid #d5defa;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.account-button-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.account-button-link {
+  background: transparent;
+  border: none;
+  color: #3571f2;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.account-button-link:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.account-button-link--danger {
+  color: #c62828;
+}
+
+.account-addresses {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #ececec;
+}
+
+.account-addresses__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.account-addresses__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.account-addresses__item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  padding: 12px 12px;
+  background: #fff;
+}
+
+.account-addresses__item-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.account-addresses__badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #e9f7ef;
+  color: #1b5e20;
+  border: 1px solid #ccead7;
+}
+
+.account-addresses__item-lines {
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.account-addresses__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  min-width: 170px;
+}
+
+.account-addresses__empty {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 14px;
+}
+
+.account-addresses__form {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px dashed #d5defa;
+  border-radius: 12px;
+  background: #fbfcff;
+}
+
+.account-addresses__form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .account-checkbox {
   flex-direction: row !important;
   align-items: center;

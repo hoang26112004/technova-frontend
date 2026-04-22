@@ -48,7 +48,7 @@ const LeftOrder = ({
           <p>Thêm địa chỉ mới</p>
         </div>
       </div>
-      <h1>Phuong thuc thanh toan</h1>
+      <h1>Phương thức thanh toán</h1>
       <div className="leftOrder__payment">
         <div className="leftOrder__payment-item">
           <input
@@ -77,7 +77,7 @@ const LeftOrder = ({
           <div className="leftOrder__payment-item-info">
             <img src={vnpay} />
             <div className="leftOrder__payment-item-info-detail">
-              <p className="title">Vi dien tu</p>
+              <p className="title">Ví điện tử</p>
               <div className="detailt-item">
                 <p>VN PAY</p>
                 <img src={vnpayIcon} />

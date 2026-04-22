@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { formatNumber } from "@/utils/function";
 import { FaRegHeart } from "react-icons/fa";
 import cartApi from "@/utils/api/cartApi";
-import { isLikedProductId, subscribeLikeProducts, toggleLikeProduct } from "@/utils/favorites";
+import {
+  isLikedProductId,
+  subscribeLikeProducts,
+  toggleLikeProduct,
+} from "@/utils/favorites";
 
 import "./ProductItem.scss";
 
@@ -29,15 +33,32 @@ const ProductItem = ({ product }) => {
     (Array.isArray(product?.image) && product.image.length ? product.image : null) ||
     (Array.isArray(product?.images) && product.images.length ? product.images : null) ||
     ["/vite.svg"];
+
   const count = product?.count || 0;
+  const variants = Array.isArray(product?.variants) ? product.variants : [];
+  const hasMultipleVariants = variants.length > 1;
+
+  const goToDetailToPick = () => {
+    if (!product?.id) return;
+    navigate(`/product/${product.id}?pick=1`);
+  };
 
   const handleAddToCart = async (e) => {
     e.stopPropagation();
-    const variantId = product?.variants?.[0]?.id;
-    if (!variantId) {
-      alert("Sản phẩm chưa có biến thể để mua.");
+
+    // If product has multiple variants, require the user to pick attributes/variant on detail page.
+    if (hasMultipleVariants) {
+      goToDetailToPick();
       return;
     }
+
+    const variantId = variants?.[0]?.id;
+    // If list payload doesn't include variants, fallback to detail page (it loads full product).
+    if (!variantId) {
+      goToDetailToPick();
+      return;
+    }
+
     try {
       await cartApi.addItem(variantId, 1);
       alert("Đã thêm vào giỏ hàng.");
@@ -51,10 +72,7 @@ const ProductItem = ({ product }) => {
   };
 
   return (
-    <div
-      onClick={() => navigate(`/product/${product.id}`)}
-      className="product-item"
-    >
+    <div onClick={() => product?.id && navigate(`/product/${product.id}`)} className="product-item">
       <div
         className={`product-item_following ${liked ? "active" : ""}`}
         onClick={(e) => e.stopPropagation()}
@@ -65,16 +83,14 @@ const ProductItem = ({ product }) => {
         <img src={images[indexImage]} alt={product.name} />
       </div>
       <button className="product-item_add-to-card" onClick={handleAddToCart}>
-        Thêm vào giỏ hàng
+        {hasMultipleVariants ? "Chọn phiên bản" : "Thêm vào giỏ hàng"}
       </button>
       <div className="product-item_img-list">
         {images.map((image, index) => (
           <div
             onMouseEnter={() => setIndexImage(index)}
             key={index}
-            className={`product-item_img-list-item ${
-              index === indexImage ? "active" : ""
-            }`}
+            className={`product-item_img-list-item ${index === indexImage ? "active" : ""}`}
           >
             <img src={image} alt={product.name} />
           </div>

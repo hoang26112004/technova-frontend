@@ -21,6 +21,18 @@ const Order = () => {
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("COD");
   const [placing, setPlacing] = useState(false);
+  const [addressModalOpen, setAddressModalOpen] = useState(false);
+  const [addressCreating, setAddressCreating] = useState(false);
+  const [addressDraft, setAddressDraft] = useState({
+    phoneNumber: "",
+    street: "",
+    city: "",
+    state: "",
+    country: "",
+    zipCode: "",
+    description: "",
+    isDefault: false,
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -40,6 +52,15 @@ const Order = () => {
       isMounted = false;
     };
   }, []);
+
+  const reloadAddresses = async () => {
+    const res = await addressApi.getOwn();
+    const list = res?.data?.data || [];
+    setAddresses(list);
+    const defaultAddr = list.find((a) => a.isDefault) || list[0];
+    setSelectedAddressId((prev) => prev || defaultAddr?.id || null);
+    return list;
+  };
 
   const handleIncrease = (id) => {
     dispatch(
@@ -64,7 +85,68 @@ const Order = () => {
   };
 
   const handleAddAddress = () => {
-    alert("Vui lòng thêm địa chỉ trong trang tài khoản.");
+    setAddressDraft({
+      phoneNumber: "",
+      street: "",
+      city: "",
+      state: "",
+      country: "",
+      zipCode: "",
+      description: "",
+      isDefault: false,
+    });
+    setAddressModalOpen(true);
+  };
+
+  const handleAddressDraftChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setAddressDraft((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const validateAddressPayload = (payload) => {
+    const required = ["phoneNumber", "street", "city", "state", "country", "zipCode"];
+    for (const k of required) {
+      if (!String(payload?.[k] || "").trim()) return false;
+    }
+    return true;
+  };
+
+  const handleCreateAddress = async (e) => {
+    e.preventDefault();
+    const payload = {
+      phoneNumber: String(addressDraft.phoneNumber || "").trim(),
+      street: String(addressDraft.street || "").trim(),
+      city: String(addressDraft.city || "").trim(),
+      state: String(addressDraft.state || "").trim(),
+      country: String(addressDraft.country || "").trim(),
+      zipCode: String(addressDraft.zipCode || "").trim(),
+      description: String(addressDraft.description || "").trim(),
+      isDefault: Boolean(addressDraft.isDefault),
+    };
+    if (!validateAddressPayload(payload)) {
+      alert("Vui lòng nhập đầy đủ thông tin địa chỉ (bắt buộc).");
+      return;
+    }
+    try {
+      setAddressCreating(true);
+      const res = await addressApi.create(payload);
+      const created = res?.data?.data;
+      await reloadAddresses();
+      if (created?.id) setSelectedAddressId(created.id);
+      setAddressModalOpen(false);
+      alert("Thêm địa chỉ thành công.");
+    } catch (error) {
+      const message =
+        error?.response?.data?.data?.message ||
+        error?.response?.data?.message ||
+        "Thêm địa chỉ thất bại.";
+      alert(message);
+    } finally {
+      setAddressCreating(false);
+    }
   };
 
   const handlePlaceOrder = async () => {
@@ -147,6 +229,102 @@ const Order = () => {
           onDecrease={handleDecrease}
           onPlaceOrder={placing ? () => {} : handlePlaceOrder}
         />
+
+        {addressModalOpen ? (
+          <div
+            className="order__modalOverlay"
+            role="dialog"
+            aria-modal="true"
+            onMouseDown={() => (addressCreating ? null : setAddressModalOpen(false))}
+          >
+            <div
+              className="order__modal"
+              onMouseDown={(e) => e.stopPropagation()}
+            >
+              <h2>Thêm địa chỉ mới</h2>
+              <form onSubmit={handleCreateAddress} className="order__modalForm">
+                <label>
+                  Số điện thoại nhận hàng
+                  <input
+                    name="phoneNumber"
+                    value={addressDraft.phoneNumber}
+                    onChange={handleAddressDraftChange}
+                  />
+                </label>
+                <label>
+                  Đường
+                  <input
+                    name="street"
+                    value={addressDraft.street}
+                    onChange={handleAddressDraftChange}
+                  />
+                </label>
+                <label>
+                  Thành phố
+                  <input
+                    name="city"
+                    value={addressDraft.city}
+                    onChange={handleAddressDraftChange}
+                  />
+                </label>
+                <label>
+                  Tỉnh/Thành
+                  <input
+                    name="state"
+                    value={addressDraft.state}
+                    onChange={handleAddressDraftChange}
+                  />
+                </label>
+                <label>
+                  Quốc gia
+                  <input
+                    name="country"
+                    value={addressDraft.country}
+                    onChange={handleAddressDraftChange}
+                  />
+                </label>
+                <label>
+                  Mã bưu điện
+                  <input
+                    name="zipCode"
+                    value={addressDraft.zipCode}
+                    onChange={handleAddressDraftChange}
+                  />
+                </label>
+                <label>
+                  Mô tả
+                  <textarea
+                    name="description"
+                    value={addressDraft.description}
+                    onChange={handleAddressDraftChange}
+                  />
+                </label>
+                <label className="order__modalCheckbox">
+                  <input
+                    type="checkbox"
+                    name="isDefault"
+                    checked={addressDraft.isDefault}
+                    onChange={handleAddressDraftChange}
+                  />
+                  Đặt làm địa chỉ mặc định
+                </label>
+                <div className="order__modalActions">
+                  <button type="submit" disabled={addressCreating}>
+                    {addressCreating ? "Đang lưu..." : "Lưu địa chỉ"}
+                  </button>
+                  <button
+                    type="button"
+                    className="order__modalCancel"
+                    onClick={() => setAddressModalOpen(false)}
+                    disabled={addressCreating}
+                  >
+                    Hủy
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        ) : null}
       </div>
     </Layout>
   );

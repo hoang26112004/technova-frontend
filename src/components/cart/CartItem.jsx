@@ -51,8 +51,8 @@ const CartItem = ({
         <div className="card-item__right-search">
           <MdCancel className="icon-cancel" onClick={() => onRemove(product.id)} />
           <div className="search">
-            <p>Tìm kiếm sản phẩm tương tự</p>
-            <FaCaretDown className="icon-down" />
+            {/*<p>Tìm kiếm sản phẩm tương tự</p>*/}
+            {/*<FaCaretDown className="icon-down" />*/}
           </div>
         </div>
       </div>

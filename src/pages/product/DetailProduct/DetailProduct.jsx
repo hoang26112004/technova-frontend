@@ -24,6 +24,7 @@ const DetailProduct = () => {
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState(0);
   const autoReview = String(searchParams.get("review") || "") === "1";
+  const autoPick = String(searchParams.get("pick") || "") === "1";
 
   useEffect(() => {
     if (!id) return;
@@ -110,6 +111,22 @@ const DetailProduct = () => {
       variants,
     };
   }, [product, reviews, selectedType]);
+
+  useEffect(() => {
+    if (!autoPick) return;
+    if (!productView?.id) return;
+
+    const t = window.setTimeout(() => {
+      const el =
+        document.querySelector(".right-session__attrs") ||
+        document.querySelector(".right-session__type");
+      if (el && typeof el.scrollIntoView === "function") {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 50);
+
+    return () => window.clearTimeout(t);
+  }, [autoPick, productView?.id]);
 
   if (loading || !productView) {
     return (
