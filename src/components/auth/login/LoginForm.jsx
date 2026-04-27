@@ -10,6 +10,7 @@ import { loginValidationSchema } from "@/utils/validation/authValidation";
 import ForgotPassword from "../forgotPassword/ForgotPassword";
 import { useNavigate } from "react-router-dom";
 import authApi from "@/utils/api/authApi";
+import { clearAdminFlag, ensureAdminStatus } from "@/utils/auth";
 const LoginForm = ({ setIsLogin, compact = false }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isFogotPassword, setIsForgotPassword] = useState(false);
@@ -41,9 +42,19 @@ const LoginForm = ({ setIsLogin, compact = false }) => {
         const expiresAt = Date.now() + Number(expiresIn) * 1000;
         localStorage.setItem("accessTokenExpiresAt", String(expiresAt));
       }
-      // Notify same-tab listeners (e.g. favorites) that auth state changed.
+
+      // Token changed; drop any previous user's cached role before re-checking.
+      clearAdminFlag();
+      let isAdmin = false;
+      try {
+        isAdmin = await ensureAdminStatus();
+      } catch {
+        isAdmin = false;
+      }
+
+      // Notify same-tab listeners (e.g. header/favorites) that auth state changed.
       window.dispatchEvent(new CustomEvent("auth:changed"));
-      navigate("/");
+      navigate(isAdmin ? "/admin" : "/");
     } catch (error) {
       const message =
           error?.response?.data?.data?.message ||

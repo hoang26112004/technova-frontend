@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setInputValue, setResult } from "@/store/searchSlice";
 import Menu from "./Menu";
-import authApi from "@/utils/api/authApi";
 import productApi from "@/utils/api/productApi";
 import { mapProductToCard } from "@/utils/api/mappers";
 import logo from "@/assets/images/logo.png";
-import { clearAdminFlag, ensureAdminStatus } from "@/utils/auth";
+import { ensureAdminStatus } from "@/utils/auth";
+import { performLogout } from "@/utils/logout";
 import notificationApi from "@/utils/api/notificationApi";
 
 import { FiSearch } from "react-icons/fi";
@@ -225,19 +225,9 @@ const HeaderDesktop = () => {
   };
 
   const handleLogout = async () => {
-    try {
-      await authApi.logout();
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("accessTokenExpiresAt");
-      clearAdminFlag();
-      window.dispatchEvent(new CustomEvent("auth:changed"));
-      setIsShow(false);
-      navigate("/auth");
-    }
+    await performLogout();
+    setIsShow(false);
+    navigate("/auth?mode=login");
   };
 
   return (

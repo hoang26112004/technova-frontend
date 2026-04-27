@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import StatCard from "@/components/admin/StatCard";
 import SaleOverviewChart from "@/components/admin/chart/SaleOverviewChart";
 import CategoryDistributionChart from "@/components/admin/chart/CategoryDistributionChart";
+import WeeklySalesChart from "@/components/admin/chart/WeeklySalesChart";
+import SalesByProductTypeChart from "@/components/admin/chart/SalesByProductTypeChart";
 import dashboardApi from "@/utils/api/dashboardApi";
 
 const formatCurrency = (value) => {
@@ -30,6 +32,11 @@ const formatOrdersPerUser = (value) =>
 const Overview = () => {
 	const [overview, setOverview] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const today = new Date();
+	const [weeklyMonth, setWeeklyMonth] = useState(today.getMonth() + 1);
+	const [weeklyYear] = useState(today.getFullYear());
+	const [weeklySales, setWeeklySales] = useState([]);
+	const [weeklySalesLoading, setWeeklySalesLoading] = useState(false);
 
 	useEffect(() => {
 		let mounted = true;
@@ -52,6 +59,27 @@ const Overview = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		let mounted = true;
+		setWeeklySalesLoading(true);
+		dashboardApi
+			.getWeeklySalesByMonth({ year: weeklyYear, month: weeklyMonth })
+			.then((res) => {
+				const data = res?.data?.data || [];
+				if (mounted) setWeeklySales(Array.isArray(data) ? data : []);
+			})
+			.catch((err) => {
+				console.error("Load weekly sales error:", err);
+				if (mounted) setWeeklySales([]);
+			})
+			.finally(() => {
+				if (mounted) setWeeklySalesLoading(false);
+			});
+		return () => {
+			mounted = false;
+		};
+	}, [weeklyYear, weeklyMonth]);
+
 	const kpis = overview?.kpis || null;
 	const monthlySales = useMemo(
 		() => overview?.monthlySales || [],
@@ -60,6 +88,10 @@ const Overview = () => {
 	const categoryDistribution = useMemo(
 		() => overview?.categoryDistribution || [],
 		[overview?.categoryDistribution]
+	);
+	const salesByCategory = useMemo(
+		() => overview?.salesByCategory || [],
+		[overview?.salesByCategory]
 	);
 
 	const statValues = {
@@ -107,7 +139,14 @@ const Overview = () => {
 					</motion.div>
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 						<SaleOverviewChart data={monthlySales} />
+						<WeeklySalesChart
+							data={weeklySales}
+							month={weeklyMonth}
+							onMonthChange={setWeeklyMonth}
+							loading={weeklySalesLoading}
+						/>
 						<CategoryDistributionChart data={categoryDistribution} />
+						<SalesByProductTypeChart data={salesByCategory} />
 					</div>
 				</main>
 			</div>

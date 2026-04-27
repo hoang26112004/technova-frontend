@@ -118,7 +118,7 @@ const InformationDetail = ({ product, onRefreshReviews, initialMenu, autoOpenWri
         if (String(message).includes("already reviewed")) {
           setSubmitError("Bạn đã đánh giá sản phẩm này rồi.");
         } else if (String(message).includes("only review products")) {
-          setSubmitError("Chỉ có thể đánh giá sản phẩm đã mua và đã nhận hàng.");
+          setSubmitError("Chỉ có thể đánh giá sản phẩm khi đã nhận hàng.");
         } else {
           setSubmitError(String(message));
         }

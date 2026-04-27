@@ -79,9 +79,9 @@ const SidebarAdmin = () => {
               className="flex items-center justify-center"
             >
               <p>
-                <Link to={"/"} className="flex items-center justify-center">
+                {/*<Link to={"/"} className="flex items-center justify-center">*/}
                   <img src={logo} alt="TechNova" className="h-20 w-auto" />
-                </Link>
+                {/*</Link>*/}
               </p>
             </motion.div>
           )}

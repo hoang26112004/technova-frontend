@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { clearAdminFlag, ensureAdminStatus } from "@/utils/auth";
 
 const OAuthCallback = () => {
   const navigate = useNavigate();
@@ -19,13 +20,28 @@ const OAuthCallback = () => {
       hashParams.get("accessToken");
     if (token) {
       localStorage.setItem("accessToken", token);
-      window.dispatchEvent(new CustomEvent("auth:changed"));
-      navigate("/", { replace: true });
+      clearAdminFlag();
+      ensureAdminStatus()
+        .then((isAdmin) => {
+          window.dispatchEvent(new CustomEvent("auth:changed"));
+          navigate(isAdmin ? "/admin" : "/", { replace: true });
+        })
+        .catch(() => {
+          window.dispatchEvent(new CustomEvent("auth:changed"));
+          navigate("/", { replace: true });
+        });
       return;
     }
     const existingToken = localStorage.getItem("accessToken");
     if (existingToken) {
-      navigate("/", { replace: true });
+      clearAdminFlag();
+      ensureAdminStatus()
+        .then((isAdmin) => {
+          navigate(isAdmin ? "/admin" : "/", { replace: true });
+        })
+        .catch(() => {
+          navigate("/", { replace: true });
+        });
       return;
     }
     navigate("/auth", { replace: true });

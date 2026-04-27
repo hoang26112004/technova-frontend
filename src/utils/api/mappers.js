@@ -37,6 +37,16 @@ export const buildVariantLabel = (variant) => {
   const attrs = variant?.attributes || [];
   if (!attrs.length) return "Default";
 
+  const labelOf = (type) => {
+    if (type === "STORAGE") return "Phiên bản";
+    if (type === "COLOR") return "Màu sắc";
+    if (type === "SIZE") return "Kích thước";
+    if (type === "MATERIAL") return "Chất liệu";
+    if (type === "RAM") return "Cấu hình";
+    if (type === "WEIGHT") return "Khối lượng";
+    return type;
+  };
+
   const normalizeAttributeType = (type) => {
     const raw = String(type || "").trim();
     if (!raw) return "";
@@ -55,7 +65,8 @@ export const buildVariantLabel = (variant) => {
   return attrs
     .map((attr) => {
       const t = normalizeAttributeType(attr?.type);
-      return `${t || attr?.type || ""}: ${attr?.value || ""}`.trim();
+      const label = labelOf(t || attr?.type || "");
+      return `${label}: ${attr?.value || ""}`.trim();
     })
-    .join(" / ");
+    .join(" | ");
 };

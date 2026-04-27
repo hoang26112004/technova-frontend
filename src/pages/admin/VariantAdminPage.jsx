@@ -13,8 +13,8 @@ const ATTRIBUTE_TYPES = [
 	{ label: "Màu sắc", value: "COLOR" },
 	{ label: "Kích thước", value: "SIZE" },
 	{ label: "Chất liệu", value: "MATERIAL" },
-	{ label: "Bộ nhớ", value: "STORAGE" },
-	{ label: "RAM", value: "RAM" },
+	{ label: "Phiên bản", value: "STORAGE" },
+	{ label: "Cấu hình", value: "RAM" },
 	{ label: "Khối lượng", value: "WEIGHT" },
 ];
 

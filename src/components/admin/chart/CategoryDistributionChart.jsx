@@ -2,7 +2,23 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-const COLORS = ["#6366f1", "#8b5cf6", "#ec4899", "#10b981", "#f59e0b"];
+const hashStringToInt = (s = "") => {
+  // Small deterministic hash (no crypto) just for stable coloring.
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = (h * 31 + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+};
+
+const colorForCategory = (name, index) => {
+  const key = (name == null ? "" : String(name)).trim();
+  const seed = key ? hashStringToInt(key) : index * 9973;
+  const hue = seed % 360;
+  const sat = 70;
+  const light = 52;
+  return `hsl(${hue}, ${sat}%, ${light}%)`;
+};
 
 const CategoryDistributionChart = ({ data = [] }) => {
   return (
@@ -33,7 +49,7 @@ const CategoryDistributionChart = ({ data = [] }) => {
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={colorForCategory(entry?.name, index)}
                 />
               ))}
             </Pie>
