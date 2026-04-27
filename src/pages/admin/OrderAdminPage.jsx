@@ -28,6 +28,15 @@ const ADMIN_ORDER_STATUSES = [
 ];
 
 const mapOrderToAdmin = (order) => {
+  const formatAddress = (addr) => {
+    if (!addr) return "N/A";
+    const parts = [addr.street, addr.city, addr.state, addr.country, addr.zipCode]
+      .map((x) => String(x || "").trim())
+      .filter(Boolean);
+    const base = parts.join(", ");
+    const desc = String(addr.description || "").trim();
+    return (desc ? `${base}${base ? " - " : ""}${desc}` : base) || "N/A";
+  };
   const items =
     order?.items?.map((item) => ({
       id: item.variantId,
@@ -39,6 +48,10 @@ const mapOrderToAdmin = (order) => {
     })) || [];
 
   const rawStatus = order?.status || "PENDING";
+  const addr = order?.shippingAddress || null;
+  const recipientName = order?.recipientName || "N/A";
+  const recipientPhone = order?.recipientPhone || addr?.phoneNumber || "N/A";
+  const deliveryAddress = formatAddress(addr);
   return {
     // Display ID in UI should be the human-friendly reference if available.
     id: order?.reference || String(order?.id || ""),
@@ -50,11 +63,14 @@ const mapOrderToAdmin = (order) => {
     sellerContact: "N/A",
     status: rawStatus,
     shippingMethod: "Standard Delivery",
-    shippingFee: "Free",
+    shippingFee:
+      order?.shippingFee != null && Number(order.shippingFee) > 0
+        ? `$${Number(order.shippingFee).toFixed(2)}`
+        : "Free",
     estimatedDelivery: "N/A",
-    recipient: "N/A",
-    recipientPhone: "N/A",
-    deliveryAddress: "N/A",
+    recipient: recipientName,
+    recipientPhone,
+    deliveryAddress,
     paymentMethod: order?.paymentMethod || "N/A",
     paymentStatus: rawStatus === "PAID" ? "Paid" : "Pending",
     subtotal: `$${Number(order?.totalAmount || 0).toFixed(2)}`,

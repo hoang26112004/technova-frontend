@@ -44,6 +44,25 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 		return v;
 	};
 
+	const labelOfStatus = (status) => {
+		switch (status) {
+			case "PENDING":
+				return "Chờ xử lý";
+			case "CONFIRMED":
+				return "Đã xác nhận";
+			case "PAID":
+				return "Đã thanh toán";
+			case "SHIPPED":
+				return "Đang giao";
+			case "DELIVERED":
+				return "Đã giao";
+			case "CANCELLED":
+				return "Đã hủy";
+			default:
+				return String(status || "-");
+		}
+	};
+
 	return (
 		<div className="fixed inset-0 bg-[#0000009e] bg-opacity-50 flex items-center justify-center z-50 p-4 ">
 			<div className="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -160,7 +179,7 @@ const OrderViewModal = ({ order, onClose, statusOptions = [], onChangeStatus }) 
 																		  ]
 																	).map((s) => (
 																		<option key={s} value={s}>
-																			{s}
+																			{labelOfStatus(s)}
 																		</option>
 																	))}
 																</select>
